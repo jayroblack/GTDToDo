@@ -1,0 +1,519 @@
+{
+  "ModelName": "ToDo",
+  "ModelMetadata": {
+    "Author": "James Rhodes",
+    "DateCreated": "Jan 10, 2020, 8:02 PM",
+    "DateLastModified": "Jan 14, 2020, 9:50 PM",
+    "Description": "This is a test of the DynamoDB using a relational schema"
+  },
+  "DataModel": [
+    {
+      "TableName": "ToDo-Main",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "ID",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "Data",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "FirstName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "LastName",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Email",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsEmailVerified",
+          "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "BillingId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "AuthId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsAccountEnabled",
+          "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "Name",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "UserId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Entry",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DateCreated",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DateCompleted",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsCompleted",
+          "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "Count",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "User",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "UserId",
+            "SortKeyAlias": "Constant:User"
+          },
+          "TableData": [
+            {
+              "ID": {
+                "S": "1"
+              },
+              "Data": {
+                "S": "User"
+              },
+              "FirstName": {
+                "S": "James"
+              },
+              "LastName": {
+                "S": "Rhodes"
+              },
+              "Email": {
+                "S": "jayroblack@gmail.com"
+              },
+              "IsEmailVerified": {
+                "BOOL": false
+              },
+              "BillingId": {
+                "S": "12345"
+              },
+              "AuthId": {
+                "S": "12345"
+              },
+              "IsAccountEnabled": {
+                "BOOL": false
+              },
+              "DateCreated": {
+                "S": "2020-01-11T02:58:21+0000"
+              }
+            },
+            {
+              "ID": {
+                "S": "2"
+              },
+              "Data": {
+                "S": "User"
+              },
+              "FirstName": {
+                "S": "Asif"
+              },
+              "LastName": {
+                "S": "Shiraz"
+              },
+              "Email": {
+                "S": "something@gmail.com"
+              },
+              "IsEmailVerified": {
+                "BOOL": false
+              },
+              "BillingId": {
+                "S": "23456"
+              },
+              "AuthId": {
+                "S": "23456"
+              },
+              "IsAccountEnabled": {
+                "BOOL": false
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "FirstName",
+            "LastName",
+            "Email",
+            "IsEmailVerified",
+            "BillingId",
+            "AuthId",
+            "IsAccountEnabled",
+            "DateCreated"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "Project",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "ProjectId",
+            "SortKeyAlias": "Constant:Project"
+          },
+          "TableData": [
+            {
+              "ID": {
+                "S": "3"
+              },
+              "Data": {
+                "S": "Project"
+              },
+              "Name": {
+                "S": "Inbox"
+              },
+              "UserId": {
+                "S": "1"
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              },
+              "Count": {
+                "S": "1"
+              }
+            },
+            {
+              "ID": {
+                "S": "6"
+              },
+              "Data": {
+                "S": "Project"
+              },
+              "Name": {
+                "S": "Inbox"
+              },
+              "UserId": {
+                "S": "2"
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              },
+              "Count": {
+                "S": "1"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "Name",
+            "UserId",
+            "DateCreated",
+            "Count"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        },
+        {
+          "FacetName": "Label",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "LabelId",
+            "SortKeyAlias": "Constant:Label"
+          },
+          "TableData": [
+            {
+              "ID": {
+                "S": "4"
+              },
+              "Data": {
+                "S": "Label"
+              },
+              "Name": {
+                "S": "Work"
+              },
+              "UserId": {
+                "S": "1"
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              },
+              "Count": {
+                "S": "1"
+              }
+            },
+            {
+              "ID": {
+                "S": "5"
+              },
+              "Data": {
+                "S": "Label"
+              },
+              "Name": {
+                "S": "Personal"
+              },
+              "UserId": {
+                "S": "1"
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              },
+              "Count": {
+                "S": "0"
+              }
+            },
+            {
+              "ID": {
+                "S": "7"
+              },
+              "Data": {
+                "S": "Label"
+              },
+              "Name": {
+                "S": "Cox"
+              },
+              "UserId": {
+                "S": "2"
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              },
+              "Count": {
+                "S": "1"
+              }
+            },
+            {
+              "ID": {
+                "S": "8"
+              },
+              "Data": {
+                "S": "Label"
+              },
+              "Name": {
+                "S": "Pakistan"
+              },
+              "UserId": {
+                "S": "2"
+              },
+              "DateCreated": {
+                "S": "2020-01-11T03:00:24+0000"
+              },
+              "Count": {
+                "S": "1"
+              }
+            }
+          ],
+          "NonKeyAttributes": [
+            "Name",
+            "UserId",
+            "DateCreated",
+            "Count"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "ProjectLabelByUserId",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "UserId",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    },
+    {
+      "TableName": "ToDo-Task",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "Id",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "Task|Reminder",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "Description",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DueDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "CreateDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Labels",
+          "AttributeType": "NS"
+        },
+        {
+          "AttributeName": "Priority",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "Sort",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "Section",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "TaskParentId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsCurrent",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DateCompleted",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "UserId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "TaskId",
+          "AttributeType": "S"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "Reminder",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "Id",
+            "SortKeyAlias": "\"Reminder\""
+          },
+          "TableData": [],
+          "NonKeyAttributes": [
+            "DueDate",
+            "IsCurrent",
+            "UserId",
+            "TaskId"
+          ]
+        },
+        {
+          "FacetName": "Task",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "Id",
+            "SortKeyAlias": "Task"
+          },
+          "TableData": [],
+          "NonKeyAttributes": [
+            "Description",
+            "DueDate",
+            "CreateDate",
+            "Labels",
+            "Priority",
+            "Sort",
+            "Section",
+            "TaskParentId",
+            "IsCurrent",
+            "DateCompleted",
+            "UserId"
+          ]
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "CurrentItems",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "UserId",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "IsCurrent",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        },
+        {
+          "IndexName": "RemindersforTask",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "TaskId",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "INCLUDE",
+            "NonKeyAttributes": [
+              "IsCurrent",
+              "UserId",
+              "DueDate"
+            ]
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    },
+    {
+      "TableName": "ToDo-Journal",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "UserId",
+          "AttributeType": "S"
+        },
+        "SortKey": {
+          "AttributeName": "DateTimeCreated",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "Entry",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "TaskId",
+          "AttributeType": "NS"
+        },
+        {
+          "AttributeName": "ProjectId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DateCreated",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DateModified",
+          "AttributeType": "S"
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    }
+  ]
+}
