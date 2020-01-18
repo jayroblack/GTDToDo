@@ -86,7 +86,7 @@ Then I have indexes that I use periodically to select records from the primary t
 ### ToDo-Task-Old
 
 A lambda runs in the background moving records from the active table to the older table.  That table is rarely changed, and is often read in order to get aggregates - so it is created more for that reason.  
-* ToDo-Journal
+## ToDo-Journal
 
 Here the Partition Key is the User Id and the Sort Key is the Date Created.  This should hold.  The only concern is that if this partition ever grows larger than 10 GB - then we will be exceeding the max capable limits.  
 
