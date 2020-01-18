@@ -1,5 +1,5 @@
 ## TLDR;
-Just run the shell script labaled: createDynamoDbSchema.sh.
+Just run the shell script labaled: createDynamoDbSchema.sh
 **BE SURE TO MODIFY IT TO POINT TO YOUR DESIRED REGION!!!**
 
 ## Dynamo DB Modeling ToDo.json
@@ -57,31 +57,9 @@ The first thing to realize about this table is that over time we will accumulate
 
 What we want is to keep the application snappy and responsive and not slow down as it scales.  So we have 2 tables.  Task and Task-Old.  
 
-As tasks are completed or deleted - they make their way to the -Old table.  This table has much lower read and write levels saving us valuable money.  
+As Tasks are added, deleted, or completed; if they belong to a Project or Task, then a lambda updates the corresponding totals:  Count and CountOverdue.
 
-To make queries deciding what needs to go to the old table there is a really cool trick Dynamo DB has.  Use an attribute for a row on a global secondary index.  If the row does not have that attribute it is not part of the index.  
-
-Since there are three categories of tasks I use this tecnique to make it easy to find thigs that need to move. 
-
-1. Current
-2. Completed - Not Current
-3. Delete - Who cares?
-
-Inside the application logic ( that has yet to be written ) I will add the attribute IsCurrent ( does not matter the value ) for what I need to pull down as the active set.  These are tasks that are not done and are not delted.    
-
-Whenever a task is completed I remove the IsCurrent Attribute - which makes my index super small and fixed on what is active.  And add the attribute IsNotCurrent.  
-
-Whenever a task is deleted - I remove the Current Attribute and add a IsDeleted Attribute.  
-
-Then I have indexes that I use periodically to select records from the primary table to move to the Old table.  
-
-![Things](./ToDoTaskAllData.PNG)
-
-![Things](./ToDoTaskCurrentItems.PNG)
-
-![Things](./ToDoTaskDeletedItems.PNG)
-
-![Things](./ToDoTaskOldItems.PNG)
+As tasks are completed or deleted - they make their way to the ToDo-Task-Old table via a lambda.  This table has much lower read and write levels saving  money.  
 
 ### ToDo-Task-Old
 

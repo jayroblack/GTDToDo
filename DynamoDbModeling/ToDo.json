@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "James Rhodes",
     "DateCreated": "Jan 10, 2020, 8:02 PM",
-    "DateLastModified": "Jan 17, 2020, 9:51 PM",
+    "DateLastModified": "Jan 18, 2020, 5:47 PM",
     "Description": "This is a test of the DynamoDB using a relational schema"
   },
   "DataModel": [
@@ -62,11 +62,15 @@
         },
         {
           "AttributeName": "Count",
-          "AttributeType": "S"
+          "AttributeType": "N"
         },
         {
           "AttributeName": "IsDeleted",
           "AttributeType": "BOOL"
+        },
+        {
+          "AttributeName": "CountOverDue",
+          "AttributeType": "N"
         }
       ],
       "TableFacets": [
@@ -152,7 +156,10 @@
             "IsAccountEnabled",
             "DateCreated",
             "IsDeleted"
-          ]
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
         },
         {
           "FacetName": "Project",
@@ -230,8 +237,12 @@
             "UserId",
             "DateCreated",
             "Count",
-            "IsDeleted"
-          ]
+            "IsDeleted",
+            "CountOverDue"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
         },
         {
           "FacetName": "Label",
@@ -349,8 +360,12 @@
             "UserId",
             "DateCreated",
             "Count",
-            "IsDeleted"
-          ]
+            "IsDeleted",
+            "CountOverDue"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
         }
       ],
       "GlobalSecondaryIndexes": [
@@ -375,6 +390,10 @@
       "TableName": "ToDo-Task",
       "KeyAttributes": {
         "PartitionKey": {
+          "AttributeName": "UserId",
+          "AttributeType": "S"
+        },
+        "SortKey": {
           "AttributeName": "Id",
           "AttributeType": "S"
         }
@@ -393,8 +412,8 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "Labels",
-          "AttributeType": "NS"
+          "AttributeName": "LabelIds",
+          "AttributeType": "SS"
         },
         {
           "AttributeName": "Priority",
@@ -409,15 +428,7 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "IsCurrent",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "DateCompleted",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "UserId",
           "AttributeType": "S"
         },
         {
@@ -433,7 +444,11 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "IsNotCurrent",
+          "AttributeName": "ProjectId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "ParentTaskId",
           "AttributeType": "S"
         }
       ],
@@ -441,15 +456,22 @@
         {
           "FacetName": "Task",
           "KeyAttributeAlias": {
-            "PartitionKeyAlias": "Id"
+            "PartitionKeyAlias": "UserId",
+            "SortKeyAlias": "Id"
           },
           "TableData": [
             {
-              "Id": {
+              "UserId": {
                 "S": "1"
               },
+              "Id": {
+                "S": "101"
+              },
               "Description": {
-                "S": "Do this"
+                "S": "Do this  - Not a Section"
+              },
+              "DueDate": {
+                "S": "Nill"
               },
               "CreateDate": {
                 "S": "2020-01-17T04:54:50+0000"
@@ -460,16 +482,16 @@
               "Sort": {
                 "N": "1"
               },
-              "IsCurrent": {
-                "S": "true"
-              },
-              "UserId": {
-                "S": "1"
+              "ProjectId": {
+                "S": "3"
               }
             },
             {
+              "UserId": {
+                "S": "1"
+              },
               "Id": {
-                "S": "2"
+                "S": "102"
               },
               "Description": {
                 "S": "Do That - Done"
@@ -489,16 +511,16 @@
               "DateCompleted": {
                 "S": "2020-01-17T04:54:50+0000"
               },
-              "UserId": {
-                "S": "1"
-              },
-              "IsNotCurrent": {
-                "S": "true"
+              "ProjectId": {
+                "S": "3"
               }
             },
             {
+              "UserId": {
+                "S": "1"
+              },
               "Id": {
-                "S": "3"
+                "S": "103"
               },
               "Description": {
                 "S": "I Am Deleted"
@@ -512,11 +534,73 @@
               "Sort": {
                 "N": "1"
               },
+              "IsDeleted": {
+                "S": "true"
+              },
+              "ProjectId": {
+                "S": "10"
+              }
+            },
+            {
               "UserId": {
                 "S": "1"
               },
-              "IsDeleted": {
-                "S": "true"
+              "Id": {
+                "S": "104"
+              },
+              "Description": {
+                "S": "Do this - section1"
+              },
+              "DueDate": {
+                "S": "Nill"
+              },
+              "CreateDate": {
+                "S": "2020-01-17T04:54:50+0000"
+              },
+              "LabelIds": {
+                "SS": [
+                  4.5
+                ]
+              },
+              "Sort": {
+                "N": "1"
+              },
+              "Section": {
+                "S": "Section 1"
+              },
+              "ProjectId": {
+                "S": "3"
+              }
+            },
+            {
+              "UserId": {
+                "S": "1"
+              },
+              "Id": {
+                "S": "105"
+              },
+              "Description": {
+                "S": "Sub Item - Section 1"
+              },
+              "DueDate": {
+                "S": "Nill"
+              },
+              "CreateDate": {
+                "S": "2020-01-17T04:54:50+0000"
+              },
+              "LabelIds": {
+                "SS": [
+                  4.5
+                ]
+              },
+              "Section": {
+                "S": "Section 1"
+              },
+              "ProjectId": {
+                "S": "3"
+              },
+              "ParentTaskId": {
+                "S": "104"
               }
             }
           ],
@@ -524,65 +608,32 @@
             "Description",
             "DueDate",
             "CreateDate",
-            "Labels",
+            "LabelIds",
             "Priority",
             "Sort",
             "Section",
-            "IsCurrent",
             "DateCompleted",
-            "UserId",
             "Reminders",
             "JournalEntries",
             "IsDeleted",
-            "IsNotCurrent"
-          ]
+            "ProjectId",
+            "ParentTaskId"
+          ],
+          "DataAccess": {
+            "MySql": {}
+          }
         }
       ],
       "GlobalSecondaryIndexes": [
         {
-          "IndexName": "CurrentItems",
+          "IndexName": "ByDueDate",
           "KeyAttributes": {
             "PartitionKey": {
               "AttributeName": "UserId",
               "AttributeType": "S"
             },
             "SortKey": {
-              "AttributeName": "IsCurrent",
-              "AttributeType": "S"
-            }
-          },
-          "Projection": {
-            "ProjectionType": "ALL"
-          }
-        },
-        {
-          "IndexName": "DeletedItems",
-          "KeyAttributes": {
-            "PartitionKey": {
-              "AttributeName": "UserId",
-              "AttributeType": "S"
-            },
-            "SortKey": {
-              "AttributeName": "IsDeleted",
-              "AttributeType": "S"
-            }
-          },
-          "Projection": {
-            "ProjectionType": "INCLUDE",
-            "NonKeyAttributes": [
-              "Id"
-            ]
-          }
-        },
-        {
-          "IndexName": "OldItems",
-          "KeyAttributes": {
-            "PartitionKey": {
-              "AttributeName": "UserId",
-              "AttributeType": "S"
-            },
-            "SortKey": {
-              "AttributeName": "IsNotCurrent",
+              "AttributeName": "DueDate",
               "AttributeType": "S"
             }
           },
@@ -602,6 +653,10 @@
       "TableName": "ToDo-Task-Old",
       "KeyAttributes": {
         "PartitionKey": {
+          "AttributeName": "UserId",
+          "AttributeType": "S"
+        },
+        "SortKey": {
           "AttributeName": "Id",
           "AttributeType": "S"
         }
@@ -620,8 +675,8 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "Labels",
-          "AttributeType": "NS"
+          "AttributeName": "LabelIds",
+          "AttributeType": "SS"
         },
         {
           "AttributeName": "Priority",
@@ -636,15 +691,7 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "IsCurrent",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "DateCompleted",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "UserId",
           "AttributeType": "S"
         },
         {
@@ -654,31 +701,66 @@
         {
           "AttributeName": "JournalEntries",
           "AttributeType": "M"
+        },
+        {
+          "AttributeName": "IsDeleted",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "ProjectId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "ParentTaskId",
+          "AttributeType": "S"
         }
       ],
       "TableFacets": [
         {
           "FacetName": "Task",
           "KeyAttributeAlias": {
-            "PartitionKeyAlias": "Id"
+            "PartitionKeyAlias": "UserId",
+            "SortKeyAlias": "Id"
           },
           "TableData": [],
           "NonKeyAttributes": [
             "Description",
             "DueDate",
             "CreateDate",
-            "Labels",
+            "LabelIds",
             "Priority",
             "Sort",
             "Section",
-            "IsCurrent",
             "DateCompleted",
-            "UserId",
             "Reminders",
-            "JournalEntries"
+            "JournalEntries",
+            "IsDeleted",
+            "ProjectId",
+            "ParentTaskId"
           ],
           "DataAccess": {
             "MySql": {}
+          }
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "ByDueDate",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "UserId",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "DueDate",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "INCLUDE",
+            "NonKeyAttributes": [
+              "Id"
+            ]
           }
         }
       ],
