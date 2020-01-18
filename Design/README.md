@@ -11,10 +11,10 @@ You can learn more about [Event Storming here](https://www.eventstorming.com/)
 
 ![Start](./Start.png)
 
-## Expand Projects
+## Expand Projects Expanded 
 
 ![Start](./ExpandProjects.png)
 
-## Defaul View
+## Defaul Labels Expanded
 
 ![Start](./ExpandLabels.png)
