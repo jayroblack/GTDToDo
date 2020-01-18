@@ -3,7 +3,7 @@
   "ModelMetadata": {
     "Author": "James Rhodes",
     "DateCreated": "Jan 10, 2020, 8:02 PM",
-    "DateLastModified": "Jan 16, 2020, 11:02 PM",
+    "DateLastModified": "Jan 17, 2020, 9:51 PM",
     "Description": "This is a test of the DynamoDB using a relational schema"
   },
   "DataModel": [
@@ -57,24 +57,16 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "Entry",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "DateCreated",
           "AttributeType": "S"
         },
         {
-          "AttributeName": "DateCompleted",
-          "AttributeType": "S"
-        },
-        {
-          "AttributeName": "IsCompleted",
-          "AttributeType": "BOOL"
-        },
-        {
           "AttributeName": "Count",
           "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsDeleted",
+          "AttributeType": "BOOL"
         }
       ],
       "TableFacets": [
@@ -158,7 +150,8 @@
             "BillingId",
             "AuthId",
             "IsAccountEnabled",
-            "DateCreated"
+            "DateCreated",
+            "IsDeleted"
           ]
         },
         {
@@ -207,13 +200,37 @@
               "Count": {
                 "S": "1"
               }
+            },
+            {
+              "ID": {
+                "S": "10"
+              },
+              "Data": {
+                "S": "Project"
+              },
+              "Name": {
+                "S": "IAmDeleted"
+              },
+              "UserId": {
+                "S": "1"
+              },
+              "DateCreated": {
+                "S": "2020-01-18T01:08:29+0000"
+              },
+              "Count": {
+                "S": "0"
+              },
+              "IsDeleted": {
+                "BOOL": true
+              }
             }
           ],
           "NonKeyAttributes": [
             "Name",
             "UserId",
             "DateCreated",
-            "Count"
+            "Count",
+            "IsDeleted"
           ]
         },
         {
@@ -302,13 +319,37 @@
               "Count": {
                 "S": "1"
               }
+            },
+            {
+              "ID": {
+                "S": "9"
+              },
+              "Data": {
+                "S": "Label"
+              },
+              "Name": {
+                "S": "IAmDeleted"
+              },
+              "UserId": {
+                "S": "1"
+              },
+              "DateCreated": {
+                "S": "2020-01-18T01:08:29+0000"
+              },
+              "Count": {
+                "S": "0"
+              },
+              "IsDeleted": {
+                "BOOL": true
+              }
             }
           ],
           "NonKeyAttributes": [
             "Name",
             "UserId",
             "DateCreated",
-            "Count"
+            "Count",
+            "IsDeleted"
           ]
         }
       ],
@@ -331,14 +372,10 @@
       }
     },
     {
-      "TableName": "ToDo-TaskReminder",
+      "TableName": "ToDo-Task",
       "KeyAttributes": {
         "PartitionKey": {
           "AttributeName": "Id",
-          "AttributeType": "S"
-        },
-        "SortKey": {
-          "AttributeName": "Task|Reminder",
           "AttributeType": "S"
         }
       },
@@ -372,10 +409,6 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "TaskParentId",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "IsCurrent",
           "AttributeType": "S"
         },
@@ -388,38 +421,32 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "TaskId",
+          "AttributeName": "Reminders",
+          "AttributeType": "SS"
+        },
+        {
+          "AttributeName": "JournalEntries",
+          "AttributeType": "M"
+        },
+        {
+          "AttributeName": "IsDeleted",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsNotCurrent",
           "AttributeType": "S"
         }
       ],
       "TableFacets": [
         {
-          "FacetName": "Reminder",
-          "KeyAttributeAlias": {
-            "PartitionKeyAlias": "Id",
-            "SortKeyAlias": "\"Reminder\""
-          },
-          "TableData": [],
-          "NonKeyAttributes": [
-            "DueDate",
-            "IsCurrent",
-            "UserId",
-            "TaskId"
-          ]
-        },
-        {
           "FacetName": "Task",
           "KeyAttributeAlias": {
-            "PartitionKeyAlias": "Id",
-            "SortKeyAlias": "\"Task\""
+            "PartitionKeyAlias": "Id"
           },
           "TableData": [
             {
               "Id": {
                 "S": "1"
-              },
-              "Task|Reminder": {
-                "S": "Task"
               },
               "Description": {
                 "S": "Do this"
@@ -444,9 +471,6 @@
               "Id": {
                 "S": "2"
               },
-              "Task|Reminder": {
-                "S": "Task"
-              },
               "Description": {
                 "S": "Do That - Done"
               },
@@ -467,6 +491,32 @@
               },
               "UserId": {
                 "S": "1"
+              },
+              "IsNotCurrent": {
+                "S": "true"
+              }
+            },
+            {
+              "Id": {
+                "S": "3"
+              },
+              "Description": {
+                "S": "I Am Deleted"
+              },
+              "DueDate": {
+                "S": "2020-01-17T04:54:50+0000"
+              },
+              "CreateDate": {
+                "S": "2020-01-17T04:54:50+0000"
+              },
+              "Sort": {
+                "N": "1"
+              },
+              "UserId": {
+                "S": "1"
+              },
+              "IsDeleted": {
+                "S": "true"
               }
             }
           ],
@@ -478,10 +528,13 @@
             "Priority",
             "Sort",
             "Section",
-            "TaskParentId",
             "IsCurrent",
             "DateCompleted",
-            "UserId"
+            "UserId",
+            "Reminders",
+            "JournalEntries",
+            "IsDeleted",
+            "IsNotCurrent"
           ]
         }
       ],
@@ -503,23 +556,129 @@
           }
         },
         {
-          "IndexName": "RemindersforTask",
+          "IndexName": "DeletedItems",
           "KeyAttributes": {
             "PartitionKey": {
-              "AttributeName": "TaskId",
+              "AttributeName": "UserId",
               "AttributeType": "S"
             },
             "SortKey": {
-              "AttributeName": "IsCurrent",
+              "AttributeName": "IsDeleted",
               "AttributeType": "S"
             }
           },
           "Projection": {
             "ProjectionType": "INCLUDE",
             "NonKeyAttributes": [
-              "UserId",
-              "DueDate"
+              "Id"
             ]
+          }
+        },
+        {
+          "IndexName": "OldItems",
+          "KeyAttributes": {
+            "PartitionKey": {
+              "AttributeName": "UserId",
+              "AttributeType": "S"
+            },
+            "SortKey": {
+              "AttributeName": "IsNotCurrent",
+              "AttributeType": "S"
+            }
+          },
+          "Projection": {
+            "ProjectionType": "INCLUDE",
+            "NonKeyAttributes": [
+              "Id"
+            ]
+          }
+        }
+      ],
+      "DataAccess": {
+        "MySql": {}
+      }
+    },
+    {
+      "TableName": "ToDo-Task-Old",
+      "KeyAttributes": {
+        "PartitionKey": {
+          "AttributeName": "Id",
+          "AttributeType": "S"
+        }
+      },
+      "NonKeyAttributes": [
+        {
+          "AttributeName": "Description",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DueDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "CreateDate",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Labels",
+          "AttributeType": "NS"
+        },
+        {
+          "AttributeName": "Priority",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "Sort",
+          "AttributeType": "N"
+        },
+        {
+          "AttributeName": "Section",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "IsCurrent",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "DateCompleted",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "UserId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "Reminders",
+          "AttributeType": "SS"
+        },
+        {
+          "AttributeName": "JournalEntries",
+          "AttributeType": "M"
+        }
+      ],
+      "TableFacets": [
+        {
+          "FacetName": "Task",
+          "KeyAttributeAlias": {
+            "PartitionKeyAlias": "Id"
+          },
+          "TableData": [],
+          "NonKeyAttributes": [
+            "Description",
+            "DueDate",
+            "CreateDate",
+            "Labels",
+            "Priority",
+            "Sort",
+            "Section",
+            "IsCurrent",
+            "DateCompleted",
+            "UserId",
+            "Reminders",
+            "JournalEntries"
+          ],
+          "DataAccess": {
+            "MySql": {}
           }
         }
       ],
@@ -535,7 +694,7 @@
           "AttributeType": "S"
         },
         "SortKey": {
-          "AttributeName": "DateTimeCreated",
+          "AttributeName": "DateCreated",
           "AttributeType": "S"
         }
       },
@@ -553,10 +712,6 @@
           "AttributeType": "S"
         },
         {
-          "AttributeName": "DateCreated",
-          "AttributeType": "S"
-        },
-        {
           "AttributeName": "S3Path",
           "AttributeType": "S"
         }
@@ -566,7 +721,7 @@
           "FacetName": "JournalEntry",
           "KeyAttributeAlias": {
             "PartitionKeyAlias": "UserId",
-            "SortKeyAlias": "DateTimeCreated"
+            "SortKeyAlias": "DateCreated"
           },
           "TableData": [],
           "NonKeyAttributes": [
