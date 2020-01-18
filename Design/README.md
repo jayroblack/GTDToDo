@@ -5,7 +5,7 @@ You can learn more about [Event Storming here](https://www.eventstorming.com/)
 ![GTD ToDo Event Storming V1](./EventStorm.jpg)
 
 
-[Watch Video: ](./DayOne.mp4)
+[Watch Video: ](./PlayLabelAndProjects.mp4)
 
 ## Defaul View
 
