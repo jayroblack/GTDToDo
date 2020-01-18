@@ -2,4 +2,4 @@
 
 You can learn more about [Event Storming here](https://www.eventstorming.com/)
 
-[GTD ToDo Event Storming V1](./EventStorm.jpg)
+![GTD ToDo Event Storming V1](./EventStorm.jpg)
