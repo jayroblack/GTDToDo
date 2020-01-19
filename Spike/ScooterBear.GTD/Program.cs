@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.Json;
+using Autofac.Extensions.DependencyInjection;
 
 namespace ScooterBear.GTD
 {
@@ -36,9 +33,13 @@ namespace ScooterBear.GTD
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .UseContentRoot(Directory.GetCurrentDirectory())
+                        .UseIISIntegration()
+                        .UseStartup<Startup>();
                 });
     }
 }
