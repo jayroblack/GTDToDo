@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ScooterBear.GTD.Abstractions;
+using ScooterBear.GTD.DynamoDb;
+using ScooterBear.GTD.Patterns;
 
 namespace ScooterBear.GTD
 {
@@ -26,8 +29,10 @@ namespace ScooterBear.GTD
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            // Register your own things directly with Autofac, like:
-            
+            builder.RegisterModule<GtdAutofacModule>();
+            builder.RegisterModule<AbstractionsAutofacModule>();
+            builder.RegisterModule<DynamoDbAutofacModule>();
+            builder.RegisterModule<PatternsAutofacModule>();
         }
 
         public ILifetimeScope AutofacContainer { get; private set; }

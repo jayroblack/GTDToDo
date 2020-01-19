@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Optional.Async.Extensions;
 using ScooterBear.GTD.Abstractions.Users;
 using ScooterBear.GTD.Patterns.CQRS;
 
