@@ -1,0 +1,28 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "UserId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "Id",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "WriteCapacityUnits": 5,
+    "ReadCapacityUnits": 5
+  },
+  "TableSizeBytes": 0,
+  "TableName": "ToDo-Task-Old",
+  "KeySchema": [
+    {
+      "KeyType": "HASH",
+      "AttributeName": "UserId"
+    },
+    {
+      "KeyType": "RANGE",
+      "AttributeName": "Id"
+    }
+  ]
+}

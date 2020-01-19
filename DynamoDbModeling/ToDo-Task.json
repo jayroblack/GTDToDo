@@ -1,0 +1,57 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "UserId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "Id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "DueDate",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "WriteCapacityUnits": 5,
+    "ReadCapacityUnits": 5
+  },
+  "TableSizeBytes": 0,
+  "TableName": "ToDo-Task",
+  "KeySchema": [
+    {
+      "KeyType": "HASH",
+      "AttributeName": "UserId"
+    },
+    {
+      "KeyType": "RANGE",
+      "AttributeName": "Id"
+    }
+  ],
+  "GlobalSecondaryIndexes ": [
+    {
+      "IndexName": "ByDueDate",
+      "KeySchema": [
+        {
+          "AttributeName": "UserId",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "DueDate",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "INCLUDE",
+        "NonKeyAttributes": [
+          "Id"
+        ]
+      },
+      "ProvisionedThroughput": {
+        "WriteCapacityUnits": 5,
+        "ReadCapacityUnits": 5
+      }
+    }
+  ]
+}

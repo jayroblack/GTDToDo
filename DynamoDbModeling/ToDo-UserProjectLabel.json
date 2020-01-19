@@ -1,0 +1,59 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "ID",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "Data",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "UserId",
+      "AttributeType": "S"
+    }
+  ],
+  "TableName": "ToDo-UserProjectLabel",
+  "KeySchema": [
+    {
+      "KeyType": "HASH",
+      "AttributeName": "ID"
+    },
+    {
+      "KeyType": "RANGE",
+      "AttributeName": "Data"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "ProjectLabelByUserId",
+      "KeySchema": [
+        {
+          "AttributeName": "UserId",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      },
+      "ProvisionedThroughput": {
+        "WriteCapacityUnits": 5,
+        "ReadCapacityUnits": 5
+      }
+    }
+  ],
+  "BillingMode": "PAY_PER_REQUEST",
+  "ProvisionedThroughput": {
+    "WriteCapacityUnits": 5,
+    "ReadCapacityUnits": 5
+  },
+  "StreamSpecification": {
+    "StreamEnabled": true,
+    "StreamViewType": "KEYS_ONLY"
+  },
+  "SSESpecification": {
+    "Enabled": true,
+    "SSEType": "AES256",
+    "KMSMasterKeyId": ""
+  }
+}
