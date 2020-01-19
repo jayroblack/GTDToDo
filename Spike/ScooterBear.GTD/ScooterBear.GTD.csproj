@@ -17,6 +17,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ScooterBear.GTD.Abstractions\ScooterBear.GTD.Abstractions.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
-    <ProjectReference Include="..\ScooterBerar.GTD.DynamoDb\ScooterBerar.GTD.DynamoDb.csproj" />
   </ItemGroup>
 </Project>

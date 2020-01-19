@@ -10,5 +10,11 @@ namespace ScooterBear.GTD.Controllers
         {
             return new JsonResult($"Projects for user {userId}");
         }
+
+        [HttpPost("/{userId}/projects")]
+        public IActionResult Post(string userId)
+        {
+            return new JsonResult($"Add Project for user {userId}");
+        }
     }
 }

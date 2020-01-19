@@ -10,5 +10,11 @@ namespace ScooterBear.GTD.Controllers
         {
             return new JsonResult($"User for {userId}");
         }
+
+        [HttpPut("{userId}")]
+        public IActionResult Put(string userId)
+        {
+            return new JsonResult($"User for {userId}");
+        }
     }
 }
