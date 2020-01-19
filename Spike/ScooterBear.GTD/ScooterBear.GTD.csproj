@@ -10,13 +10,13 @@
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="4.0.0" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.0.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ScooterBear.GTD.Abstractions\ScooterBear.GTD.Abstractions.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\ScooterBerar.GTD.DynamoDb\ScooterBerar.GTD.DynamoDb.csproj" />
   </ItemGroup>
 </Project>
