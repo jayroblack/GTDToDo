@@ -1,14 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Optional.Async.Extensions;
+using ScooterBear.GTD.Abstractions.Users;
+using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
 {
     [Route("/api/user")]
     public class UserController : Controller
     {
-        [HttpGet("{userId}")]
-        public IActionResult Get(string userId)
+        private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
+
+        public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser)
         {
-            return new JsonResult($"User for {userId}");
+            _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
+        }
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> Get(string userId)
+        {
+            var resultOption = await _getUser.Run(new GetUserQueryArgs(userId));
+            return resultOption.Match<IActionResult>( some => new JsonResult(some) ,
+                 () => new NotFoundResult());
         }
 
         [HttpPut("{userId}")]
