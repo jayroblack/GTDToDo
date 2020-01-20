@@ -1,4 +1,5 @@
-﻿using Optional;
+﻿using System;
+using Optional;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
@@ -28,44 +29,90 @@ namespace ScooterBear.GTD.Application.Users.Update
             VersionNumber = versionNumber;
         }
 
-        public enum ModifyUserOutcome
+        public void SetFirstName(string firstName)
+        {
+            if (string.IsNullOrEmpty(firstName))
+                throw new ArgumentException($"{nameof(firstName)} is required.");
+            this.FirstName = firstName;
+        }
+
+        public void SetLastName(string lastName)
+        {
+            if (string.IsNullOrEmpty(lastName))
+                throw new ArgumentException($"{nameof(lastName)} is required.");
+            this.LastName = lastName;
+        }
+
+        public void SetEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                throw new ArgumentException($"{nameof(email)} is required.");
+            this.Email = email;
+            this.IsEmailVerified = false;
+            DisableAccount();
+        }
+
+        /// <summary>
+        /// To Be set whenever a user clicks on a link we have sent to their email address provided.
+        /// </summary>
+        public void VerifyEmail()
+        {
+            this.IsEmailVerified = true;
+            EnableAccount();
+        }
+
+        /// <summary>
+        /// A user will pay for this service, this ID is our way to access this users payment history and status.
+        /// </summary>
+        public void SetBillingId(string billingId)
+        {
+            if( string.IsNullOrEmpty(billingId))
+                throw new ArgumentException($"{nameof(billingId)} is required.");
+            this.BillingId = billingId;
+            EnableAccount();
+        }
+
+        /// <summary>
+        /// Whenever a user is created, we use an external system for authentication, this string is what we need to load the current user.
+        /// </summary>
+        /// <param name="authId"></param>
+        public void SetAuthId(string authId)
+        {
+            if (string.IsNullOrEmpty(authId))
+                throw new ArgumentException($"{nameof(authId)} is required.");
+            this.AuthId = authId;
+            EnableAccount();
+        }
+
+        public enum EnableUserOutcome
         {
             EmailIsNotVerified,
             BillingIdIsNotDefined,
             AuthIdIsNotDefined,
-            PaymentOverdue,
-            DoesNotExist,
-            Conflict
         }
 
-        public void VerifyEmail()
+        public void DisableAccount()
         {
-            this.IsEmailVerified = true;
+            this.IsAccountEnabled = false;
         }
 
-        public void SetBillingId(string billingId)
-        {
-            this.BillingId = billingId;
-        }
-
-        public void SetAuthId(string authId)
-        {
-            this.AuthId = authId;
-        }
-
-        public Option<bool, ModifyUserOutcome> EnableAccount()
+        /// <summary>
+        /// An account is Enabled once we have verified an email, have their billing information on file, and their authentication is set up.
+        /// </summary>
+        /// <returns>EnableUserOutcome</returns>
+        public Option<bool, EnableUserOutcome> EnableAccount()
         {
             if( !this.IsEmailVerified)
-                return Option.None<bool, ModifyUserOutcome>(ModifyUserOutcome.EmailIsNotVerified);
+                return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.EmailIsNotVerified);
 
             if( ! string.IsNullOrEmpty(this.BillingId))
-                return Option.None<bool, ModifyUserOutcome>(ModifyUserOutcome.BillingIdIsNotDefined);
+                return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.BillingIdIsNotDefined);
 
             if (!string.IsNullOrEmpty(this.AuthId))
-                return Option.None<bool, ModifyUserOutcome>(ModifyUserOutcome.AuthIdIsNotDefined);
+                return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.AuthIdIsNotDefined);
 
             this.IsAccountEnabled = true;
-            return Option.Some<bool, ModifyUserOutcome>(true);
+            return Option.Some<bool, EnableUserOutcome>(true);
         }
     }
 }
