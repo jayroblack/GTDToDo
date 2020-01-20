@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScooterBear.GTD.Abstractions.Users;
+using ScooterBear.GTD.Abstractions.Users.New;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
@@ -10,10 +11,14 @@ namespace ScooterBear.GTD.Controllers
     public class UserController : Controller
     {
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
+        private readonly IServiceAsync<CreateUserServiceArg, CreateUserServiceResult> _createUser;
 
-        public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser)
+
+        public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
+            IServiceAsync<CreateUserServiceArg, CreateUserServiceResult> createUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
+            _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
         }
         [HttpGet("{userId}")]
         public async Task<IActionResult> Get(string userId)
@@ -23,10 +28,23 @@ namespace ScooterBear.GTD.Controllers
                  () => new NotFoundResult());
         }
 
-        [HttpPut("{userId}")]
-        public IActionResult Put(string userId)
+        public class NewUserValues
         {
-            return new JsonResult($"User for {userId}");
+            public string ID { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+        }
+
+        //TODO:  Check for Existing Item - Return 409 Conflict if exists. - After you return a user;
+        [HttpPost]
+        public async Task<IActionResult> Post(NewUserValues values)
+        {
+            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email);
+            var result = await _createUser.Run(args);
+            ReadonlyUser user = null;
+            result.MatchSome(x=> user = x.User);
+            return Created(new Uri(null, $"/api/user/{values.ID}"), user);
         }
     }
 }

@@ -1,11 +1,18 @@
 ﻿using System;
 using Amazon.DynamoDBv2.DataModel;
-using ScooterBear.GTD.Abstractions.Users;
+using ScooterBear.GTD.Abstractions.Users.New;
 
 namespace ScooterBear.GTD.DynamoDb.Dynamo
 {
+    public static class UserProjectLabelTableData
+    {
+        public static readonly string User = "User";
+        public static readonly string Project = "Projecjt";
+        public static readonly string Label = "Label";
+    }
+
     [DynamoDBTable("ToDo-UserProjectLabel")]
-    public class UserProjectLabelDynamoDbTable : IUser
+    public class UserProjectLabelDynamoDbTable : INewuser
     {
         [DynamoDBHashKey] 
         public string ID { get; set; }

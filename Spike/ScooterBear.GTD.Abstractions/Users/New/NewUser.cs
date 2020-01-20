@@ -1,20 +1,18 @@
 ﻿using System;
 
-namespace ScooterBear.GTD.Abstractions.Users
+namespace ScooterBear.GTD.Abstractions.Users.New
 {
-    public class UserAggregateRoot : IUser
+    public class NewUser : INewuser
     {
         public string ID { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public string Email { get; }
         public bool IsEmailVerified { get; }
-        public string BillingId { get; }
-        public string AuthId { get; }
         public bool IsAccountEnabled { get; }
         public DateTime DateCreated { get; }
 
-        public UserAggregateRoot(string id, string firstName, string lastName, string email, DateTime dateCreated)
+        public NewUser(string id, string firstName, string lastName, string email, DateTime dateCreated)
         {
             if( string.IsNullOrEmpty(id))
                 throw new ArgumentException($"{nameof(id)} is required.");

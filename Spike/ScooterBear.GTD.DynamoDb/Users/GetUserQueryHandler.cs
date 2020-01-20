@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Optional;
 using ScooterBear.GTD.Abstractions.Users;
+using ScooterBear.GTD.Abstractions.Users.New;
 using ScooterBear.GTD.DynamoDb.Dynamo;
 using ScooterBear.GTD.Patterns.CQRS;
 
@@ -15,7 +16,7 @@ namespace ScooterBear.GTD.DynamoDb.Users
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             DynamoDBContext context = new DynamoDBContext(client);
             var result = await context.LoadAsync<UserProjectLabelDynamoDbTable>(query.UserId, "User");
-            return Option.Some(new GetUserQueryResult(((IUser)result)));
+            return Option.Some(new GetUserQueryResult(((INewuser)result)));
         }
     }
 }

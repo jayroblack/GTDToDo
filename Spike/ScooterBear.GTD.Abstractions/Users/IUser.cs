@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace ScooterBear.GTD.Abstractions.Users
 {
     public interface IUser
@@ -12,6 +11,6 @@ namespace ScooterBear.GTD.Abstractions.Users
         string BillingId { get; }
         string AuthId { get; }
         bool IsAccountEnabled { get; }
-        DateTime DateCreated { get; }
+        int VersionNumber { get; }
     }
 }
