@@ -11,10 +11,14 @@ namespace ScooterBear.GTD.Controllers
     public class UserController : Controller
     {
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
-        private readonly IServiceAsync<CreateUserServiceArg, CreateUserServiceResult> _createUser;
-        
+
+        private readonly
+            IServiceAsyncOptionalAlternativeOutcome<CreateUserServiceArg, CreateUserServiceResult,
+                CreateUserServiceOutcome> _createUser;
+
         public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceAsync<CreateUserServiceArg, CreateUserServiceResult> createUser)
+            IServiceAsyncOptionalAlternativeOutcome<CreateUserServiceArg,
+                CreateUserServiceResult, CreateUserServiceOutcome> createUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
@@ -24,8 +28,8 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Get(string userId)
         {
             var resultOption = await _getUser.Run(new GetUserQueryArgs(userId));
-            return resultOption.Match<IActionResult>( some => new JsonResult(some) ,
-                 () => new NotFoundResult());
+            return resultOption.Match<IActionResult>(some => new JsonResult(some),
+                () => new NotFoundResult());
         }
 
         public class NewUserValues
@@ -36,14 +40,15 @@ namespace ScooterBear.GTD.Controllers
             public string Email { get; set; }
         }
 
-        //TODO:  Check for Existing Item - Return 409 Conflict if exists. - After you return a user;
-        //TODO:  Create Global Error Handler that maps to return codes - ArgumentException should return 400 or 422
         [HttpPost]
         public async Task<IActionResult> Post(NewUserValues values)
         {
             var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email);
             var result = await _createUser.Run(args);
-            return Created(new Uri(null, $"/api/user/{values.ID}"), result.User);
+
+            return result.Match<IActionResult>(
+                some => Created(new Uri(null, $"/api/user/{values.ID}"), some.User),
+                outcome => Conflict($"User already exists for this id {values.ID}"));
         }
 
         [HttpPut]
