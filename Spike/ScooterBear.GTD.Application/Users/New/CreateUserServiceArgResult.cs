@@ -19,13 +19,15 @@ namespace ScooterBear.GTD.Application.Users.New
         public string FirstName { get; }
         public string LastName { get; }
         public string Email { get; }
+        public string AuthId { get; }
 
-        public CreateUserServiceArg(string id, string firstName, string lastName, string email)
+        public CreateUserServiceArg(string id, string firstName, string lastName, string email, string authId)
         {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
+            AuthId = authId;
         }
     }
 }

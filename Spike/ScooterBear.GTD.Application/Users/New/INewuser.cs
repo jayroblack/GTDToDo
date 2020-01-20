@@ -8,6 +8,7 @@ namespace ScooterBear.GTD.Application.Users.New
         string FirstName { get; }
         string LastName { get; }
         string Email { get; }
+        string AuthId { get; }
         DateTime DateCreated { get; }
     }
 }

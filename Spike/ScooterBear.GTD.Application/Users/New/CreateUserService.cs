@@ -41,7 +41,7 @@ namespace ScooterBear.GTD.Application.Users.New
                     () =>
                     {
                         var newUser = new NewUser(arg.Id, arg.FirstName, arg.LastName, arg.Email,
-                            _iKnowTheDate.UtcNow());
+                            _iKnowTheDate.UtcNow(), arg.AuthId);
 
                         //SHOULD BE ASYNC!!!!
                         var result =

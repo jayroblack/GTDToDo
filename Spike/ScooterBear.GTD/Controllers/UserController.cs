@@ -24,7 +24,7 @@ namespace ScooterBear.GTD.Controllers
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("/{userId}")]
         public async Task<IActionResult> Get(string userId)
         {
             var resultOption = await _getUser.Run(new GetUserQueryArgs(userId));
@@ -38,12 +38,13 @@ namespace ScooterBear.GTD.Controllers
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
+            public string AuthId { get; set; }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(NewUserValues values)
         {
-            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email);
+            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email, values.AuthId);
             var result = await _createUser.Run(args);
 
             return result.Match<IActionResult>(
@@ -66,7 +67,7 @@ namespace ScooterBear.GTD.Controllers
 
         //Question:  Shouldn't the ID be in the URL for a Put?  Ask around / research
         [HttpPut]
-        public async Task<IActionResult> Put(PutUserValues userValues)
+        public Task<IActionResult> Put(PutUserValues userValues)
         {
             //Replaces the item at the key.  
             // If it does not exist return 404.
