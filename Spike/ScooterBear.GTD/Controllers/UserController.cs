@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ScooterBear.GTD.Abstractions.Users;
-using ScooterBear.GTD.Abstractions.Users.New;
+using ScooterBear.GTD.Application.Users;
+using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
@@ -19,6 +19,7 @@ namespace ScooterBear.GTD.Controllers
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
         }
+
         [HttpGet("{userId}")]
         public async Task<IActionResult> Get(string userId)
         {
@@ -42,9 +43,7 @@ namespace ScooterBear.GTD.Controllers
         {
             var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email);
             var result = await _createUser.Run(args);
-            ReadonlyUser user = null;
-            result.MatchSome(x=> user = x.User);
-            return Created(new Uri(null, $"/api/user/{values.ID}"), user);
+            return Created(new Uri(null, $"/api/user/{values.ID}"), result.User);
         }
 
         [HttpPut]

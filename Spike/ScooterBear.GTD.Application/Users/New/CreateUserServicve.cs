@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Optional;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Abstractions.Users.New
+namespace ScooterBear.GTD.Application.Users.New
 {
     public class CreateUserServicve : IServiceAsync<CreateUserServiceArg, CreateUserServiceResult>
     {
@@ -19,7 +18,7 @@ namespace ScooterBear.GTD.Abstractions.Users.New
                 persistNewUserService ?? throw new ArgumentNullException(nameof(persistNewUserService));
         }
 
-        public async Task<Option<CreateUserServiceResult>> Run(CreateUserServiceArg arg)
+        public async Task<CreateUserServiceResult> Run(CreateUserServiceArg arg)
         {
             if (arg == null) throw new ArgumentNullException(nameof(arg));
 
@@ -28,10 +27,7 @@ namespace ScooterBear.GTD.Abstractions.Users.New
             var result =
                 await _persistNewUserService.Run(new PersistNewUserServiceArgs(newUser));
 
-            ReadonlyUser user = null;
-            result.MatchSome(x => user = x.ReadonlyUser);
-
-            return Option.Some(new CreateUserServiceResult(user));
+            return new CreateUserServiceResult(result.ReadonlyUser);
         }
     }
 }

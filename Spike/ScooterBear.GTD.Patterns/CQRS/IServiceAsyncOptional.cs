@@ -1,0 +1,10 @@
+﻿using System.Threading.Tasks;
+using Optional;
+
+namespace ScooterBear.GTD.Patterns.CQRS
+{
+    public interface IServiceAsyncOptional<TArg, TResult>
+    {
+        Task<Option<TResult>> Run(TArg arg);
+    }
+}

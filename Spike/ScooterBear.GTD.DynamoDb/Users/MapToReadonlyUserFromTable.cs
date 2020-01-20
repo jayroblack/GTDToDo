@@ -1,4 +1,4 @@
-﻿using ScooterBear.GTD.Abstractions.Users;
+﻿using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.DynamoDb.Dynamo;
 using ScooterBear.GTD.Patterns;
 

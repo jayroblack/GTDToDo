@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Optional;
-using ScooterBear.GTD.Abstractions.Users;
-using ScooterBear.GTD.Abstractions.Users.New;
+using ScooterBear.GTD.Application.Users;
+using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.DynamoDb.Dynamo;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
@@ -24,7 +23,7 @@ namespace ScooterBear.GTD.DynamoDb.Users
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<Option<PersistNewUserServiceResult>> Run(PersistNewUserServiceArgs arg)
+        public async Task<PersistNewUserServiceResult> Run(PersistNewUserServiceArgs arg)
         {
             var table = _mapFrom.MapFrom(arg.NewUser);
 
@@ -36,7 +35,7 @@ namespace ScooterBear.GTD.DynamoDb.Users
                     CancellationToken.None);
 
             var readonlyUser = _mapTo.MapTo(bookRetrieved);
-            return Option.Some(new PersistNewUserServiceResult(readonlyUser));
+            return new PersistNewUserServiceResult(readonlyUser);
         }
     }
 }

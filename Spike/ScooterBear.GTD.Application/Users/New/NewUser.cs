@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ScooterBear.GTD.Abstractions.Users.New
+namespace ScooterBear.GTD.Application.Users.New
 {
     public class NewUser : INewuser
     {

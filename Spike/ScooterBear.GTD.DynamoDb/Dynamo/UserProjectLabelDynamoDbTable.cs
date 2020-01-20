@@ -1,6 +1,6 @@
 ﻿using System;
 using Amazon.DynamoDBv2.DataModel;
-using ScooterBear.GTD.Abstractions.Users.New;
+using ScooterBear.GTD.Application.Users.New;
 
 namespace ScooterBear.GTD.DynamoDb.Dynamo
 {

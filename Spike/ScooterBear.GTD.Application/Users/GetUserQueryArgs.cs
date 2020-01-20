@@ -1,7 +1,7 @@
 ﻿using System;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Abstractions.Users
+namespace ScooterBear.GTD.Application.Users
 {
     public class GetUserQueryArgs : IQuery<GetUserQueryResult>
     {

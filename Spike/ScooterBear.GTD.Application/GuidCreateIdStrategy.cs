@@ -1,7 +1,7 @@
 ﻿using System;
 using ScooterBear.GTD.Patterns;
 
-namespace ScooterBear.GTD.Abstractions
+namespace ScooterBear.GTD.Application
 {
     public class GuidCreateIdStrategy : ICreateIdsStrategy
     {

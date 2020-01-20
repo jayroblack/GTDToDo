@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ScooterBear.GTD.Abstractions;
+using ScooterBear.GTD.Application;
 using ScooterBear.GTD.DynamoDb;
 using ScooterBear.GTD.Patterns;
 
@@ -30,7 +30,7 @@ namespace ScooterBear.GTD
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule<GtdAutofacModule>();
-            builder.RegisterModule<AbstractionsAutofacModule>();
+            builder.RegisterModule<ApplicationAutofacModule>();
             builder.RegisterModule<DynamoDbAutofacModule>();
             builder.RegisterModule<PatternsAutofacModule>();
         }
