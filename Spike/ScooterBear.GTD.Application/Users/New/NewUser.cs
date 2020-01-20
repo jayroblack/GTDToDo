@@ -2,7 +2,7 @@
 
 namespace ScooterBear.GTD.Application.Users.New
 {
-    public class NewUser : INewuser
+    public class NewUser : INewUser
     {
         public string ID { get; }
         public string FirstName { get; }

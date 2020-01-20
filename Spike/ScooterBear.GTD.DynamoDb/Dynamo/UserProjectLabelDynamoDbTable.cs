@@ -12,7 +12,7 @@ namespace ScooterBear.GTD.DynamoDb.Dynamo
     }
 
     [DynamoDBTable("ToDo-UserProjectLabel")]
-    public class UserProjectLabelDynamoDbTable : INewuser
+    public class UserProjectLabelDynamoDbTable : INewUser
     {
         [DynamoDBHashKey] public string ID { get; set; }
         [DynamoDBRangeKey] public string Data { get; set; }

@@ -13,4 +13,8 @@
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Users\Update\" />
+  </ItemGroup>
+
 </Project>

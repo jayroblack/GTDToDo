@@ -2,7 +2,7 @@
 
 namespace ScooterBear.GTD.Application.Users.New
 {
-    public interface INewuser
+    public interface INewUser
     {
         string ID { get; }
         string FirstName { get; }

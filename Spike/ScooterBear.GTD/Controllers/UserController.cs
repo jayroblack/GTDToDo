@@ -51,8 +51,22 @@ namespace ScooterBear.GTD.Controllers
                 outcome => Conflict($"User already exists for this id {values.ID}"));
         }
 
+        public class PutUserValues : IUser
+        {
+            public string ID { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public bool IsEmailVerified { get; set; }
+            public string BillingId { get; set; }
+            public string AuthId { get; set; }
+            public bool IsAccountEnabled { get; set; }
+            public int VersionNumber { get; set; }
+        }
+
+        //Question:  Shouldn't the ID be in the URL for a Put?  Ask around / research
         [HttpPut]
-        public async Task<IActionResult> Put()
+        public async Task<IActionResult> Put(PutUserValues userValues)
         {
             //Replaces the item at the key.  
             // If it does not exist return 404.
