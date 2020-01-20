@@ -7,7 +7,7 @@ namespace ScooterBear.GTD.Abstractions.Users.New
     {
         public NewUser NewUser { get; }
 
-        public PersistNewUserServiceArgs( NewUser newUser)
+        public PersistNewUserServiceArgs(NewUser newUser)
         {
             NewUser = newUser ?? throw new ArgumentNullException(nameof(newUser));
         }

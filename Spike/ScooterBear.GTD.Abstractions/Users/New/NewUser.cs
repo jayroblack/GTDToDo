@@ -14,7 +14,7 @@ namespace ScooterBear.GTD.Abstractions.Users.New
 
         public NewUser(string id, string firstName, string lastName, string email, DateTime dateCreated)
         {
-            if( string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
                 throw new ArgumentException($"{nameof(id)} is required.");
 
             if (string.IsNullOrEmpty(firstName))
@@ -25,7 +25,7 @@ namespace ScooterBear.GTD.Abstractions.Users.New
 
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException($"{nameof(email)} is required.");
-            
+
             ID = id;
             FirstName = firstName;
             LastName = lastName;

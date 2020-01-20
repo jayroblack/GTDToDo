@@ -16,13 +16,14 @@ namespace ScooterBear.GTD.DynamoDb.Users
     {
         private readonly IMapFrom<UserProjectLabelDynamoDbTable, NewUser> _mapFrom;
         private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadonlyUser> _mapTo;
-        
+
         public PersistNewUserServiceAsync(IMapFrom<UserProjectLabelDynamoDbTable, NewUser> mapFrom,
             IMapTo<UserProjectLabelDynamoDbTable, ReadonlyUser> mapTo)
         {
             _mapFrom = mapFrom ?? throw new ArgumentNullException(nameof(mapFrom));
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
+
         public async Task<Option<PersistNewUserServiceResult>> Run(PersistNewUserServiceArgs arg)
         {
             var table = _mapFrom.MapFrom(arg.NewUser);

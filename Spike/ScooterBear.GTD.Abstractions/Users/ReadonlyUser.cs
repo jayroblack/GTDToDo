@@ -13,7 +13,8 @@ namespace ScooterBear.GTD.Abstractions.Users
         public bool IsAccountEnabled { get; }
         public int VersionNumber { get; }
 
-        public ReadonlyUser(string id, string firstName, string lastName, string email, bool isEmailVerified, string billingId, string authId, bool isAccountEnabled, int versionNumber)
+        public ReadonlyUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
+            string billingId, string authId, bool isAccountEnabled, int versionNumber)
         {
             ID = id;
             FirstName = firstName;

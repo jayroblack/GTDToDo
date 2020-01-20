@@ -9,7 +9,7 @@ namespace ScooterBear.GTD.Abstractions.Users
 
         public GetUserQueryArgs(string userId)
         {
-            if( string.IsNullOrEmpty(userId))
+            if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException($"'{userId}' is not a valid User Id.");
             UserId = userId;
         }

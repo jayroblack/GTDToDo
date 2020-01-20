@@ -3,7 +3,8 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Abstractions.Users.New
 {
-    public class CreateUserServiceResult : IServiceResult{
+    public class CreateUserServiceResult : IServiceResult
+    {
         public ReadonlyUser User { get; }
 
         public CreateUserServiceResult(ReadonlyUser user)

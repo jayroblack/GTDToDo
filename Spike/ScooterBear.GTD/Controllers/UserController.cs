@@ -12,8 +12,7 @@ namespace ScooterBear.GTD.Controllers
     {
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
         private readonly IServiceAsync<CreateUserServiceArg, CreateUserServiceResult> _createUser;
-
-
+        
         public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
             IServiceAsync<CreateUserServiceArg, CreateUserServiceResult> createUser)
         {
@@ -37,6 +36,7 @@ namespace ScooterBear.GTD.Controllers
         }
 
         //TODO:  Check for Existing Item - Return 409 Conflict if exists. - After you return a user;
+        //TODO:  Create Global Error Handler that maps to return codes - ArgumentException should return 400 or 422
         [HttpPost]
         public async Task<IActionResult> Post(NewUserValues values)
         {
@@ -45,6 +45,16 @@ namespace ScooterBear.GTD.Controllers
             ReadonlyUser user = null;
             result.MatchSome(x=> user = x.User);
             return Created(new Uri(null, $"/api/user/{values.ID}"), user);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put()
+        {
+            //Replaces the item at the key.  
+            // If it does not exist return 404.
+            // If it exists, but the version numbers don't match return 409 conflict. 
+            // If Succeeds return 202 Accepted.
+            throw new NotImplementedException();
         }
     }
 }
