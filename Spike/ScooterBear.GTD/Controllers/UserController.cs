@@ -73,6 +73,11 @@ namespace ScooterBear.GTD.Controllers
             // If it does not exist return 404.
             // If it exists, but the version numbers don't match return 409 conflict. 
             // If Succeeds return 202 Accepted.
+            // EmailIsNotVerified 422 Unprocessable Entity
+            // BillingIdIsNotDefined 422 Unprocessable Entity
+            // AuthIdIsNotDefined 422 Unprocessable Entity
+            // PaymentOverdue 422 Unprocessable Entity
+
             throw new NotImplementedException();
         }
     }
