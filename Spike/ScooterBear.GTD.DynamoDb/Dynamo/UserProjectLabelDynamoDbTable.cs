@@ -1,6 +1,5 @@
 ﻿using System;
 using Amazon.DynamoDBv2.DataModel;
-using ScooterBear.GTD.Application.Users.New;
 
 namespace ScooterBear.GTD.DynamoDb.Dynamo
 {
@@ -12,7 +11,7 @@ namespace ScooterBear.GTD.DynamoDb.Dynamo
     }
 
     [DynamoDBTable("ToDo-UserProjectLabel")]
-    public class UserProjectLabelDynamoDbTable : INewUser
+    public class UserProjectLabelDynamoDbTable
     {
         [DynamoDBHashKey] public string ID { get; set; }
         [DynamoDBRangeKey] public string Data { get; set; }

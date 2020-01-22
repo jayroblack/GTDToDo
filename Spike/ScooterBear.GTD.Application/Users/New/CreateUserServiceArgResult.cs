@@ -5,9 +5,9 @@ namespace ScooterBear.GTD.Application.Users.New
 {
     public class CreateUserServiceResult : IServiceResult
     {
-        public ReadonlyUser User { get; }
+        public IUser User { get; }
 
-        public CreateUserServiceResult(ReadonlyUser user)
+        public CreateUserServiceResult(IUser user)
         {
             User = user ?? throw new ArgumentNullException(nameof(user));
         }

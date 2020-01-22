@@ -1,5 +1,7 @@
 ﻿
-namespace ScooterBear.GTD.Application.Users
+using ScooterBear.GTD.Application.Users;
+
+namespace ScooterBear.GTD.DynamoDb.Users
 {
     public class ReadonlyUser : IUser
     {
@@ -13,7 +15,7 @@ namespace ScooterBear.GTD.Application.Users
         public bool IsAccountEnabled { get; }
         public int VersionNumber { get; }
 
-        public ReadonlyUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
+        internal ReadonlyUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
             string billingId, string authId, bool isAccountEnabled, int versionNumber)
         {
             ID = id;

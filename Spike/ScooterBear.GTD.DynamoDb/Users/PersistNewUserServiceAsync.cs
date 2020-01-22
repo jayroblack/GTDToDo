@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.DynamoDb.Dynamo;
 using ScooterBear.GTD.Patterns;

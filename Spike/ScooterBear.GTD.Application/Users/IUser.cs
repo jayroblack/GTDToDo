@@ -1,5 +1,4 @@
-﻿
-namespace ScooterBear.GTD.Application.Users
+﻿namespace ScooterBear.GTD.Application.Users
 {
     public interface IUser
     {

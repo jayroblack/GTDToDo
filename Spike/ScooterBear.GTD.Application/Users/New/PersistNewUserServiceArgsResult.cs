@@ -15,9 +15,9 @@ namespace ScooterBear.GTD.Application.Users.New
 
     public class PersistNewUserServiceResult : IServiceResult
     {
-        public ReadonlyUser ReadonlyUser { get; }
+        public IUser ReadonlyUser { get; }
 
-        public PersistNewUserServiceResult(ReadonlyUser readonlyUser)
+        public PersistNewUserServiceResult(IUser readonlyUser)
         {
             ReadonlyUser = readonlyUser ?? throw new ArgumentNullException(nameof(readonlyUser));
         }

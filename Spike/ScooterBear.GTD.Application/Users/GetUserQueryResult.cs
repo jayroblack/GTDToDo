@@ -5,10 +5,10 @@ namespace ScooterBear.GTD.Application.Users
 {
     public class GetUserQueryResult : IQueryResult
     {
-        public ReadonlyUser User { get; }
+        public IUser User { get; }
 
 
-        public GetUserQueryResult(ReadonlyUser user)
+        public GetUserQueryResult(IUser user)
         {
             User = user ?? throw new ArgumentNullException(nameof(user));
         }

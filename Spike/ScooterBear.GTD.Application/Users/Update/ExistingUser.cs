@@ -3,7 +3,7 @@ using Optional;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
-    public class ExistingUser : IUser
+    public class ExistingUser
     {
         public string ID { get; }
         public string FirstName { get; private set; }
@@ -15,7 +15,7 @@ namespace ScooterBear.GTD.Application.Users.Update
         public bool IsAccountEnabled { get; private set; }
         public int VersionNumber { get; }
 
-        public ExistingUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
+        internal ExistingUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
             string billingId, string authId, bool isAccountEnabled, int versionNumber)
         {
             ID = id;
@@ -47,6 +47,10 @@ namespace ScooterBear.GTD.Application.Users.Update
         {
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException($"{nameof(email)} is required.");
+
+            if (email == this.Email)
+                return;
+
             this.Email = email;
             this.IsEmailVerified = false;
             DisableAccount();

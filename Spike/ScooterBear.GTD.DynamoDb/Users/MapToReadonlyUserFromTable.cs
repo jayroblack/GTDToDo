@@ -1,5 +1,4 @@
-﻿using ScooterBear.GTD.Application.Users;
-using ScooterBear.GTD.DynamoDb.Dynamo;
+﻿using ScooterBear.GTD.DynamoDb.Dynamo;
 using ScooterBear.GTD.Patterns;
 
 namespace ScooterBear.GTD.DynamoDb.Users

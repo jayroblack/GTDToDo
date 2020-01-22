@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.New;
+using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
@@ -52,27 +53,14 @@ namespace ScooterBear.GTD.Controllers
                 outcome => Conflict($"User already exists for this id {values.ID}"));
         }
 
-        public class PutUserValues : IUser
-        {
-            public string ID { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            public string Email { get; set; }
-            public bool IsEmailVerified { get; set; }
-            public string BillingId { get; set; }
-            public string AuthId { get; set; }
-            public bool IsAccountEnabled { get; set; }
-            public int VersionNumber { get; set; }
-        }
-
         //Question:  Shouldn't the ID be in the URL for a Put?  Ask around / research
         [HttpPut]
-        public Task<IActionResult> Put(PutUserValues userValues)
+        public Task<IActionResult> Put(UpdateUserServiceArgs userValues)
         {
             //Replaces the item at the key.  
-            // If it does not exist return 404.
-            // If it exists, but the version numbers don't match return 409 conflict. 
-            // If Succeeds return 202 Accepted.
+            // If it does not exist return 404.  DoesNotExist
+            // If it exists, but the version numbers don't match return 409 conflict. VersionConflict
+            // If Succeeds return 202 Accepted.  Success
             // EmailIsNotVerified 422 Unprocessable Entity
             // BillingIdIsNotDefined 422 Unprocessable Entity
             // AuthIdIsNotDefined 422 Unprocessable Entity
