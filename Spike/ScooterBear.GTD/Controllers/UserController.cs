@@ -45,7 +45,8 @@ namespace ScooterBear.GTD.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(NewUserValues values)
         {
-            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email, values.AuthId);
+            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email,
+                values.AuthId);
             var result = await _createUser.Run(args);
 
             return result.Match<IActionResult>(
@@ -58,7 +59,7 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Put(UpdateUserServiceArgs userValues)
         {
             if (userValues == null) return BadRequest("Cannot parse required values.");
-            if( string.IsNullOrEmpty(userValues.ID)) return BadRequest("ID is required.");
+            if (string.IsNullOrEmpty(userValues.ID)) return BadRequest("ID is required.");
 
             //Replaces the item at the key.  
             // If it does not exist return 404.  DoesNotExist

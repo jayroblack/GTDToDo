@@ -37,7 +37,8 @@ namespace ScooterBear.GTD.Application.Users.New
             //TODO:  Come back and make this async!!!!
             return
                 queryOption.Match<Option<CreateUserServiceResult, CreateUserServiceOutcome>>(
-                    some => Option.None<CreateUserServiceResult, CreateUserServiceOutcome>(CreateUserServiceOutcome.UserExists),
+                    some => Option.None<CreateUserServiceResult, CreateUserServiceOutcome>(CreateUserServiceOutcome
+                        .UserExists),
                     () =>
                     {
                         var newUser = new NewUser(arg.Id, arg.FirstName, arg.LastName, arg.Email,

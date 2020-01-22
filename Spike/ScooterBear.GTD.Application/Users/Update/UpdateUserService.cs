@@ -9,7 +9,10 @@ namespace ScooterBear.GTD.Application.Users.Update
         UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>
     {
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
-        private readonly IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome> _persistUpdatedUser;
+
+        private readonly
+            IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+                PersistUpdatedUserOutcome> _persistUpdatedUser;
 
 
         public enum UpdateUserOutcome
@@ -21,7 +24,8 @@ namespace ScooterBear.GTD.Application.Users.Update
         }
 
         public UpdateUserService(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome> persistUpdatedUser)
+            IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+                PersistUpdatedUserOutcome> persistUpdatedUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _persistUpdatedUser = persistUpdatedUser ?? throw new ArgumentNullException(nameof(persistUpdatedUser));
@@ -38,7 +42,9 @@ namespace ScooterBear.GTD.Application.Users.Update
             userExistsOption.MatchSome(some =>
             {
                 var existingUser = some.User;
-                user = new User(existingUser.ID, existingUser.FirstName, existingUser.LastName, existingUser.Email, existingUser.IsEmailVerified, existingUser.BillingId, existingUser.AuthId, existingUser.VersionNumber);
+                user = new User(existingUser.ID, existingUser.FirstName, existingUser.LastName, existingUser.Email,
+                    existingUser.IsEmailVerified, existingUser.BillingId, existingUser.AuthId,
+                    existingUser.VersionNumber);
             });
 
             try
@@ -49,14 +55,14 @@ namespace ScooterBear.GTD.Application.Users.Update
                 user.SetBillingId(arg.BillingId);
                 user.SetAuthId(arg.AuthId);
 
-                if( arg.IsEmailVerified.GetValueOrDefault() && !user.IsEmailVerified.GetValueOrDefault())
+                if (arg.IsEmailVerified.GetValueOrDefault() && !user.IsEmailVerified.GetValueOrDefault())
                     user.VerifyEmail();
 
-                if( !arg.IsAccountEnabled.GetValueOrDefault() && user.IsAccountEnabled.GetValueOrDefault())
+                if (!arg.IsAccountEnabled.GetValueOrDefault() && user.IsAccountEnabled.GetValueOrDefault())
                     user.DisableAccount();
 
                 if (arg.IsAccountEnabled.GetValueOrDefault() &&
-                    (!user.IsAccountEnabled.HasValue ||user.IsAccountEnabled.GetValueOrDefault()))
+                    (!user.IsAccountEnabled.HasValue || user.IsAccountEnabled.GetValueOrDefault()))
                     user.EnableAccount();
 
             }
@@ -68,14 +74,15 @@ namespace ScooterBear.GTD.Application.Users.Update
 
             var updatedExistUserOption = await _persistUpdatedUser.Run(new PersistUpdatedUserServiceArgs(user));
 
-            if( !updatedExistUserOption.HasValue )
+            if (!updatedExistUserOption.HasValue)
                 return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
                     .VersionConflict);
 
-            return updatedExistUserOption.Match<Option<UpdateUserServiceResult, UpdateUserOutcome>>(some=>
-                Option.Some<UpdateUserServiceResult, UpdateUserOutcome>(new UpdateUserServiceResult(some.UpdatedUser)),
-                none=> Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
-                .VersionConflict));
+            return updatedExistUserOption.Match<Option<UpdateUserServiceResult, UpdateUserOutcome>>(some =>
+                    Option.Some<UpdateUserServiceResult, UpdateUserOutcome>(
+                        new UpdateUserServiceResult(some.UpdatedUser)),
+                none => Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
+                    .VersionConflict));
         }
     }
 }

@@ -7,7 +7,6 @@ namespace ScooterBear.GTD.Application.Users
     {
         public IUser User { get; }
 
-
         public GetUserQueryResult(IUser user)
         {
             User = user ?? throw new ArgumentNullException(nameof(user));

@@ -26,7 +26,7 @@ namespace ScooterBear.GTD.Application.Users.Update
                 throw new ArgumentException($"Missing required value {nameof(lastName)}");
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException($"Missing required value {nameof(email)}");
-            if( versionNumber == 0)
+            if (versionNumber == 0)
                 throw new ArgumentOutOfRangeException(nameof(versionNumber));
 
             ID = id;
@@ -84,7 +84,7 @@ namespace ScooterBear.GTD.Application.Users.Update
         /// </summary>
         public void SetBillingId(string billingId)
         {
-            if( string.IsNullOrEmpty(billingId))
+            if (string.IsNullOrEmpty(billingId))
                 throw new ArgumentException($"{nameof(billingId)} is required.");
             if (this.BillingId == billingId)
                 return;
@@ -124,10 +124,10 @@ namespace ScooterBear.GTD.Application.Users.Update
         /// <returns>EnableUserOutcome</returns>
         public Option<bool, EnableUserOutcome> EnableAccount()
         {
-            if( !this.IsEmailVerified.GetValueOrDefault())
+            if (!this.IsEmailVerified.GetValueOrDefault())
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.EmailIsNotVerified);
 
-            if( ! string.IsNullOrEmpty(this.BillingId))
+            if (!string.IsNullOrEmpty(this.BillingId))
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.BillingIdIsNotDefined);
 
             if (!string.IsNullOrEmpty(this.AuthId))

@@ -4,7 +4,7 @@ using Optional;
 using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.DynamoDb
+namespace ScooterBear.GTD.DynamoDb.Users
 {
     public class
         PersistUpdatedUserService : IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>
