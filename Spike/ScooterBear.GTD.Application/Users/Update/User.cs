@@ -3,7 +3,7 @@ using Optional;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
-    public class ExistingUser : IUser
+    public class User : IUser
     {
         public string ID { get; }
         public string FirstName { get; private set; }
@@ -15,7 +15,7 @@ namespace ScooterBear.GTD.Application.Users.Update
         public bool? IsAccountEnabled { get; private set; }
         public int VersionNumber { get; }
 
-        internal ExistingUser(string id, string firstName, string lastName, string email, bool? isEmailVerified,
+        internal User(string id, string firstName, string lastName, string email, bool? isEmailVerified,
             string billingId, string authId, int versionNumber)
         {
             if (string.IsNullOrEmpty(id))
@@ -72,6 +72,9 @@ namespace ScooterBear.GTD.Application.Users.Update
         /// </summary>
         public void VerifyEmail()
         {
+            if (this.IsEmailVerified.GetValueOrDefault())
+                return;
+
             this.IsEmailVerified = true;
             EnableAccount();
         }
@@ -83,6 +86,8 @@ namespace ScooterBear.GTD.Application.Users.Update
         {
             if( string.IsNullOrEmpty(billingId))
                 throw new ArgumentException($"{nameof(billingId)} is required.");
+            if (this.BillingId == billingId)
+                return;
             this.BillingId = billingId;
             EnableAccount();
         }
@@ -95,6 +100,8 @@ namespace ScooterBear.GTD.Application.Users.Update
         {
             if (string.IsNullOrEmpty(authId))
                 throw new ArgumentException($"{nameof(authId)} is required.");
+            if (this.AuthId == authId)
+                return;
             this.AuthId = authId;
             EnableAccount();
         }

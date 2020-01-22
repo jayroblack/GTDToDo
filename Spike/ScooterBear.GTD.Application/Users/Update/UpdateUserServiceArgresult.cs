@@ -1,10 +1,16 @@
-﻿using ScooterBear.GTD.Patterns.CQRS;
+﻿using System;
+using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
     public class UpdateUserServiceResult : IServiceResult
     {
+        public IUser User { get; }
 
+        public UpdateUserServiceResult(IUser user)
+        {
+            User = user ?? throw new ArgumentNullException(nameof(user));
+        }
     }
 
     public class UpdateUserServiceArgs : IServiceArgs<UpdateUserServiceResult>, IUser

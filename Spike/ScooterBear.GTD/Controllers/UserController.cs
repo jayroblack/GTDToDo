@@ -58,13 +58,13 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Put(UpdateUserServiceArgs userValues)
         {
             if (userValues == null) return BadRequest("Cannot parse required values.");
-            if (string.IsNullOrEmpty(userValues.ID))
-                return BadRequest("Missing Required Parameter ID");
-            
+            if( string.IsNullOrEmpty(userValues.ID)) return BadRequest("ID is required.");
+
             //Replaces the item at the key.  
             // If it does not exist return 404.  DoesNotExist
             // If it exists, but the version numbers don't match return 409 conflict. VersionConflict
             // If Succeeds return 202 Accepted.  Success
+            // Unprocessable Entity if any variables are missing.
             // EmailIsNotVerified 422 Unprocessable Entity
             // BillingIdIsNotDefined 422 Unprocessable Entity
             // AuthIdIsNotDefined 422 Unprocessable Entity
