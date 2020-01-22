@@ -3,21 +3,32 @@ using Optional;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
-    public class ExistingUser
+    public class ExistingUser : IUser
     {
         public string ID { get; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Email { get; private set; }
-        public bool IsEmailVerified { get; private set; }
+        public bool? IsEmailVerified { get; private set; }
         public string BillingId { get; private set; }
         public string AuthId { get; private set; }
-        public bool IsAccountEnabled { get; private set; }
+        public bool? IsAccountEnabled { get; private set; }
         public int VersionNumber { get; }
 
-        internal ExistingUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
-            string billingId, string authId, bool isAccountEnabled, int versionNumber)
+        internal ExistingUser(string id, string firstName, string lastName, string email, bool? isEmailVerified,
+            string billingId, string authId, int versionNumber)
         {
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException($"Missing required value {nameof(id)}");
+            if (string.IsNullOrEmpty(firstName))
+                throw new ArgumentException($"Missing required value {nameof(firstName)}");
+            if (string.IsNullOrEmpty(lastName))
+                throw new ArgumentException($"Missing required value {nameof(lastName)}");
+            if (string.IsNullOrEmpty(email))
+                throw new ArgumentException($"Missing required value {nameof(email)}");
+            if( versionNumber == 0)
+                throw new ArgumentOutOfRangeException(nameof(versionNumber));
+
             ID = id;
             FirstName = firstName;
             LastName = lastName;
@@ -25,8 +36,8 @@ namespace ScooterBear.GTD.Application.Users.Update
             IsEmailVerified = isEmailVerified;
             BillingId = billingId;
             AuthId = authId;
-            IsAccountEnabled = isAccountEnabled;
             VersionNumber = versionNumber;
+            EnableAccount();
         }
 
         public void SetFirstName(string firstName)
@@ -106,7 +117,7 @@ namespace ScooterBear.GTD.Application.Users.Update
         /// <returns>EnableUserOutcome</returns>
         public Option<bool, EnableUserOutcome> EnableAccount()
         {
-            if( !this.IsEmailVerified)
+            if( !this.IsEmailVerified.GetValueOrDefault())
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.EmailIsNotVerified);
 
             if( ! string.IsNullOrEmpty(this.BillingId))

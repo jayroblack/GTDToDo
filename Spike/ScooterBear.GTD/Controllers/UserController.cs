@@ -53,10 +53,14 @@ namespace ScooterBear.GTD.Controllers
                 outcome => Conflict($"User already exists for this id {values.ID}"));
         }
 
-        //Question:  Shouldn't the ID be in the URL for a Put?  Ask around / research
+        //Question: Does the ID have to be in the URL for a Put?  Ask around / research
         [HttpPut]
-        public Task<IActionResult> Put(UpdateUserServiceArgs userValues)
+        public async Task<IActionResult> Put(UpdateUserServiceArgs userValues)
         {
+            if (userValues == null) return BadRequest("Cannot parse required values.");
+            if (string.IsNullOrEmpty(userValues.ID))
+                return BadRequest("Missing Required Parameter ID");
+            
             //Replaces the item at the key.  
             // If it does not exist return 404.  DoesNotExist
             // If it exists, but the version numbers don't match return 409 conflict. VersionConflict

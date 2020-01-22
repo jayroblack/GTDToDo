@@ -27,6 +27,7 @@ namespace ScooterBear.GTD.Application.Users.Update
 
         public Task<Option<UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>> Run(UpdateUserServiceArgs arg)
         {
+            var desiredUserState = arg as IUser;
             throw new System.NotImplementedException();
         }
     }
