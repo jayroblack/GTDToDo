@@ -24,5 +24,6 @@ namespace ScooterBear.GTD.Application.Users.Update
         public string AuthId { get; set; }
         public bool? IsAccountEnabled { get; set; }
         public int VersionNumber { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }

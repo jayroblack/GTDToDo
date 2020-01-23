@@ -11,7 +11,7 @@ namespace ScooterBear.GTD.Application.Users.New
         UserExists
     }
 
-    public class CreateUserService : IServiceAsyncOptionalAlternativeOutcome<CreateUserServiceArg,
+    public class CreateUserService : IServiceAsyncOptionalOutcomes<CreateUserServiceArg,
         CreateUserServiceResult, CreateUserServiceOutcome>
     {
         private readonly IKnowTheDate _iKnowTheDate;

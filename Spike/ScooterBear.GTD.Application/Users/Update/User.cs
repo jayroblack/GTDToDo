@@ -14,9 +14,10 @@ namespace ScooterBear.GTD.Application.Users.Update
         public string AuthId { get; private set; }
         public bool? IsAccountEnabled { get; private set; }
         public int VersionNumber { get; }
+        public DateTime DateCreated { get; }
 
         internal User(string id, string firstName, string lastName, string email, bool? isEmailVerified,
-            string billingId, string authId, int versionNumber)
+            string billingId, string authId, int versionNumber, DateTime dateCreated)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException($"Missing required value {nameof(id)}");
@@ -37,6 +38,7 @@ namespace ScooterBear.GTD.Application.Users.Update
             BillingId = billingId;
             AuthId = authId;
             VersionNumber = versionNumber;
+            DateCreated = dateCreated;
             EnableAccount();
         }
 

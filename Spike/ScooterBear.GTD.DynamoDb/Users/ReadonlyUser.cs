@@ -1,4 +1,5 @@
 ﻿
+using System;
 using ScooterBear.GTD.Application.Users;
 
 namespace ScooterBear.GTD.DynamoDb.Users
@@ -14,9 +15,10 @@ namespace ScooterBear.GTD.DynamoDb.Users
         public string AuthId { get; }
         public bool? IsAccountEnabled { get; }
         public int VersionNumber { get; }
+        public DateTime DateCreated { get; }
 
         internal ReadonlyUser(string id, string firstName, string lastName, string email, bool isEmailVerified,
-            string billingId, string authId, bool isAccountEnabled, int versionNumber)
+            string billingId, string authId, bool isAccountEnabled, int versionNumber, DateTime dateCreated)
         {
             ID = id;
             FirstName = firstName;
@@ -27,6 +29,7 @@ namespace ScooterBear.GTD.DynamoDb.Users
             AuthId = authId;
             IsAccountEnabled = isAccountEnabled;
             VersionNumber = versionNumber;
+            DateCreated = dateCreated;
         }
     }
 }

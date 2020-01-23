@@ -1,4 +1,6 @@
-﻿namespace ScooterBear.GTD.Application.Users
+﻿using System;
+
+namespace ScooterBear.GTD.Application.Users
 {
     public interface IUser
     {
@@ -11,5 +13,6 @@
         string AuthId { get; }
         bool? IsAccountEnabled { get; }
         int VersionNumber { get; }
+        DateTime DateCreated { get; }
     }
 }

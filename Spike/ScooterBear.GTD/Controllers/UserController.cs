@@ -12,17 +12,16 @@ namespace ScooterBear.GTD.Controllers
     public class UserController : Controller
     {
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
-
-        private readonly
-            IServiceAsyncOptionalAlternativeOutcome<CreateUserServiceArg, CreateUserServiceResult,
-                CreateUserServiceOutcome> _createUser;
+        private readonly IServiceAsyncOptionalOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> _createUser;
+        private readonly IServiceAsyncOptionalOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> _updateUser;
 
         public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceAsyncOptionalAlternativeOutcome<CreateUserServiceArg,
-                CreateUserServiceResult, CreateUserServiceOutcome> createUser)
+            IServiceAsyncOptionalOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> createUser,
+            IServiceAsyncOptionalOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> updateUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
+            _updateUser = updateUser ?? throw new ArgumentNullException(nameof(updateUser));
         }
 
         [HttpGet("/{userId}")]
@@ -61,17 +60,21 @@ namespace ScooterBear.GTD.Controllers
             if (userValues == null) return BadRequest("Cannot parse required values.");
             if (string.IsNullOrEmpty(userValues.ID)) return BadRequest("ID is required.");
 
-            //Replaces the item at the key.  
-            // If it does not exist return 404.  DoesNotExist
-            // If it exists, but the version numbers don't match return 409 conflict. VersionConflict
-            // If Succeeds return 202 Accepted.  Success
-            // Unprocessable Entity if any variables are missing.
-            // EmailIsNotVerified 422 Unprocessable Entity
-            // BillingIdIsNotDefined 422 Unprocessable Entity
-            // AuthIdIsNotDefined 422 Unprocessable Entity
-            // PaymentOverdue 422 Unprocessable Entity
+            var optionalResult = await _updateUser.Run(userValues);
 
-            throw new NotImplementedException();
+            return optionalResult.Match<IActionResult>(
+                some => Ok(some.User), 
+                outcome =>
+                {
+                    if (outcome == UpdateUserService.UpdateUserOutcome.UnprocessableEntity)
+                        return UnprocessableEntity();
+
+                    if (outcome == UpdateUserService.UpdateUserOutcome.VersionConflict)
+                        return Conflict();
+
+                    return NotFound();
+
+                });
         }
     }
 }

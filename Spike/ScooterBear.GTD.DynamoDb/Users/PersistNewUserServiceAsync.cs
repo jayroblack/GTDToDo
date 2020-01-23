@@ -28,7 +28,7 @@ namespace ScooterBear.GTD.DynamoDb.Users
 
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             DynamoDBContext context = new DynamoDBContext(client);
-            await context.SaveAsync<UserProjectLabelDynamoDbTable>(table, CancellationToken.None);
+            await context.SaveAsync(table, CancellationToken.None);
             UserProjectLabelDynamoDbTable bookRetrieved =
                 await context.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, table.DateCreated,
                     CancellationToken.None);

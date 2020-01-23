@@ -5,13 +5,13 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
-    public class UpdateUserService : IServiceAsyncOptionalAlternativeOutcome<UpdateUserServiceArgs,
+    public class UpdateUserService : IServiceAsyncOptionalOutcomes<UpdateUserServiceArgs,
         UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>
     {
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
 
         private readonly
-            IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+            IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> _persistUpdatedUser;
 
 
@@ -19,12 +19,11 @@ namespace ScooterBear.GTD.Application.Users.Update
         {
             DoesNotExist,
             VersionConflict,
-            Success,
             UnprocessableEntity
         }
 
         public UpdateUserService(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceAsyncOptionalAlternativeOutcome<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+            IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> persistUpdatedUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
@@ -44,7 +43,7 @@ namespace ScooterBear.GTD.Application.Users.Update
                 var existingUser = some.User;
                 user = new User(existingUser.ID, existingUser.FirstName, existingUser.LastName, existingUser.Email,
                     existingUser.IsEmailVerified, existingUser.BillingId, existingUser.AuthId,
-                    existingUser.VersionNumber);
+                    existingUser.VersionNumber, existingUser.DateCreated);
             });
 
             try
