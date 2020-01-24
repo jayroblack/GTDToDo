@@ -29,11 +29,11 @@ namespace ScooterBear.GTD.DynamoDb.Users
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             DynamoDBContext context = new DynamoDBContext(client);
             await context.SaveAsync(table, CancellationToken.None);
-            UserProjectLabelDynamoDbTable bookRetrieved =
+            UserProjectLabelDynamoDbTable userRetrieved =
                 await context.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, table.DateCreated,
                     CancellationToken.None);
 
-            var readonlyUser = _mapTo.MapTo(bookRetrieved);
+            var readonlyUser = _mapTo.MapTo(userRetrieved);
             return new PersistNewUserServiceResult(readonlyUser);
         }
     }

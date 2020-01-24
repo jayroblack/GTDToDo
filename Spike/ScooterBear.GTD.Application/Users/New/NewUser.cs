@@ -13,7 +13,7 @@ namespace ScooterBear.GTD.Application.Users.New
         public bool IsAccountEnabled { get; }
         public DateTime DateCreated { get; }
 
-        public NewUser(string id, string firstName, string lastName, string email, DateTime dateCreated, string authId)
+        public NewUser(string id, string firstName, string lastName, string email, DateTime dateCreated)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException($"{nameof(id)} is required.");
@@ -27,15 +27,14 @@ namespace ScooterBear.GTD.Application.Users.New
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException($"{nameof(email)} is required.");
 
-            if (string.IsNullOrEmpty(authId))
-                throw new ArgumentException($"{nameof(authId)} is required.");
+            if (dateCreated == default(DateTime))
+                throw new ArgumentException($"Date Created value {dateCreated} is not valid.");
 
             ID = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             DateCreated = dateCreated;
-            AuthId = authId;
             IsEmailVerified = false;
             IsAccountEnabled = false;
         }

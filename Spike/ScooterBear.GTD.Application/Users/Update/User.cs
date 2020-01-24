@@ -16,7 +16,10 @@ namespace ScooterBear.GTD.Application.Users.Update
         public int VersionNumber { get; }
         public DateTime DateCreated { get; }
 
-        internal User(string id, string firstName, string lastName, string email, bool? isEmailVerified,
+        //I would rather this be internal so that external users are unable to create this class
+        //they have to go through the UpdateUserService.
+        //But in order to make it testable - I have to open it up.
+        public User(string id, string firstName, string lastName, string email, bool? isEmailVerified,
             string billingId, string authId, int versionNumber, DateTime dateCreated)
         {
             if (string.IsNullOrEmpty(id))
@@ -27,8 +30,10 @@ namespace ScooterBear.GTD.Application.Users.Update
                 throw new ArgumentException($"Missing required value {nameof(lastName)}");
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException($"Missing required value {nameof(email)}");
-            if (versionNumber == 0)
+            if (versionNumber < 0)
                 throw new ArgumentOutOfRangeException(nameof(versionNumber));
+            if( dateCreated == default(DateTime))
+                throw new ArgumentException($"Date Created value {dateCreated} is not valid.");
 
             ID = id;
             FirstName = firstName;
@@ -129,10 +134,10 @@ namespace ScooterBear.GTD.Application.Users.Update
             if (!this.IsEmailVerified.GetValueOrDefault())
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.EmailIsNotVerified);
 
-            if (!string.IsNullOrEmpty(this.BillingId))
+            if (string.IsNullOrEmpty(this.BillingId))
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.BillingIdIsNotDefined);
 
-            if (!string.IsNullOrEmpty(this.AuthId))
+            if (string.IsNullOrEmpty(this.AuthId))
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.AuthIdIsNotDefined);
 
             this.IsAccountEnabled = true;

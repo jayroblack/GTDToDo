@@ -38,14 +38,12 @@ namespace ScooterBear.GTD.Controllers
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
-            public string AuthId { get; set; }
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(NewUserValues values)
         {
-            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email,
-                values.AuthId);
+            var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email);
             var result = await _createUser.Run(args);
 
             return result.Match<IActionResult>(

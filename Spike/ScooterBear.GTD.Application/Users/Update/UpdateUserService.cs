@@ -14,7 +14,6 @@ namespace ScooterBear.GTD.Application.Users.Update
             IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> _persistUpdatedUser;
 
-
         public enum UpdateUserOutcome
         {
             DoesNotExist,
@@ -77,8 +76,8 @@ namespace ScooterBear.GTD.Application.Users.Update
                 return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
                     .VersionConflict);
 
-            return updatedExistUserOption.Match<Option<UpdateUserServiceResult, UpdateUserOutcome>>(some =>
-                    Option.Some<UpdateUserServiceResult, UpdateUserOutcome>(
+            return updatedExistUserOption.Match<Option<UpdateUserServiceResult, UpdateUserOutcome>>(
+                some => Option.Some<UpdateUserServiceResult, UpdateUserOutcome>(
                         new UpdateUserServiceResult(some.UpdatedUser)),
                 none => Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
                     .VersionConflict));
