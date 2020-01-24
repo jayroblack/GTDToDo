@@ -33,7 +33,7 @@ namespace ScooterBear.GTD.Application.Users.Update
         {
             var userExistsOption = await _getUser.Run(new GetUserQueryArgs(arg.ID));
             if (!userExistsOption.HasValue)
-                Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
+                return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
                     .DoesNotExist);
 
             User user = null;
@@ -72,11 +72,7 @@ namespace ScooterBear.GTD.Application.Users.Update
 
             var updatedExistUserOption = await _persistUpdatedUser.Run(new PersistUpdatedUserServiceArgs(user));
 
-            if (!updatedExistUserOption.HasValue)
-                return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
-                    .VersionConflict);
-
-            return updatedExistUserOption.Match<Option<UpdateUserServiceResult, UpdateUserOutcome>>(
+            return updatedExistUserOption.Match(
                 some => Option.Some<UpdateUserServiceResult, UpdateUserOutcome>(
                         new UpdateUserServiceResult(some.UpdatedUser)),
                 none => Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
