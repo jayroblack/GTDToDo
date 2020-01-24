@@ -18,7 +18,8 @@ namespace ScooterBear.GTD.Application.Users.New
         private readonly IServiceAsync<PersistNewUserServiceArgs, PersistNewUserServiceResult> _persistNewUserService;
         private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
 
-        public CreateUserService(IKnowTheDate iKnowTheDate, ICreateIdsStrategy createIdsStrategy,
+        public CreateUserService(IKnowTheDate iKnowTheDate, 
+            ICreateIdsStrategy createIdsStrategy,
             IServiceAsync<PersistNewUserServiceArgs, PersistNewUserServiceResult> persistNewUserService,
             IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser)
         {
