@@ -5,13 +5,13 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
-    public class UpdateUserService : IServiceAsyncOptionalOutcomes<UpdateUserServiceArgs,
+    public class UpdateUserService : IServiceOptOutcomes<UpdateUserServiceArgs,
         UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>
     {
-        private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
+        private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
 
         private readonly
-            IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+            IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> _persistUpdatedUser;
 
         public enum UpdateUserOutcome
@@ -21,8 +21,8 @@ namespace ScooterBear.GTD.Application.Users.Update
             UnprocessableEntity
         }
 
-        public UpdateUserService(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+        public UpdateUserService(IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser,
+            IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> persistUpdatedUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));

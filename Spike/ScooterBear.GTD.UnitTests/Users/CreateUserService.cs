@@ -64,8 +64,8 @@ namespace ScooterBear.GTD.UnitTests.Users
     {
         public Mock<IKnowTheDate> IKnowTheDate;
         public Mock<ICreateIdsStrategy> CreateIdsStrategy;
-        public Mock<IServiceAsync<PersistNewUserServiceArgs, PersistNewUserServiceResult>> PersistNewUserService;
-        public Mock<IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult>> GetUserService;
+        public Mock<IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>> PersistNewUserService;
+        public Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>> GetUserService;
         public CreateUserService CreateUserService;
         public User User;
 
@@ -74,8 +74,8 @@ namespace ScooterBear.GTD.UnitTests.Users
             this.IKnowTheDate = new Mock<IKnowTheDate>();
             this.CreateIdsStrategy = new Mock<ICreateIdsStrategy>();
             this.PersistNewUserService =
-                new Mock<IServiceAsync<PersistNewUserServiceArgs, PersistNewUserServiceResult>>();
-            this.GetUserService = new Mock<IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult>>();
+                new Mock<IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>>();
+            this.GetUserService = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
             this.CreateUserService = new CreateUserService(IKnowTheDate.Object, CreateIdsStrategy.Object,
                 PersistNewUserService.Object, GetUserService.Object);
             this.User = new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0, DateTime.Now);

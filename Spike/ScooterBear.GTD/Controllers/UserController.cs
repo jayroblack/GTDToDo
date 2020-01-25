@@ -11,13 +11,13 @@ namespace ScooterBear.GTD.Controllers
     [Route("/api/user")]
     public class UserController : Controller
     {
-        private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
-        private readonly IServiceAsyncOptionalOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> _createUser;
-        private readonly IServiceAsyncOptionalOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> _updateUser;
+        private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
+        private readonly IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> _createUser;
+        private readonly IServiceOptOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> _updateUser;
 
-        public UserController(IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceAsyncOptionalOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> createUser,
-            IServiceAsyncOptionalOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> updateUser)
+        public UserController(IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser,
+            IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> createUser,
+            IServiceOptOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> updateUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));

@@ -81,9 +81,9 @@ namespace ScooterBear.GTD.UnitTests.Users
 
     public class UpdateUserServiceFixture : IDisposable
     {
-        public readonly Mock<IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult>> GetUser;
+        public readonly Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>> GetUser;
 
-        public readonly Mock<IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs,
+        public readonly Mock<IServiceOptOutcomes<PersistUpdatedUserServiceArgs,
             PersistUpdatedUserServiceResult,
             PersistUpdatedUserOutcome>> PersistUpdatedUser;
 
@@ -93,9 +93,9 @@ namespace ScooterBear.GTD.UnitTests.Users
 
         public UpdateUserServiceFixture()
         {
-            this.GetUser = new Mock<IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult>>();
+            this.GetUser = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
             this.PersistUpdatedUser =
-                new Mock<IServiceAsyncOptionalOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+                new Mock<IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                     PersistUpdatedUserOutcome>>();
             this.UpdateUserService = new UpdateUserService(this.GetUser.Object, this.PersistUpdatedUser.Object);
             this.UpdateUserServiceArgs = new UpdateUserServiceArgs()

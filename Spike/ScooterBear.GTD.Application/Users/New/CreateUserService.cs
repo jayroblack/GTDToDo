@@ -11,17 +11,17 @@ namespace ScooterBear.GTD.Application.Users.New
         UserExists
     }
 
-    public class CreateUserService : IServiceAsyncOptionalOutcomes<CreateUserServiceArg,
+    public class CreateUserService : IServiceOptOutcomes<CreateUserServiceArg,
         CreateUserServiceResult, CreateUserServiceOutcome>
     {
         private readonly IKnowTheDate _iKnowTheDate;
-        private readonly IServiceAsync<PersistNewUserServiceArgs, PersistNewUserServiceResult> _persistNewUserService;
-        private readonly IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> _getUser;
+        private readonly IService<PersistNewUserServiceArgs, PersistNewUserServiceResult> _persistNewUserService;
+        private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
 
         public CreateUserService(IKnowTheDate iKnowTheDate, 
             ICreateIdsStrategy createIdsStrategy,
-            IServiceAsync<PersistNewUserServiceArgs, PersistNewUserServiceResult> persistNewUserService,
-            IQueryHandlerAsync<GetUserQueryArgs, GetUserQueryResult> getUser)
+            IService<PersistNewUserServiceArgs, PersistNewUserServiceResult> persistNewUserService,
+            IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser)
         {
             _iKnowTheDate = iKnowTheDate ?? throw new ArgumentNullException(nameof(iKnowTheDate));
             _persistNewUserService =

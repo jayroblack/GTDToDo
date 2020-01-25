@@ -1,8 +1,10 @@
-﻿namespace ScooterBear.GTD.Patterns.CQRS
+﻿using System.Threading.Tasks;
+
+namespace ScooterBear.GTD.Patterns.CQRS
 {
     public interface ICommandHandler<TCommand>
         where TCommand : ICommand
     {
-        void Run(TCommand command);
+        Task Run(TCommand command);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Optional;
+﻿using System.Threading.Tasks;
 
 namespace ScooterBear.GTD.Patterns.CQRS
 {
@@ -6,6 +6,6 @@ namespace ScooterBear.GTD.Patterns.CQRS
         where TArg : IServiceArgs<TResult>
         where TResult : IServiceResult
     {
-        Option<TResult> Run(TArg arg);
+        Task<TResult> Run(TArg arg);
     }
 }

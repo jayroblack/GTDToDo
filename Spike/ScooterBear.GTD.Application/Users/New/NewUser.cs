@@ -8,7 +8,6 @@ namespace ScooterBear.GTD.Application.Users.New
         public string FirstName { get; }
         public string LastName { get; }
         public string Email { get; }
-        public string AuthId { get; }
         public bool IsEmailVerified { get; }
         public bool IsAccountEnabled { get; }
         public DateTime DateCreated { get; }

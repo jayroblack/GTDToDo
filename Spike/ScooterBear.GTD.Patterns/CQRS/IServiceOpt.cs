@@ -3,7 +3,7 @@ using Optional;
 
 namespace ScooterBear.GTD.Patterns.CQRS
 {
-    public interface IServiceAsyncOptional<TArg, TResult>
+    public interface IServiceOpt<TArg, TResult>
     {
         Task<Option<TResult>> Run(TArg arg);
     }
