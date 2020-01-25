@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  scooterbear.gtd:
+    image: ${DOCKER_REGISTRY-}scooterbeargtd
+    build:
+      context: .
+      dockerfile: ScooterBear.GTD/Dockerfile
