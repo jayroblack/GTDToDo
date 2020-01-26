@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.Application
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6D3EEABF-190F-4EF8-A6CC-ED7A8099C0BD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.IntegrationTests", "..\ScooterBear.GTD.IntegrationTests\ScooterBear.GTD.IntegrationTests.csproj", "{AFC131AD-19D3-4863-87E5-60749C4E13B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6D3EEABF-190F-4EF8-A6CC-ED7A8099C0BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D3EEABF-190F-4EF8-A6CC-ED7A8099C0BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D3EEABF-190F-4EF8-A6CC-ED7A8099C0BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFC131AD-19D3-4863-87E5-60749C4E13B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFC131AD-19D3-4863-87E5-60749C4E13B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFC131AD-19D3-4863-87E5-60749C4E13B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFC131AD-19D3-4863-87E5-60749C4E13B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
