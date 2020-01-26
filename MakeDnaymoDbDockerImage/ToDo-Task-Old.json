@@ -13,7 +13,6 @@
     "WriteCapacityUnits": 5,
     "ReadCapacityUnits": 5
   },
-  "TableSizeBytes": 0,
   "TableName": "ToDo-Task-Old",
   "KeySchema": [
     {

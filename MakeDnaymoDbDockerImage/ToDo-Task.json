@@ -17,7 +17,6 @@
     "WriteCapacityUnits": 5,
     "ReadCapacityUnits": 5
   },
-  "TableSizeBytes": 0,
   "TableName": "ToDo-Task",
   "KeySchema": [
     {
@@ -29,7 +28,7 @@
       "AttributeName": "Id"
     }
   ],
-  "GlobalSecondaryIndexes ": [
+  "GlobalSecondaryIndexes": [
     {
       "IndexName": "ByDueDate",
       "KeySchema": [

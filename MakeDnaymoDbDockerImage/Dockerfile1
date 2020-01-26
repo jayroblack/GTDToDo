@@ -1,0 +1,6 @@
+FROM amazon/dynamodb-local
+MAINTAINER jayroblack
+EXPOSE 8000
+ENTRYPOINT ["java"]
+USER root
+CMD ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/db"]

@@ -1,0 +1,27 @@
+{
+	"AttributeDefinitions": [
+		{
+			"AttributeName": "UserId",
+			"AttributeType": "S"
+		},
+		{
+			"AttributeName": "DateCreated",
+			"AttributeType": "S"
+		}
+	],
+	"ProvisionedThroughput": {
+		"WriteCapacityUnits": 5,
+		"ReadCapacityUnits": 5
+	},
+	"TableName": "ToDo-Journal",
+	"KeySchema": [
+		{
+			"KeyType": "HASH",
+			"AttributeName": "UserId"
+		},
+		{
+			"KeyType": "RANGE",
+			"AttributeName": "DateCreated"
+		}
+	]
+}
