@@ -31,12 +31,12 @@ namespace ScooterBear.GTD.DynamoDb.Users
             var table = _mapper.MapFrom(arg.User);
             using (var _dynamoDb = _dynamoDbFactory.Create())
             {
-                await _dynamoDb.SaveAsync(table);
-
                 try
                 {
+                    await _dynamoDb.SaveAsync(table);
+
                     UserProjectLabelDynamoDbTable userRetrieved =
-                        await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, table.DateCreated,
+                        await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.User,
                             CancellationToken.None);
 
                     var readonlyUser = _mapTo.MapTo(userRetrieved);

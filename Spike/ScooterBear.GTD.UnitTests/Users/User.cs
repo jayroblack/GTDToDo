@@ -25,21 +25,24 @@ namespace ScooterBear.GTD.UnitTests.Users
         [InlineData("BillingId", "AuthId")]
         public void ShouldNotThrowRegardless(string billingId, string authId)
         {
-            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", true, billingId, authId, 1, DateTime.Now);
+            Action toRun = () =>
+                new User("Id", "FirstName", "LastName", "Email", true, billingId, authId, 1, DateTime.Now);
             toRun.Should().NotThrow<ArgumentException>();
         }
 
         [Fact]
         public void ShouldThrowWhenVersionIsLessThan0()
         {
-            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", -1, DateTime.Now);
+            Action toRun = () =>
+                new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", -1, DateTime.Now);
             toRun.Should().Throw<ArgumentException>();
         }
 
         [Fact]
         public void ShouldThrowIfDateHasNotBeenSet()
         {
-            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0, DateTime.MinValue);
+            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0,
+                DateTime.MinValue);
             toRun.Should().Throw<ArgumentException>();
         }
 
@@ -73,14 +76,10 @@ namespace ScooterBear.GTD.UnitTests.Users
             var billingId = billingIdSet ? "BillingId" : null;
             var authId = authIdIsSet ? "AuthId" : null;
 
-            var user = new User("Id", "FirstName", "LastName", "Email", isEmailVerfied, billingId, authId, 0, DateTime.Now);
+            var user = new User("Id", "FirstName", "LastName", "Email", isEmailVerfied, billingId, authId, 0,
+                DateTime.Now);
 
             user.IsAccountEnabled.GetValueOrDefault().Should().Be(userEnabled);
         }
-
-        [Fact]
-        public void ShouldMaintainDisableAccountIfManuallySet()
-        {
-            Assert.False(true, "If account is disabled because of lack of payment, then regardless of resetting email, or any other event, it should stay false until enabled again.");        }
     }
 }

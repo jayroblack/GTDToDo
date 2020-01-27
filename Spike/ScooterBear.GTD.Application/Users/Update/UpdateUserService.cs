@@ -53,14 +53,14 @@ namespace ScooterBear.GTD.Application.Users.Update
                 user.SetBillingId(arg.BillingId);
                 user.SetAuthId(arg.AuthId);
 
-                if (arg.IsEmailVerified.GetValueOrDefault() && !user.IsEmailVerified.GetValueOrDefault())
+                if (arg.IsEmailVerified.HasValue && arg.IsEmailVerified.GetValueOrDefault() && !user.IsEmailVerified.GetValueOrDefault())
                     user.VerifyEmail();
 
-                if (!arg.IsAccountEnabled.GetValueOrDefault() && user.IsAccountEnabled.GetValueOrDefault())
+                if (arg.IsAccountEnabled.HasValue && arg.IsAccountEnabled.GetValueOrDefault() && user.IsAccountEnabled.GetValueOrDefault())
                     user.DisableAccount();
 
-                if (arg.IsAccountEnabled.GetValueOrDefault() &&
-                    (!user.IsAccountEnabled.HasValue || user.IsAccountEnabled.GetValueOrDefault()))
+                if (arg.IsAccountEnabled.HasValue && arg.IsAccountEnabled.GetValueOrDefault() &&
+                    !user.IsAccountEnabled.GetValueOrDefault())
                     user.EnableAccount();
 
             }
