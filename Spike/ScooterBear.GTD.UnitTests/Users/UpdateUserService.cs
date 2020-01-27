@@ -94,13 +94,12 @@ namespace ScooterBear.GTD.UnitTests.Users
         public UpdateUserServiceFixture()
         {
             this.GetUser = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
-            this.PersistUpdatedUser =
-                new Mock<IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
-                    PersistUpdatedUserOutcome>>();
+            this.PersistUpdatedUser = new Mock<IServiceOptOutcomes<
+                PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>>();
             this.UpdateUserService = new UpdateUserService(this.GetUser.Object, this.PersistUpdatedUser.Object);
             this.UpdateUserServiceArgs = new UpdateUserServiceArgs()
             {
-                ID = "Id", AuthId = "AuthId", IsAccountEnabled = true, FirstName = "james", Email = "Emai",
+                ID = "Id", AuthId = "AuthId", FirstName = "james", Email = "Email",
                 BillingId = "BillingId", DateCreated = DateTime.Now, LastName = "LastName", VersionNumber = 4,
                 IsEmailVerified = true
             };

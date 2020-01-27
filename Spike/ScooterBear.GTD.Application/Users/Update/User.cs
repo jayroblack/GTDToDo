@@ -71,7 +71,7 @@ namespace ScooterBear.GTD.Application.Users.Update
 
             this.Email = email;
             this.IsEmailVerified = false;
-            DisableAccount();
+            this.IsAccountEnabled = false;
         }
 
         /// <summary>
@@ -118,11 +118,6 @@ namespace ScooterBear.GTD.Application.Users.Update
             EmailIsNotVerified,
             BillingIdIsNotDefined,
             AuthIdIsNotDefined,
-        }
-
-        public void DisableAccount()
-        {
-            this.IsAccountEnabled = false;
         }
 
         /// <summary>
