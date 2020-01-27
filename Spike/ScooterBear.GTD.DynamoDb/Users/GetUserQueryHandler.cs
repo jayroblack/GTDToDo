@@ -28,6 +28,9 @@ namespace ScooterBear.GTD.DynamoDb.Users
                     await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(query.UserId,
                         UserProjectLabelTableData.User);
 
+                if (result == null)
+                    return Option.None<GetUserQueryResult>();
+
                 var user = _mapTo.MapTo(result);
                 return Option.Some(new GetUserQueryResult(user));
             }

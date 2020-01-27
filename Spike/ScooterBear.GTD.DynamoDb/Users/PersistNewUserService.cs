@@ -30,9 +30,8 @@ namespace ScooterBear.GTD.DynamoDb.Users
             using (var _dynamoDb = _dynamoDbFactory.Create())
             {
                 await _dynamoDb.SaveAsync(table, CancellationToken.None);
-                UserProjectLabelDynamoDbTable userRetrieved =
-                    await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, table.DateCreated,
-                        CancellationToken.None);
+                var userRetrieved =
+                    await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.User, CancellationToken.None);
 
                 var readonlyUser = _mapTo.MapTo(userRetrieved);
                 return new PersistNewUserServiceResult(readonlyUser);
