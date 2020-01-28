@@ -19,9 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Spike\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
-    <ProjectReference Include="..\Spike\ScooterBear.GTD.DynamoDb\ScooterBear.GTD.DynamoDb.csproj" />
-    <ProjectReference Include="..\Spike\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.DynamoDb\ScooterBear.GTD.DynamoDb.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 
 </Project>
