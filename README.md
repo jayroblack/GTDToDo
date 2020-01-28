@@ -22,3 +22,4 @@ __NOTE: You must be using Visual Studio 2019 16.4.3 or above to work with Dotnet
 * [AWS CLI v1](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html#install-msi-on-windows)
 * [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-windows.html)
 * An Administrator Local Account ( Docker needs this to mount drives. )
+* If you are using Visual Studio - it must be v2019 16.4.3 or above to work with the Dotnet Core 3.1 bits. 
