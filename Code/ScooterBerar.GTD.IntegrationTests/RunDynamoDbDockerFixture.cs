@@ -22,26 +22,40 @@ namespace ScooterBear.GTD.IntegrationTests
         public IContainer Container { get; }
         public RunDynamoDbDockerFixture()
         {
+            //Bootstrap Autofac
             this.Container = SetupAutofac().Build(ContainerBuildOptions.None);
 
-            //NOTE:  If this fails - run MakeDnaymoDbDockerImage/BuildCustomDyanmoDbDocker.sh
+            //Bootstrap Docker
+            RunCommandLine("docker", "run -d --rm --name integration-test -p 8000:8000 jayroblack/dynamodb-local:1.1");
+            
+            if( !WaitForContainerToBeOnline())
+                Assert.False(true, "Failed to start up and query DynamoDb Local.");
+        }
+
+        public void Dispose()
+        {
+            //TODO: When debugging - discover a way to ensure that docker is stupped
+            //IF you Get Stuck - open Git Bash and type `docker stop integration-test` 
+            RunCommandLine("docker", "stop integration-test");
+        }
+
+        public void RunCommandLine(string fileName, string args)
+        {
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = "docker",
-                Arguments = "run -d --rm --name integration-test -p 8000:8000 jayroblack/dynamodb-local:1.1",
+                FileName = fileName,
+                Arguments = args,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            processStartInfo.Environment["CONFIGURATION"] = "Debug";
-            processStartInfo.Environment["COMPUTERNAME"] = Environment.MachineName;
 
             var process = Process.Start(processStartInfo);
             var std = new StringBuilder();
             while (!process.StandardOutput.EndOfStream)
                 std.Append(process.StandardOutput.ReadLine());
-            
+
             var err = new StringBuilder();
             while (!process.StandardError.EndOfStream)
                 err.Append(process.StandardError.ReadLine());
@@ -49,24 +63,7 @@ namespace ScooterBear.GTD.IntegrationTests
             process.WaitForExit();
             if (process.ExitCode != 0)
                 Assert.False(true, err.ToString());
-            
-            Assert.Equal(0, process.ExitCode);
-            if( !WaitForContainerToBeOnline())
-                Assert.False(true, "Failed to start up and query DynamoDb Local.");
-        }
 
-        public void Dispose()
-        {
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = "docker",
-                Arguments =
-                    $"stop integration-test"
-            };
-
-            var process = Process.Start(processStartInfo);
-
-            process.WaitForExit();
             Assert.Equal(0, process.ExitCode);
         }
 

@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: ScooterBear.GTD/Dockerfile
   dynamodb:
-    image: "jayroblack/dynamodb-local:1.1"
+    build:
+      context: .
+      dockerfile: DynamoDbDocker/Dockerfile
     ports:
       - "8000:8000"
