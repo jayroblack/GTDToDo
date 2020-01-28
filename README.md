@@ -1,13 +1,18 @@
-# GTDToDo
+# Getting Things Done - To Do Application
 Getting Things Done app based on David Allen - using Dynamo Db 
+
+## Purpose
+Showcase skils, play with new technology, memorialize biolerplate code for re use. 
+
+## Theory / Ideas / Commentary
 
 * [UI Design](./Design/README.md)
 * [DynamoDb Design](./DynamoDbModeling/README.md)
 * [Make Custom Dynamo DB Docker Image](./MakeDnaymoDbDockerImage/README.md)
 * [Take me to the Code!!!](./Code/README.md)
 
-## Developer Dependencies
-
+## Want to run the code?  
+### Developer Depenencies
 * [Docker Desktop 2.1.0.5 (40693)](https://docs.docker.com/docker-for-windows/install/)
 * [Dotnet Core 3.1.101](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 __NOTE: You must be using Visual Studio 2019 16.4.3 or above to work with Dotnet Core 3.1.__
