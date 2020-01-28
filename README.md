@@ -4,6 +4,7 @@ Getting Things Done app based on David Allen - using Dynamo Db
 * [UI Design](./Design/README.md)
 * [DynamoDb Design](./DynamoDbModeling/README.md)
 * [Make Custom Dynamo DB Docker Image](./MakeDnaymoDbDockerImage/README.md)
+* [Take me to the Code!!!](./Code/README.md)
 
 ## Developer Dependencies
 
