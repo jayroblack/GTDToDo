@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Optional;
+using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.DynamoDb.Dynamo;
 using ScooterBear.GTD.Patterns;

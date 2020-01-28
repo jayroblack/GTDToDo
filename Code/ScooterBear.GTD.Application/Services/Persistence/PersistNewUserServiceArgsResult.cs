@@ -1,7 +1,9 @@
 ﻿using System;
+using ScooterBear.GTD.Application.Users;
+using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Application.Users.New
+namespace ScooterBear.GTD.Application.Services.Persistence
 {
     public class PersistNewUserServiceArgs : IServiceArgs<PersistNewUserServiceResult>
     {

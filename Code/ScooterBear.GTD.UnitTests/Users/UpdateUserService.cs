@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Optional;
+using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns.CQRS;

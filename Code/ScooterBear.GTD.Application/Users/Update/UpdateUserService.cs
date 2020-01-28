@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Optional;
+using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Users.Update

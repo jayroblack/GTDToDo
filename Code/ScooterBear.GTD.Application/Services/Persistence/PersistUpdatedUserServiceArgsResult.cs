@@ -1,7 +1,9 @@
 ﻿using System;
+using ScooterBear.GTD.Application.Users;
+using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Application.Users.Update
+namespace ScooterBear.GTD.Application.Services.Persistence
 {
     public class PersistUpdatedUserServiceResult : IServiceResult
     {

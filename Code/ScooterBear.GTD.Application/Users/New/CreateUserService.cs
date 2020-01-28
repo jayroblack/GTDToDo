@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Optional;
+using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
@@ -18,7 +19,7 @@ namespace ScooterBear.GTD.Application.Users.New
         private readonly IService<PersistNewUserServiceArgs, PersistNewUserServiceResult> _persistNewUserService;
         private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
 
-        public CreateUserService(IKnowTheDate iKnowTheDate, 
+        public CreateUserService(IKnowTheDate iKnowTheDate,
             ICreateIdsStrategy createIdsStrategy,
             IService<PersistNewUserServiceArgs, PersistNewUserServiceResult> persistNewUserService,
             IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser)

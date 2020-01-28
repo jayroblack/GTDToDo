@@ -17,6 +17,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.IntegrationTests", "ScooterBerar.GTD.IntegrationTests\ScooterBear.GTD.IntegrationTests.csproj", "{6784676D-58D5-4ED9-9179-23207AF3D0DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScooterBear.GTD.AwsSimpleEmailService", "ScooterBear.GTD.AwsSimpleEmailService\ScooterBear.GTD.AwsSimpleEmailService.csproj", "{F5138CD6-F6CE-4CEB-BCD4-91B0FE5F6252}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{6784676D-58D5-4ED9-9179-23207AF3D0DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6784676D-58D5-4ED9-9179-23207AF3D0DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6784676D-58D5-4ED9-9179-23207AF3D0DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5138CD6-F6CE-4CEB-BCD4-91B0FE5F6252}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5138CD6-F6CE-4CEB-BCD4-91B0FE5F6252}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5138CD6-F6CE-4CEB-BCD4-91B0FE5F6252}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5138CD6-F6CE-4CEB-BCD4-91B0FE5F6252}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
