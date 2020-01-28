@@ -1,6 +1,8 @@
 # Getting Things Done - To Do Application
 Getting Things Done app based on David Allen - using Dynamo Db 
 
+**__NOTE:  This is a rapidly written stream of conciousness completed at the time of writing the code. It is going to have erratum ( like a lot of it ).  It needs an editors love and care.  Focus on the message and not the medium and enjoy the ride.__**  
+
 ## Purpose
 Showcase skils, play with new technology, memorialize biolerplate code for re use. 
 
