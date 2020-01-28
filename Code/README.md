@@ -41,7 +41,9 @@ In the past I have used in memory Repository objects to manage this.  But as I m
 
 Unfortunately not all services adapt themselves to being able to be run in Docker.  But it certainly makes portability and setup of code much easier.  Time is money, and the days when we can wait 1 to 2 weeks for a developer to have his machine buiding code are long gone.  And with current technology there is really no reaso for us to cling to these old ways.  They should be purged from the earth with fire....hard.  
 
-I would be remiss if I did not mention those on the internet that helped me arrive at this idea.  
-* [Restful API Integration Testing For .NET Core Using Docker](https://btburnett.com/2017/02/restful-api-integration-testing-for-net-core-using-docker.html)
+I would be remiss if I did not mention those on the internet that helped me arrive at this idea of:
+1. Using Docker in Integration Tests
+  * [Restful API Integration Testing For .NET Core Using Docker](https://btburnett.com/2017/02/restful-api-integration-testing-for-net-core-using-docker.html)
+2. Creating my own image using Amazyon Dynamo DB as the core and altering it with my own schema.  
 * [dwmkerr/docker-dynamodb](https://github.com/dwmkerr/docker-dynamodb)
 
