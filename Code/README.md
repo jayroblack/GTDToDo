@@ -46,4 +46,5 @@ I would be remiss if I did not mention those on the internet that helped me arri
   * [Restful API Integration Testing For .NET Core Using Docker](https://btburnett.com/2017/02/restful-api-integration-testing-for-net-core-using-docker.html)
 2. Creating my own image using Amazyon Dynamo DB as the core and altering it with my own schema.  
 * [dwmkerr/docker-dynamodb](https://github.com/dwmkerr/docker-dynamodb)
+* [Step by Step](../MakeDnaymoDbDockerImage/BuildCustomDyanmoDbDocker.sh)
 
