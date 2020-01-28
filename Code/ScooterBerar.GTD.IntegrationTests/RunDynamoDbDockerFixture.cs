@@ -26,6 +26,7 @@ namespace ScooterBear.GTD.IntegrationTests
             this.Container = SetupAutofac().Build(ContainerBuildOptions.None);
 
             //Bootstrap Docker
+            RunCommandLine("docker", "build -t jayroblack/dynamodb-local:1.1 -f ../../../../DynamoDbDocker/DockerFile ../../../../DynamoDbDocker");
             RunCommandLine("docker", "run -d --rm --name integration-test -p 8000:8000 jayroblack/dynamodb-local:1.1");
             
             if( !WaitForContainerToBeOnline())
