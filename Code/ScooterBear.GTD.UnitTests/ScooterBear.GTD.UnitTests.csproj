@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.DynamoDb\ScooterBear.GTD.DynamoDb.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using ScooterBear.GTD.Application.Services.Security;
+using ScooterBear.GTD.Fakes;
 using Xunit;
 
 namespace ScooterBear.GTD.UnitTests.Services

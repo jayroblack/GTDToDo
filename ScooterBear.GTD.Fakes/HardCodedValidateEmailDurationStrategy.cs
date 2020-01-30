@@ -1,13 +1,9 @@
 ﻿using System;
+using ScooterBear.GTD.Application.Services.Security;
 using ScooterBear.GTD.Patterns;
 
-namespace ScooterBear.GTD.Application.Services.Security
+namespace ScooterBear.GTD.Fakes
 {
-    public interface IValidateEmailDurationStrategy
-    {
-        bool IsValid(DateTime dateTimeUtc);
-    }
-
     public class HardCodedValidateEmailDurationStrategy : IValidateEmailDurationStrategy
     {
         private readonly IKnowTheDate _iKkKnowTheDate;

@@ -1,4 +1,6 @@
-﻿namespace ScooterBear.GTD.Application.Services.Security
+﻿using ScooterBear.GTD.Application.Services.Security;
+
+namespace ScooterBear.GTD.Fakes
 {
     public class HardCodedSecurityConfigurationFactory : ISecurityConfigurationFactory
     {
