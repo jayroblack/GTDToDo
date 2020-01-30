@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ScooterBear.GTD.Application.Services.Security;
-using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Application.Services.Email
+namespace ScooterBear.GTD.Application.Users.New
 {
     public class SendNewUserEmailServiceResult : IServiceResult
     {
@@ -30,7 +29,7 @@ namespace ScooterBear.GTD.Application.Services.Email
         }
         public Task<SendNewUserEmailServiceResult> Run(SendNewUserEmailServiceArgs arg)
         {
-            //CHEAPLY DELEGATE THIS TO Auth0, Okta or ORY
+            
             //TODO:  1) Create Cryptographic Method To Create a Time Sensitive Token to attach to a URL to verify this Email.
             //TODO:  2) Create a REST API Method to receive that verification and mark the user as Email Verified.
             //TODO:  3) Email Merge SubSystem - Maybe HandlerBars - Send Data and a Template and get an output of info. 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ScooterBear.GTD.Application.Services.Email;
 using ScooterBear.GTD.Patterns.CQRS;
 using ScooterBear.GTD.Patterns.Domain;
 

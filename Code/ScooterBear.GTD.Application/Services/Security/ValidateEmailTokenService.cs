@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ScooterBear.GTD.Application.Services.Profile;
+using Newtonsoft.Json;
+using Optional;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Services.Security
@@ -17,35 +18,62 @@ namespace ScooterBear.GTD.Application.Services.Security
 
     public class ValidateEmailTokenServicArgs : IServiceArgs<ValidateEmailTokenServiceResult>
     {
-        public string Token { get; }
+        public string Iv { get; }
+        public string Encrypted { get; }
 
-        public ValidateEmailTokenServicArgs(string token)
+        public ValidateEmailTokenServicArgs(string iv, string encrypted)
         {
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentException($"{nameof(token)} is required.");
-            Token = token;
+            if( string.IsNullOrEmpty(iv))
+                throw new ArgumentException($"{nameof(iv)} is required.");
+            if (string.IsNullOrEmpty(encrypted))
+                throw new ArgumentException($"{nameof(encrypted)} is required.");
+            Iv = iv;
+            Encrypted = encrypted;
         }
     }
 
-    public class
-        ValidateEmailTokenService : IService<CreateValidateEmailTokenServiceArgs, ValidateEmailTokenServiceResult>
+    public enum ValidateEmailOutcomes
     {
-        private readonly IQueryHandler<WhoAmIQueryArgs, WhoAmIQueryResult> _whoamId;
+        InvalidToken,
+        TokenExpired
+    }
 
-        public ValidateEmailTokenService(IQueryHandler<WhoAmIQueryArgs, WhoAmIQueryResult> whoamId)
+    public class ValidateEmailTokenService :
+        IServiceOptOutcomes<ValidateEmailTokenServicArgs, ValidateEmailTokenServiceResult, ValidateEmailOutcomes>
+    {
+        private readonly IEncryptDecryptStrategy _encryptDecryptStrategy;
+        private readonly IValidateEmailDurationStrategy _validateEmailDurationStrategy;
+
+        public ValidateEmailTokenService(IEncryptDecryptStrategy encryptDecryptStrategy,
+            IValidateEmailDurationStrategy validateEmailDurationStrategy)
         {
-            _whoamId = whoamId ?? throw new ArgumentNullException(nameof(whoamId));
+            _encryptDecryptStrategy = encryptDecryptStrategy ?? throw new ArgumentNullException(nameof(encryptDecryptStrategy));
+            _validateEmailDurationStrategy = validateEmailDurationStrategy ?? throw new ArgumentNullException(nameof(validateEmailDurationStrategy));
         }
 
-        public async Task<ValidateEmailTokenServiceResult> Run(CreateValidateEmailTokenServiceArgs arg)
+        public async Task<Option<ValidateEmailTokenServiceResult, ValidateEmailOutcomes>> Run(ValidateEmailTokenServicArgs arg)
         {
-            if (arg == null) throw new ArgumentNullException(nameof(arg));
-            var loggedInUser = await _whoamId.Run(new WhoAmIQueryArgs());
+            string decrypted = null;
 
-            //TODO:  Some Computer Science Cryptographic Signifigant operation
-            return loggedInUser.Match<ValidateEmailTokenServiceResult>(
-                some => new ValidateEmailTokenServiceResult(some.CurrentlyLoggedInUser.FirstName == arg.User.FirstName),
-                () => new ValidateEmailTokenServiceResult(false));
+            try
+            {
+                decrypted = _encryptDecryptStrategy.Decrypt(arg.Iv, arg.Encrypted);
+            }
+            catch
+            {
+                return Option.None<ValidateEmailTokenServiceResult, ValidateEmailOutcomes>(ValidateEmailOutcomes
+                    .InvalidToken);
+            }
+
+            var emailUserToken = JsonConvert.DeserializeObject<EmailUserToken>(decrypted);
+            var isValid = _validateEmailDurationStrategy.IsValid(emailUserToken.Created);
+
+            if( ! isValid)
+                return Option.None<ValidateEmailTokenServiceResult, ValidateEmailOutcomes>(ValidateEmailOutcomes
+                    .TokenExpired);
+
+            return Option.Some<ValidateEmailTokenServiceResult, ValidateEmailOutcomes>(
+                new ValidateEmailTokenServiceResult(true));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Patterns.CQRS;
 
@@ -29,10 +30,27 @@ namespace ScooterBear.GTD.Application.Services.Security
 
     public class CreateValidateEmailTokenService : IService<CreateValidateEmailTokenServiceArgs, CreateValidateEmailTokenServiceResult>
     {
+        private readonly IEncryptDecryptStrategy _encryptDecryptStrategy;
+        
+        public CreateValidateEmailTokenService(IEncryptDecryptStrategy encryptDecryptStrategy)
+        {
+            _encryptDecryptStrategy = encryptDecryptStrategy ?? throw new ArgumentNullException(nameof(encryptDecryptStrategy));
+        }
+
         public async Task<CreateValidateEmailTokenServiceResult> Run(CreateValidateEmailTokenServiceArgs arg)
         {
-            //TODO:  Replace Naive Impl with something real!!!!
-            return new CreateValidateEmailTokenServiceResult(arg.User.FirstName);
+            var user = arg.User;
+            
+            var emailUserToken = new EmailUserToken()
+            {
+                Created = DateTime.UtcNow,
+                Version = user.VersionNumber,
+                UserId = user.ID,
+            };
+
+            string json = JsonConvert.SerializeObject(emailUserToken);
+            (string iv, string encrypted) = _encryptDecryptStrategy.Encrypt(json);
+            return new CreateValidateEmailTokenServiceResult(string.Concat("?a=", iv, "&b=", encrypted));
         }
     }
 }
