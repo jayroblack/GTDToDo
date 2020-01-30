@@ -17,9 +17,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.IntegrationTests", "ScooterBerar.GTD.IntegrationTests\ScooterBear.GTD.IntegrationTests.csproj", "{6784676D-58D5-4ED9-9179-23207AF3D0DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScooterBear.GTD.MailMerge", "..\ScooterBear.GTD.MailMerge\ScooterBear.GTD.MailMerge.csproj", "{CD91C68D-8B89-49E6-82A5-884EAB1FB50C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.Fakes", "ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj", "{127C7BCE-1DA8-47D7-8B8F-4692048B975C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScooterBear.GTD.Fakes", "..\ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj", "{6D75841D-161E-4610-AE29-957285DC852C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.MailMerge", "ScooterBear.GTD.MailMerge\ScooterBear.GTD.MailMerge.csproj", "{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,14 +55,14 @@ Global
 		{6784676D-58D5-4ED9-9179-23207AF3D0DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6784676D-58D5-4ED9-9179-23207AF3D0DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6784676D-58D5-4ED9-9179-23207AF3D0DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD91C68D-8B89-49E6-82A5-884EAB1FB50C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD91C68D-8B89-49E6-82A5-884EAB1FB50C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD91C68D-8B89-49E6-82A5-884EAB1FB50C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD91C68D-8B89-49E6-82A5-884EAB1FB50C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D75841D-161E-4610-AE29-957285DC852C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D75841D-161E-4610-AE29-957285DC852C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D75841D-161E-4610-AE29-957285DC852C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D75841D-161E-4610-AE29-957285DC852C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{127C7BCE-1DA8-47D7-8B8F-4692048B975C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{127C7BCE-1DA8-47D7-8B8F-4692048B975C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{127C7BCE-1DA8-47D7-8B8F-4692048B975C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{127C7BCE-1DA8-47D7-8B8F-4692048B975C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

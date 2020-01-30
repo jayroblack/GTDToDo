@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Code\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
-    <ProjectReference Include="..\Code\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 
 </Project>
