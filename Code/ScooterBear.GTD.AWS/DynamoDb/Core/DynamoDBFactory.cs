@@ -10,7 +10,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
     {
         DynamoDb Create();
     }
-
+    
     public class DynamoDBFactory : IDynamoDBFactory
     {
         public DynamoDb Create()
@@ -25,26 +25,52 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
     {
         private readonly AmazonDynamoDBClient _client;
         private readonly DynamoDBContext _context;
+        //private readonly ILogger<DynamoDb> _logger;
 
         public DynamoDb(AmazonDynamoDBClient client, DynamoDBContext context)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            //_logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task SaveAsync<T>(T value, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task SaveAsync<T>(T value, CancellationToken cancellationToken = default(CancellationToken))
             where T : IDynamoDbTable
         {
-            return _context.SaveAsync(value, cancellationToken);
+            try
+            {
+                //TODO:  Come back we should have an exponential back off and retry
+                //TODO:  Fall and surface back to the user!!!
+                //RESEARCH:  Does the .Net Framework use Polly or do I have to implement it?
+                await _context.SaveAsync(value, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                //TODO:  Right this wrong!!!!
+                //_logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
+                throw;
+            };
         }
 
-        public Task<T> LoadAsync<T>(
+        public async Task<T> LoadAsync<T>(
             object hashKey,
             object rangeKey,
             CancellationToken cancellationToken = default(CancellationToken))
             where T : IDynamoDbTable
         {
-            return _context.LoadAsync<T>(hashKey, rangeKey, cancellationToken);
+            try
+            {
+                //TODO:  Come back we should have an exponential back off and retry
+                //TODO:  Fall and surface back to the user!!!
+                //RESEARCH:  Does the .Net Framework use Polly or do I have to implement it?
+                return await _context.LoadAsync<T>(hashKey, rangeKey, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                //TODO:  Right this wrong!!!!
+                //_logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
+                throw;
+            };
         }
 
         public void Dispose()

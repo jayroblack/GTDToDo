@@ -38,6 +38,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
                     createdUser.FirstName.Should().Be(name);
                     createdUser.LastName.Should().Be(last);
                     createdUser.Email.Should().Be(email);
+                    createdUser.IsAccountEnabled.GetValueOrDefault().Should().BeFalse();
                 },
                 outcome => outcome.Should().NotBe(outcome == CreateUserServiceOutcome.UserExists)
             );

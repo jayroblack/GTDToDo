@@ -10,8 +10,9 @@ namespace ScooterBear.GTD.Application.Services.Email
         public string Subject { get; }
         public string TextBody { get; }
         public string HtmlBody { get; }
+        public string ConfigSetName { get; }
 
-        public SendEmailCommand(string fromEmail, string toEmail, string subject, string textBody, string htmlBody)
+        public SendEmailCommand(string fromEmail, string toEmail, string subject, string textBody, string htmlBody, string configSetName)
         {
             if (string.IsNullOrEmpty(fromEmail))
                 throw new ArgumentException($"{nameof(fromEmail)} is required.");
@@ -29,6 +30,7 @@ namespace ScooterBear.GTD.Application.Services.Email
             Subject = subject;
             TextBody = textBody;
             HtmlBody = htmlBody;
+            ConfigSetName = configSetName;
         }
     }
 }
