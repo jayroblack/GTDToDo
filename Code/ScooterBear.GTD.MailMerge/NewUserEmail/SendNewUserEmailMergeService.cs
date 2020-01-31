@@ -42,7 +42,7 @@ namespace ScooterBear.GTD.MailMerge.NewUserEmail
             var textResult = bodyTextCompiled(data);
             var htmlResult = bodyHtmlCompiled(data);
 
-            return new SendNewUserEmailMergeServiceResult(subjectResult, textResult, htmlResult);
+            return new SendNewUserEmailMergeServiceResult(subjectResult, textResult, htmlResult, data);
         }
     }
 }

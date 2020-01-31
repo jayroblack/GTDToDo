@@ -9,12 +9,14 @@ namespace ScooterBear.GTD.Application.Services.MailMerge
         public string Subject { get; }
         public string Text { get; }
         public string Html { get; }
+        public object Data { get; }
 
-        public SendNewUserEmailMergeServiceResult(string subject, string text, string html)
+        public SendNewUserEmailMergeServiceResult(string subject, string text, string html, object data)
         {
             Subject = subject;  
             Text = text;
             Html = html;
+            Data = data;
         }
     }
 

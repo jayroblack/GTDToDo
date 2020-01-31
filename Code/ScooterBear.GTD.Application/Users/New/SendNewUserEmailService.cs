@@ -56,7 +56,7 @@ namespace ScooterBear.GTD.Application.Users.New
             var result = mailMergeResult.Result;
 
             await _sendEmail.Run(new SendEmailCommand(config.FromEmailAddress, arg.User.Email, result.Subject, result.Text,
-                result.Html, config.ConfigSetName));
+                result.Html, config.ConfigSetName, result.Data, EmailType.VerifyEmail));
             return new SendNewUserEmailServiceResult();
         }
     }
