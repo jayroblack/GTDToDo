@@ -9,7 +9,7 @@ namespace ScooterBear.GTD.Application.Users.New
     public class WhenNewUserCreatedSendValidateEmail : IDomainEventHandlerAsync<NewUserCreatedEvent>
     {
         private readonly IService<SendNewUserEmailServiceArgs, SendNewUserEmailServiceResult> _sendNewUserEmail;
-
+        
         public WhenNewUserCreatedSendValidateEmail(
             IService<SendNewUserEmailServiceArgs, SendNewUserEmailServiceResult> sendNewUserEmail)
         {
@@ -17,7 +17,7 @@ namespace ScooterBear.GTD.Application.Users.New
         }
         public async Task HandleAsync(NewUserCreatedEvent domainEvent, CancellationToken cancellationToken)
         {
-           await _sendNewUserEmail.Run(new SendNewUserEmailServiceArgs(domainEvent.User));
+            await _sendNewUserEmail.Run(new SendNewUserEmailServiceArgs(domainEvent.User));
         }
     }
 }
