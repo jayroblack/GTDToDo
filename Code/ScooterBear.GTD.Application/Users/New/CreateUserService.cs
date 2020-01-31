@@ -40,6 +40,7 @@ namespace ScooterBear.GTD.Application.Users.New
             return
                 queryOption.Match(
                     some => Option.None<CreateUserServiceResult, CreateUserServiceOutcome>(
+                        //TODO:  Should User Names Be Unique?  -> Seems like that is an IDP Problem
                         CreateUserServiceOutcome.UserExists),
                     () =>
                     {
