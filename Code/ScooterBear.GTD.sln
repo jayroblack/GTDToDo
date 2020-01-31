@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD", "ScooterB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.Patterns", "ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj", "{EA82414F-CEB5-4225-BAA1-0A0C7F6AD594}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.DynamoDb", "ScooterBear.GTD.DynamoDb\ScooterBear.GTD.DynamoDb.csproj", "{25611814-5AC7-4AFC-B6AA-313161037261}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.UnitTests", "ScooterBear.GTD.UnitTests\ScooterBear.GTD.UnitTests.csproj", "{1454F0A3-027C-4F49-9390-B9CDB23E1ADB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.Application", "ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj", "{FE850109-46F6-41D7-946F-4E1555A0CD23}"
@@ -20,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.Fakes", "ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj", "{127C7BCE-1DA8-47D7-8B8F-4692048B975C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.MailMerge", "ScooterBear.GTD.MailMerge\ScooterBear.GTD.MailMerge.csproj", "{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScooterBear.GTD.AWS", "ScooterBear.GTD.AWS\ScooterBear.GTD.AWS.csproj", "{7D073C98-07A0-4202-953D-7B032C9CF79C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,6 @@ Global
 		{EA82414F-CEB5-4225-BAA1-0A0C7F6AD594}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA82414F-CEB5-4225-BAA1-0A0C7F6AD594}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA82414F-CEB5-4225-BAA1-0A0C7F6AD594}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25611814-5AC7-4AFC-B6AA-313161037261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25611814-5AC7-4AFC-B6AA-313161037261}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25611814-5AC7-4AFC-B6AA-313161037261}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25611814-5AC7-4AFC-B6AA-313161037261}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1454F0A3-027C-4F49-9390-B9CDB23E1ADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1454F0A3-027C-4F49-9390-B9CDB23E1ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1454F0A3-027C-4F49-9390-B9CDB23E1ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +59,10 @@ Global
 		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D291B3C5-7425-41AA-8FB4-1FA6D0272F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 
-namespace ScooterBear.GTD.DynamoDb.Dynamo
+namespace ScooterBear.GTD.AWS.DynamoDb.Core
 {
     public interface IDynamoDBFactory
     {

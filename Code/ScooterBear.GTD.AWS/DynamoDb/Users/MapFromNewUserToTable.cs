@@ -1,8 +1,8 @@
 ﻿using ScooterBear.GTD.Application.Users.New;
-using ScooterBear.GTD.DynamoDb.Dynamo;
+using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 
-namespace ScooterBear.GTD.DynamoDb.Users
+namespace ScooterBear.GTD.AWS.DynamoDb.Users
 {
     public class MapFromNewUserToTable : IMapFrom<UserProjectLabelDynamoDbTable, NewUser>
     {

@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Optional;
 using ScooterBear.GTD.Application.Users;
-using ScooterBear.GTD.DynamoDb.Dynamo;
+using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.DynamoDb.Users
+namespace ScooterBear.GTD.AWS.DynamoDb.Users
 {
     public class GetUserQueryHandler : IQueryHandler<GetUserQueryArgs, GetUserQueryResult>
     {

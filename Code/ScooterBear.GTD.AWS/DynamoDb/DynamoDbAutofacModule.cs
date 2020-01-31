@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace ScooterBear.GTD.DynamoDb
+namespace ScooterBear.GTD.AWS.DynamoDb
 {
     public class DynamoDbAutofacModule : Module
     {

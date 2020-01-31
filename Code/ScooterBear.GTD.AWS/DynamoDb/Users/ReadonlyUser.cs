@@ -1,8 +1,7 @@
-﻿
-using System;
+﻿using System;
 using ScooterBear.GTD.Application.Users;
 
-namespace ScooterBear.GTD.DynamoDb.Users
+namespace ScooterBear.GTD.AWS.DynamoDb.Users
 {
     public class ReadonlyUser : IUser
     {

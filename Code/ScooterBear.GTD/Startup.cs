@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ScooterBear.GTD.Application;
-using ScooterBear.GTD.DynamoDb;
+using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.Patterns;
 
 namespace ScooterBear.GTD

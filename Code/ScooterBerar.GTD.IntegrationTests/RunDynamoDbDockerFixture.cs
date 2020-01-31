@@ -4,8 +4,8 @@ using System.Text;
 using Autofac;
 using Autofac.Builder;
 using ScooterBear.GTD.Application;
-using ScooterBear.GTD.DynamoDb;
-using ScooterBear.GTD.DynamoDb.Dynamo;
+using ScooterBear.GTD.AWS.DynamoDb;
+using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using Xunit;
 

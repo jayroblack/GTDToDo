@@ -6,11 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.104.20" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.104.23" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 

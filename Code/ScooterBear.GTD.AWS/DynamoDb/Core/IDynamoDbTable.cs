@@ -1,4 +1,4 @@
-﻿namespace ScooterBear.GTD.DynamoDb.Dynamo
+﻿namespace ScooterBear.GTD.AWS.DynamoDb.Core
 {
     public interface IDynamoDbTable
     {
