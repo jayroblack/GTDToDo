@@ -14,4 +14,9 @@
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UserLabels\" />
+    <Folder Include="UserProjects\" />
+  </ItemGroup>
+
 </Project>
