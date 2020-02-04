@@ -3,6 +3,7 @@ using Autofac;
 using FluentAssertions;
 using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Application.Users.Update;
+using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;
 
@@ -21,10 +22,10 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldDetectIfItemDoesNotExist()
         {
-            var id = "ID2";
+            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
             var name = "James";
             var last = "Rhodes";
-            var email = "jayroblack@here.com";
+            var email = $"jayroblack+{id}@here.com";
 
             var _createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                               CreateUserServiceResult, CreateUserServiceOutcome>>();
@@ -48,10 +49,10 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldBeUnprocessableWithRubbish()
         {
-            var id = "ID2";
+            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
             var name = "James";
             var last = "Rhodes";
-            var email = "jayroblack@here.com";
+            var email = $"jayroblack+{id}@here.com";
 
             var _createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();
@@ -77,10 +78,10 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldUpdateValues()
         {
-            var id = "ID2";
+            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
             var name = "James";
             var last = "Rhodes";
-            var email = "jayroblack@here.com";
+            var email = $"jayroblack+{id}@here.com";
 
             var _createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();

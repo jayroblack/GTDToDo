@@ -121,6 +121,7 @@ namespace ScooterBear.GTD.IntegrationTests
             builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger("")).As<ILogger>();
 
             //Overrides
+            builder.RegisterType<MailTrap>().As<IMailTrap>().SingleInstance();
             builder.RegisterType<DynamoDBLoccalFactory>().As<IDynamoDBFactory>();
             return builder;
         }
