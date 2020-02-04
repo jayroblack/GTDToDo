@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
+using Microsoft.Extensions.Logging;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Core
 {
@@ -15,11 +16,18 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
     
     public class DynamoDBFactory : IDynamoDBFactory
     {
+        private readonly ILogger<DynamoDb> _logger;
+
+        public DynamoDBFactory(ILogger<DynamoDb> logger)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         public DynamoDb Create()
         {
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             DynamoDBContext context = new DynamoDBContext(client);
-            return new DynamoDb(client, context);
+            return new DynamoDb(client, context, _logger);
         }
     }
 
@@ -27,13 +35,14 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
     {
         private readonly AmazonDynamoDBClient _client;
         private readonly DynamoDBContext _context;
-        //private readonly ILogger<DynamoDb> _logger;
+        private readonly ILogger<DynamoDb> _logger;
 
-        public DynamoDb(AmazonDynamoDBClient client, DynamoDBContext context)
+        public DynamoDb(AmazonDynamoDBClient client, 
+            DynamoDBContext context, ILogger<DynamoDb> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            //_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task SaveAsync<T>(T value, CancellationToken cancellationToken = default(CancellationToken))

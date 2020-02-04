@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using Autofac;
 using Autofac.Builder;
+using Microsoft.Extensions.Logging;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
@@ -103,7 +104,21 @@ namespace ScooterBear.GTD.IntegrationTests
             builder.RegisterModule<PatternsAutofacModule>();
             builder.RegisterModule<MailMergeAutofacModule>();
             builder.RegisterModule<FakesAutofacModule>();
-                                    
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddFilter("System", LogLevel.Warning)
+                    .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
+                    .AddDebug()
+                    .AddConsole();
+            });
+
+            //Add custom logic later to dynamically resolve at runtime.
+            builder.RegisterInstance(loggerFactory).As<ILoggerFactory>();
+            builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger<DynamoDb>()).As<ILogger<DynamoDb>>();
+
             //Overrides
             builder.RegisterType<DynamoDBLoccalFactory>().As<IDynamoDBFactory>();
             return builder;
