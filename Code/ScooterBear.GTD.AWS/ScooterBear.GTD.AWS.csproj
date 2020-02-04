@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DynamoDb\UserLabel\" />
+  </ItemGroup>
+
 </Project>

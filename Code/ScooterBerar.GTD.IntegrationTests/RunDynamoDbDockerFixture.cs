@@ -6,6 +6,8 @@ using Autofac.Builder;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
+using ScooterBear.GTD.Fakes;
+using ScooterBear.GTD.MailMerge;
 using ScooterBear.GTD.Patterns;
 using Xunit;
 
@@ -99,7 +101,9 @@ namespace ScooterBear.GTD.IntegrationTests
             builder.RegisterModule<ApplicationAutofacModule>();
             builder.RegisterModule<DynamoDbAutofacModule>();
             builder.RegisterModule<PatternsAutofacModule>();
-
+            builder.RegisterModule<MailMergeAutofacModule>();
+            builder.RegisterModule<FakesAutofacModule>();
+                                    
             //Overrides
             builder.RegisterType<DynamoDBLoccalFactory>().As<IDynamoDBFactory>();
             return builder;

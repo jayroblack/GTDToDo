@@ -21,6 +21,8 @@
   <ItemGroup>
     <ProjectReference Include="..\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.AWS\ScooterBear.GTD.AWS.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj" />
+    <ProjectReference Include="..\ScooterBear.GTD.MailMerge\ScooterBear.GTD.MailMerge.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@ using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
+using ScooterBear.GTD.Patterns.Domain;
 using Xunit;
 
 namespace ScooterBear.GTD.UnitTests.Users
@@ -67,6 +68,7 @@ namespace ScooterBear.GTD.UnitTests.Users
         public Mock<ICreateIdsStrategy> CreateIdsStrategy;
         public Mock<IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>> PersistNewUserService;
         public Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>> GetUserService;
+        public Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>> NewUserCreated;
         public CreateUserService CreateUserService;
         public User User;
 
@@ -77,8 +79,9 @@ namespace ScooterBear.GTD.UnitTests.Users
             this.PersistNewUserService =
                 new Mock<IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>>();
             this.GetUserService = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
+            this.NewUserCreated = new Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>>();
             this.CreateUserService = new CreateUserService(IKnowTheDate.Object, CreateIdsStrategy.Object,
-                PersistNewUserService.Object, GetUserService.Object);
+                PersistNewUserService.Object, GetUserService.Object, this.NewUserCreated.Object);
             this.User = new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0, DateTime.Now);
         }
 

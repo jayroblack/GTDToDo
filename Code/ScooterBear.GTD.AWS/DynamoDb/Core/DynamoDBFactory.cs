@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Core
 {
@@ -71,6 +73,18 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
                 //_logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
                 throw;
             };
+        }
+
+        public AsyncSearch<T> QueryAsync<T>(
+            object hashKey, QueryOperator op, IEnumerable<object> values, DynamoDBOperationConfig operationConfig = null)
+        {
+            return _context.QueryAsync<T>(hashKey, op, values, operationConfig);
+        }
+
+        public AsyncSearch<T> QueryAsync<T>(
+            object hashKey, DynamoDBOperationConfig operationConfig = null)
+        {
+            return _context.QueryAsync<T>(hashKey, operationConfig);
         }
 
         public void Dispose()

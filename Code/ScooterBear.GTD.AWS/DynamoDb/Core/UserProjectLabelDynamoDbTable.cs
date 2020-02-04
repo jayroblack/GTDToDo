@@ -6,8 +6,9 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
     public static class UserProjectLabelTableData
     {
         public static readonly string User = "User";
-        public static readonly string Project = "Projecjt";
+        public static readonly string Project = "Project";
         public static readonly string Label = "Label";
+        public static readonly string IndexProjectLabelByUserId = "ProjectLabelByUserId";
     }
 
     [DynamoDBTable("ToDo-UserProjectLabel")]

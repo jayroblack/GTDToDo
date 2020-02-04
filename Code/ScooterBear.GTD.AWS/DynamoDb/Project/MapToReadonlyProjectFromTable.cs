@@ -3,7 +3,7 @@ using ScooterBear.GTD.Patterns;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Project
 {
-    public class MapToReadonlyUserProjectFromTable : 
+    public class MapToReadonlyProjectFromTable :
         IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject>
     {
         public ReadOnlyProject MapTo(UserProjectLabelDynamoDbTable input)

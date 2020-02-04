@@ -1,16 +1,29 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ScooterBear.GTD.Application.UserProject;
+using ScooterBear.GTD.Patterns;
+using ScooterBear.GTD.Patterns.CQRS;
 using ScooterBear.GTD.Patterns.Domain;
 
 namespace ScooterBear.GTD.Application.Users.New
 {
     public class WhenNewUserCreatedBootstrapUser : IDomainEventHandlerAsync<NewUserCreatedEvent>
     {
-        public Task HandleAsync(NewUserCreatedEvent domainEvent, CancellationToken cancellationToken)
+        private readonly ICreateIdsStrategy _createIdsStrategy;
+        private readonly IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> _createInboxProject;
+
+        public WhenNewUserCreatedBootstrapUser(
+            ICreateIdsStrategy createIdsStrategy,
+            IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> createInboxProject)
         {
-            //TODO:  Create Default Project "Inbox" -> Default Project all Tasks begin.
-            throw new NotImplementedException();
+            _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));
+            _createInboxProject = createInboxProject ?? throw new ArgumentNullException(nameof(createInboxProject));
+        }
+        public async Task HandleAsync(NewUserCreatedEvent domainEvent, CancellationToken cancellationToken)
+        {
+            var createNewProjectService = new CreateNewUserProjectServiceArg(_createIdsStrategy.NewId(), domainEvent.User.ID, "Inbox");
+            await _createInboxProject.Run(createNewProjectService);
         }
     }
 }

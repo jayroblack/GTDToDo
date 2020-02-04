@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="UserLabels\" />
-    <Folder Include="UserProjects\" />
   </ItemGroup>
 
 </Project>
