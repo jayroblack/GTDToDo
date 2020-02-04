@@ -39,12 +39,12 @@ namespace ScooterBear.GTD.Application.Services.Security
         }
     }
 
-    public class CreateValidateEmailTokenService : IService<CreateValidateEmailTokenServiceArgs, CreateValidateEmailTokenServiceResult>
+    public class CreateValidateEmailTokenServiceArgsResult : IService<CreateValidateEmailTokenServiceArgs, CreateValidateEmailTokenServiceResult>
     {
         private readonly IEncryptDecryptStrategy _encryptDecryptStrategy;
         private readonly IKnowTheDate _iKnowTheDate;
 
-        public CreateValidateEmailTokenService(IEncryptDecryptStrategy encryptDecryptStrategy,
+        public CreateValidateEmailTokenServiceArgsResult(IEncryptDecryptStrategy encryptDecryptStrategy,
             IKnowTheDate iKnowTheDate)
         {
             _encryptDecryptStrategy = encryptDecryptStrategy ?? throw new ArgumentNullException(nameof(encryptDecryptStrategy));

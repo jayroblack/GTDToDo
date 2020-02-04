@@ -21,7 +21,8 @@ namespace ScooterBear.GTD.Application.UserProject
         private readonly IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult> _persistService;
         private readonly IKnowTheDate _iKnowTheDate;
 
-        public CreateNewUserProjectService(IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult> query, 
+        public CreateNewUserProjectService(
+            IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult> query, 
             IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult> persistService,
             IKnowTheDate iKnowTheDate)
         {
