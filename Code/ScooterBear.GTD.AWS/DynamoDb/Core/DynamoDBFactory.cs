@@ -57,8 +57,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
             }
             catch (Exception ex)
             {
-                //TODO:  Right this wrong!!!!
-                //_logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
+                _logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
                 throw;
             };
         }
@@ -78,8 +77,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
             }
             catch (Exception ex)
             {
-                //TODO:  Right this wrong!!!!
-                //_logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
+                _logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
                 throw;
             };
         }
@@ -95,7 +93,6 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
         {
             return _context.QueryAsync<T>(hashKey, operationConfig);
         }
-
         public void Dispose()
         {
             _context.Dispose();

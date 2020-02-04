@@ -118,6 +118,7 @@ namespace ScooterBear.GTD.IntegrationTests
             //Add custom logic later to dynamically resolve at runtime.
             builder.RegisterInstance(loggerFactory).As<ILoggerFactory>();
             builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger<DynamoDb>()).As<ILogger<DynamoDb>>();
+            builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger("")).As<ILogger>();
 
             //Overrides
             builder.RegisterType<DynamoDBLoccalFactory>().As<IDynamoDBFactory>();
