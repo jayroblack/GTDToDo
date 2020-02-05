@@ -23,6 +23,7 @@ __NOTE: You must be using Visual Studio 2019 16.4.3 or above to work with Dotnet
 * [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-windows.html)
 * An Administrator Local Account ( Docker needs this to mount drives. )
 * If you are using Visual Studio - it must be v2019 16.4.3 or above to work with the Dotnet Core 3.1 bits. 
+* Node version 12.14.1 or later.
 
 ### Setup Docker Image
 In order to run the tests you must build your docker image that has your base schema installed.  If you do not you will see something like this when running Integration Tests. 
