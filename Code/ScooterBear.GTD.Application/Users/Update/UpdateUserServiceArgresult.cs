@@ -13,17 +13,27 @@ namespace ScooterBear.GTD.Application.Users.Update
         }
     }
 
-    public class UpdateUserServiceArgs : IServiceArgs<UpdateUserServiceResult>, IUser
+    public class UpdateUserServiceArgs : IServiceArgs<UpdateUserServiceResult>, IUpdateUserArgs
     {
-        public string ID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public bool? IsEmailVerified { get; set; }
-        public string BillingId { get; set; }
-        public string AuthId { get; set; }
-        public bool? IsAccountEnabled { get; set; }
-        public int VersionNumber { get; set; }
-        public DateTime DateCreated { get; set; }
+        public string ID { get; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string Email { get; }
+        public bool? IsEmailVerified { get; }
+        public string BillingId { get; }
+        public string AuthId { get; }
+        public int VersionNumber { get; }
+
+        public UpdateUserServiceArgs(string id, string firstName, string lastName, string email, bool? isEmailVerified, string billingId, string authId, int versionNumber)
+        {
+            ID = id;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            IsEmailVerified = isEmailVerified;
+            BillingId = billingId;
+            AuthId = authId;
+            VersionNumber = versionNumber;
+        }
     }
 }

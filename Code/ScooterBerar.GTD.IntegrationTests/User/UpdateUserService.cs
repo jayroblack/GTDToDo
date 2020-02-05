@@ -22,25 +22,14 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldDetectIfItemDoesNotExist()
         {
-            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
-            var name = "James";
-            var last = "Rhodes";
-            var email = $"jayroblack+{id}@here.com";
+            var user = _fixture.GenerateUser();
 
-            var _createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
-                              CreateUserServiceResult, CreateUserServiceOutcome>>();
-
-            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
+            var updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
                 UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
 
-            var updateOption = await _updateUser.Run(new UpdateUserServiceArgs()
-                {
-                    ID = id,
-                    FirstName = name,
-                    LastName = last,
-                    Email = email
-                });
-
+            var updateOption = await updateUser.Run(new UpdateUserServiceArgs(user.ID, user.FirstName, user.LastName,
+                user.Email, user.IsEmailVerified, user.BillingId, user.AuthId, user.VersionNumber));
+            
             updateOption.Match(
                 some => Assert.True(false, "Should Fail"), 
                 outcome => outcome.Should().Be(UpdateUserService.UpdateUserOutcome.DoesNotExist));
@@ -49,26 +38,18 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldBeUnprocessableWithRubbish()
         {
-            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
-            var name = "James";
-            var last = "Rhodes";
-            var email = $"jayroblack+{id}@here.com";
+            var user = _fixture.GenerateUser();
 
-            var _createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
+            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();
 
-            await _createUser.Run(new CreateUserServiceArg(id, name, last, email));
+            await createUser.Run(new CreateUserServiceArg(user.ID, user.FirstName, user.LastName, user.Email));
 
-            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
+            var updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
                 UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
 
-            var updateOption = await _updateUser.Run(new UpdateUserServiceArgs()
-            {
-                ID = id,
-                FirstName = null,
-                LastName = null,
-                Email = null
-            });
+            var updateOption = await updateUser.Run(new UpdateUserServiceArgs(user.ID, null, null,
+                null, user.IsEmailVerified, user.BillingId, user.AuthId, user.VersionNumber));
 
             updateOption.Match(
                 some => Assert.True(false, "Should Fail"),
@@ -78,15 +59,17 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldUpdateValues()
         {
-            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
-            var name = "James";
-            var last = "Rhodes";
-            var email = $"jayroblack+{id}@here.com";
+            var user = _fixture.GenerateUser();
 
-            var _createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
+            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();
 
-            await _createUser.Run(new CreateUserServiceArg(id, name, last, email));
+            var createUserOptional = 
+                await createUser.Run(new CreateUserServiceArg(user.ID, user.FirstName, user.LastName, user.Email));
+            createUserOptional.HasValue.Should().BeTrue();
+
+            var existingVeresionNumber = 0;
+            createUserOptional.MatchSome(x=> existingVeresionNumber = x.User.VersionNumber);
 
             var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
                 UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
@@ -95,19 +78,11 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var newLastName = "Tastey";
             var newEmail = "mcTastey@McLuvn";
             var isEmailverified = true;
-            var billingId = "BillingId";
-            var authId = "AuthId";
+            var billingId = "NewBillingId";
+            var authId = "NewAuthId";
 
-            var updateOption = await _updateUser.Run(new UpdateUserServiceArgs()
-            {
-                ID = id,
-                FirstName = newFirstName,
-                LastName = newLastName,
-                Email = newEmail,
-                IsEmailVerified = isEmailverified,
-                BillingId = billingId,
-                AuthId = authId
-            });
+            var updateOption = await _updateUser.Run(new UpdateUserServiceArgs(user.ID, newFirstName, newLastName,
+                newEmail, isEmailverified, billingId, authId, existingVeresionNumber));
 
             updateOption.Match(
                 some =>
@@ -122,6 +97,35 @@ namespace ScooterBear.GTD.IntegrationTests.User
                     user.IsAccountEnabled.Should().Be(true);
                 },
                 outcome => Assert.False(true, "Should Have Succeeded"));
+        }
+
+        [Fact]
+        public async void ShouldReturnVersionConflict()
+        {
+            var user = _fixture.GenerateUser();
+
+            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
+                CreateUserServiceResult, CreateUserServiceOutcome>>();
+
+            await createUser.Run(new CreateUserServiceArg(user.ID, user.FirstName, user.LastName, user.Email));
+
+            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
+                UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
+
+            var newFirstName = "Mc";
+            var newLastName = "Tastey";
+            var newEmail = "mcTastey@McLuvn";
+            var isEmailverified = true;
+            var billingId = "NewBillingId";
+            var authId = "NewAuthId";
+
+            var updateOption = await _updateUser.Run(new UpdateUserServiceArgs(user.ID, newFirstName, newLastName,
+                newEmail, isEmailverified, billingId, authId, 100));
+
+            updateOption.Match(
+                some =>
+                Assert.False(true, "Should not pass."),
+                outcome => outcome.Should().Be(UpdateUserService.UpdateUserOutcome.VersionConflict));
         }
     }
 }

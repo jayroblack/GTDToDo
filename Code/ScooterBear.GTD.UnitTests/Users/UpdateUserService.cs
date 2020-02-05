@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using Optional;
+using ScooterBear.GTD.Application;
 using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.Update;
@@ -98,13 +99,19 @@ namespace ScooterBear.GTD.UnitTests.Users
             this.PersistUpdatedUser = new Mock<IServiceOptOutcomes<
                 PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>>();
             this.UpdateUserService = new UpdateUserService(this.GetUser.Object, this.PersistUpdatedUser.Object);
-            this.UpdateUserServiceArgs = new UpdateUserServiceArgs()
-            {
-                ID = "Id", AuthId = "AuthId", FirstName = "james", Email = "Email",
-                BillingId = "BillingId", DateCreated = DateTime.Now, LastName = "LastName", VersionNumber = 4,
-                IsEmailVerified = true
-            };
-            this.User = new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0, DateTime.Now);
+            var id = new GuidCreateIdStrategy().NewId();
+            var firstName = "FirstName";
+            var lastName = "LastName";
+            var email = "Email";
+            var isEmailVerfied = true;
+            var billingId = "BilllingId";
+            var versionNumber = 4;
+            var authId = "AuthId";
+
+            this.UpdateUserServiceArgs = new UpdateUserServiceArgs(id, firstName, lastName, email, isEmailVerfied,
+                billingId, authId, versionNumber);
+            
+            this.User = new User(id, firstName, lastName, email, isEmailVerfied, billingId, authId, versionNumber, DateTime.Now);
         }
 
         public void Dispose()

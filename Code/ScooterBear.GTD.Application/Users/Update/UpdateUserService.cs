@@ -53,6 +53,7 @@ namespace ScooterBear.GTD.Application.Users.Update
                 user.SetEmail(arg.Email);
                 user.SetBillingId(arg.BillingId);
                 user.SetAuthId(arg.AuthId);
+                user.SetVersionNumber(arg.VersionNumber);
 
                 if (arg.IsEmailVerified.HasValue && arg.IsEmailVerified.GetValueOrDefault())
                     user.VerifyEmail();

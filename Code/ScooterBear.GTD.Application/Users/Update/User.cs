@@ -13,7 +13,7 @@ namespace ScooterBear.GTD.Application.Users.Update
         public string BillingId { get; private set; }
         public string AuthId { get; private set; }
         public bool? IsAccountEnabled { get; private set; }
-        public int VersionNumber { get; }
+        public int VersionNumber { get; private set; }
         public DateTime DateCreated { get; }
 
         //I would rather this be internal so that external users are unable to create this class
@@ -111,6 +111,13 @@ namespace ScooterBear.GTD.Application.Users.Update
                 return;
             this.AuthId = authId;
             EnableAccount();
+        }
+
+        public void SetVersionNumber(int versionNumber)
+        {
+            if( versionNumber < 0)
+                throw new ArgumentOutOfRangeException(nameof(versionNumber));
+            this.VersionNumber = versionNumber;
         }
 
         public enum EnableUserOutcome

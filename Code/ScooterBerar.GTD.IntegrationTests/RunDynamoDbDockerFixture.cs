@@ -5,8 +5,10 @@ using Autofac;
 using Autofac.Builder;
 using Microsoft.Extensions.Logging;
 using ScooterBear.GTD.Application;
+using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
+using ScooterBear.GTD.AWS.DynamoDb.Users;
 using ScooterBear.GTD.Fakes;
 using ScooterBear.GTD.MailMerge;
 using ScooterBear.GTD.Patterns;
@@ -124,6 +126,17 @@ namespace ScooterBear.GTD.IntegrationTests
             builder.RegisterType<MailTrap>().As<IMailTrap>().SingleInstance();
             builder.RegisterType<DynamoDBLoccalFactory>().As<IDynamoDBFactory>();
             return builder;
+        }
+
+        public IUser GenerateUser()
+        {
+            var id = this.Container.Resolve<ICreateIdsStrategy>().NewId();
+            var name = "James";
+            var last = "Rhodes";
+            var email = $"jayroblack+{id}@here.com";
+
+            return new Application.Users.Update.User(id, name, last, email, true, "billingId", "authId", 0,
+                DateTime.UtcNow);
         }
     }
 }
