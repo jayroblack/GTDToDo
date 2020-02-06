@@ -1,50 +1,25 @@
-# What is the Architecture?
 
-Is it Hexagon?  Is it CQRS?  Is it domain driven?  Is it aspect oriented?  The answer is yes.  Let me explain.  
+## Developer Depenencies
+* [Docker Desktop 2.1.0.5 (40693)](https://docs.docker.com/docker-for-windows/install/)
+* [Dotnet Core 3.1.101](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+__NOTE: You must be using Visual Studio 2019 16.4.3 or above to work with Dotnet Core 3.1.__
+* [AWS CLI v1](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html#install-msi-on-windows)
+* [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-windows.html)
+* An Administrator Local Account ( Docker needs this to mount drives. )
+* If you are using Visual Studio - it must be v2019 16.4.3 or above to work with the Dotnet Core 3.1 bits. 
+* Node version 12.14.1 or later.
 
-## Background
+# Setup Docker Image
+In order to run the tests you must build your docker image that has your base schema installed.  If you do not you will see something like this when running Integration Tests. 
 
-In my experience over the last few decades I have seen patterns and processe evolve from the Grady Booch Method / UML / Waterfall methodology to the more modern Agile aproaches of today and we have only just now begun to realize the value is some of the more modern ideas of applying Complex Systems Theory and PLE to software. 
+![Error Running Tests](../Docs/FirstTimeRunningTests.PNG "Error")
 
-The point is that you experiment with different patterns and practices and you stick to what works, and you attempt to innovate and modify what does not work.  
+To Fix, open up Gitbash here:  `GTDToDo\MakeDnaymoDbDockerImage`
+> NOTE:  This step is going to require that you have a local admin account.  Docker does not like certain types of accounts when mounting volumes, for that reason we suggest just using a local admin account.  Open up Docker for Windows, Settings, and then unshare and reset credentials, and then share C drive only this time use your local admin account.  
 
-I have been havily influenced by my Heroes:  Michael Feathers, Robert C. Martin (Uncle Bob), Eric Evans, Charles Petzold, Kent Beck and Martin Fowler and Sam Evans.  Honestly too many for me to name in a single article - all of them have helped to shape my perpective regarding what makes a good architecture versus a bad architecture.  
+> NOTE:  Be sure you have already run aws configure.  You should be able to list tables by running this command: `aws dynamodb list-tables`
 
-In the end I decided that I liked Uncle Bob's definition the best:  In a Universe where change is the only constant, we can therefore judge software only on it's ability to change without the negative side effects of entropy and unecessary complecity ( I modified it a little)
-
-## Solution / Project Structure
-
-The Dependency Inversion principal is front and center in my design.  Logic should depend on service abstraxtions and not concrete implementation code.  This is the secret ingredient to making your code testable, resilient to change, and antifragile.  
-
-### Core of the Hexagon, Onion, Whatever
-In the center we have the Pattern Primitives.  These are common interfaces of patterns that we see creep up in SW development over and over again.
-
-
-### AND THEN....
-Application and it's associated external services.  In this case - I have a project for Dynamo DB - because that is my only external service, but over time this is going to change.  
-
-NOTE:  As projects grow in size and complecity it is soetimes necessary to create a project between Application and Patterns that is named Abstractions.  We will see this happen over time with this design.  Sit tight.  The primary motiviation is to allow for standard abstractions of re occuring themes to have a home that is not in core and is not central to Application so that it can simultaneously exist in DB and in Application ( or another service )
-
-### Last
-In Hexagon we call this the Ports and Adapters Layer.  This is often one of the most difficult concepts to grasp.  Yes MVC is the entrypoint for your Application - but it is not your application.  It is just as much a service that requires abstraction as the database or email server or stream of events.  
-
-## Tests 
-So far I only have Unit Tests and Integration tests.  
-
-## Unit Tests
-
-Unit tests testing only a single class using mocks.  Notice I don't test every single class.  I don't test the mundane and redundant - that only slows me down when I need to make changes.  Instead I focus on logic - think of it like this - if there is a conditional logical statement like [ if, else, then, while, do, etc...] then I should write tests to ensure that it works the way I itend.  Simple delegation to other services actually introduce redundant levels of tests that are already covered in one way or another.  
-
-## Integration Tests
-
-In the past I have used in memory Repository objects to manage this.  But as I matured and my thinking evolved I realized the the repository pattern itself violated the SRP.  I also realized with new technology like Docker, instead of wasting precious developer time writing complex fakes - I can just use a docker image and be on my way.  
-
-Unfortunately not all services adapt themselves to being able to be run in Docker.  But it certainly makes portability and setup of code much easier.  Time is money, and the days when we can wait 1 to 2 weeks for a developer to have his machine buiding code are long gone.  And with current technology there is really no reaso for us to cling to these old ways.  They should be purged from the earth with fire....hard.  
-
-I would be remiss if I did not mention those on the internet that helped me arrive at this idea of:
-1. Using Docker in Integration Tests
-  * [Restful API Integration Testing For .NET Core Using Docker](https://btburnett.com/2017/02/restful-api-integration-testing-for-net-core-using-docker.html)
-2. Creating my own image using Amazyon Dynamo DB as the core and altering it with my own schema.  
-* [dwmkerr/docker-dynamodb](https://github.com/dwmkerr/docker-dynamodb)
-* [Step by Step](../MakeDnaymoDbDockerImage/BuildCustomDyanmoDbDocker.sh)
-
+Now run the command to bulid your docker image:  
+```
+./BuildCustomDyanmoDbDocker.sh
+```
