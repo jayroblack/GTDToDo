@@ -1,0 +1,20 @@
+title Sign Up
+
+actor Client
+materialdesignicons F59F Store Front
+materialdesignicons F15F ToDo API
+database Dynamo DB
+materialdesignicons F19B Payment Provider
+materialdesignicons F1EE Email
+
+Client->Store Front:Sign Up Link Clicked
+Store Front-> Store Front: Fill Out Form
+Client->Store Front:Sign Up Submit
+Store Front->ToDo API:Post Https
+activate ToDo API
+ToDo API->Dynamo DB: Create User 
+ToDo API->Payment Provider: Sign Up User for Tier
+ToDo API->Email: Send Email with Confirm Link
+Store Front<<--ToDo API: Done
+deactivate ToDo API
+Store Front-->>Client: Redirect to Login

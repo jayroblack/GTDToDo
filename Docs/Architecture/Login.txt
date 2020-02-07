@@ -1,0 +1,24 @@
+title Login
+
+actor Client
+materialdesignicons F59F ToDo UI
+participant oAuth Server
+materialdesignicons F15F ToDo API
+database Dynamo DB
+
+==Start oAuth Authorization Code + PKCE==
+Client->ToDo UI:
+ToDo UI->ToDo UI:Generate Verifier & Challenge
+ToDo UI->oAuth Server: Authorize
+oAuth Server-->>Client:Redirect to Login
+Client->oAuth Server: Authenticate / Consent
+oAuth Server->ToDo UI: Auth Code
+ToDo UI-->>oAuth Server:Auth Code + Code Verifier
+oAuth Server->oAuth Server:Validate
+oAuth Server->ToDo UI:Id Token + Access Token
+==End oAuth Authorization Code + PKCE==
+ToDo UI->Dynamo DB:Get User Data
+ToDo UI->ToDo UI: Is Email Verified?
+ToDo UI->ToDo UI: Is User Up to Date on Payments?
+ToDo UI->ToDo UI: Is User Locked Out?
+ToDo UI->Client:Show Start Screen
