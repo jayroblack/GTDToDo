@@ -3,7 +3,6 @@ using Autofac;
 using FluentAssertions;
 using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Application.Users.Update;
-using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;
 

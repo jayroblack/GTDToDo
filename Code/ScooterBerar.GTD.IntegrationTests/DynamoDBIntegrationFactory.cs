@@ -6,11 +6,11 @@ using ScooterBear.GTD.AWS.DynamoDb.Core;
 
 namespace ScooterBear.GTD.IntegrationTests
 {
-    public class DynamoDBLoccalFactory : IDynamoDBFactory
+    public class DynamoDBIntegrationFactory : IDynamoDBFactory
     {
         private readonly ILogger<DynamoDb> _logger;
 
-        public DynamoDBLoccalFactory(ILogger<DynamoDb> logger)
+        public DynamoDBIntegrationFactory(ILogger<DynamoDb> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }

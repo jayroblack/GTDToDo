@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.AWS.DynamoDb;
+using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 
 namespace ScooterBear.GTD
@@ -33,6 +34,7 @@ namespace ScooterBear.GTD
             builder.RegisterModule<ApplicationAutofacModule>();
             builder.RegisterModule<DynamoDbAutofacModule>();
             builder.RegisterModule<PatternsAutofacModule>();
+            builder.RegisterType<DynamoDBLocalFactory>().As<IDynamoDBFactory>();
         }
 
         public ILifetimeScope AutofacContainer { get; private set; }

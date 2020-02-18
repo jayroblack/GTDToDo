@@ -8,7 +8,6 @@ using ScooterBear.GTD.Application;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
-using ScooterBear.GTD.AWS.DynamoDb.Users;
 using ScooterBear.GTD.Fakes;
 using ScooterBear.GTD.MailMerge;
 using ScooterBear.GTD.Patterns;
@@ -124,7 +123,7 @@ namespace ScooterBear.GTD.IntegrationTests
 
             //Overrides
             builder.RegisterType<MailTrap>().As<IMailTrap>().SingleInstance();
-            builder.RegisterType<DynamoDBLoccalFactory>().As<IDynamoDBFactory>();
+            builder.RegisterType<DynamoDBIntegrationFactory>().As<IDynamoDBFactory>();
             return builder;
         }
 
