@@ -32,7 +32,6 @@ docker run -d --name jay-dyn1 -p 8000:8000 jayroblack/dynamodb-local:1.1
 aws dynamodb list-tables --endpoint-url http://localhost:8000
 docker stop jay-dyn1
 
-docker save jayroblack/dynamodb-local:1.1 | gzip > jayroblack_dynamodb-local1_1.tar.gz
 # If All Went Well You Should see that all tables are there.  
 # If you need to update your schema later - itaerate the version please!
 # Additive stuff - just iterate minor
