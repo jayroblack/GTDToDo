@@ -61,7 +61,7 @@ namespace ScooterBear.GTD
 
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Welcome to running ASP.NET Core 3.0 in Lambda!");
+                    await context.Response.WriteAsync("It's All Good!");
                 });
             });
         }

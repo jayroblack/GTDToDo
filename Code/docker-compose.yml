@@ -6,9 +6,16 @@ services:
     build:
       context: .
       dockerfile: ScooterBear.GTD/Dockerfile
-  dynamodb:
+# NEED TO FIGURE OUT HOW TO MAKE THIS WORK IN INTEGRATION TEST AND DURING DEV.
+#  dynamodb:
+#    build:
+#      context: .
+#      dockerfile: DynamoDbDocker/Dockerfile
+#    ports:
+#      - "8000:8000"
+  identityserver:
     build:
       context: .
-      dockerfile: DynamoDbDocker/Dockerfile
+      dockerfile: IdentityServerAspNetIdentity/Dockerfile
     ports:
-      - "8000:8000"
+      - "5000:80"
