@@ -1,21 +1,16 @@
 version: '3.4'
-
+# Why run the image?  Because changes to the Dynamo DB schema and the identity server will happen rarely.  Why wait for them to be built every single time?
 services:
   scooterbear.gtd:
     image: ${DOCKER_REGISTRY-}scooterbeargtd
     build:
       context: .
       dockerfile: ScooterBear.GTD/Dockerfile
-# NEED TO FIGURE OUT HOW TO MAKE THIS WORK IN INTEGRATION TEST AND DURING DEV.
-#  dynamodb:
-#    build:
-#      context: .
-#      dockerfile: DynamoDbDocker/Dockerfile
-#    ports:
-#      - "8000:8000"
-  identityserver:
-    build:
-      context: .
-      dockerfile: IdentityServerAspNetIdentity/Dockerfile
+  dynamodb:  # Run GTDToDo\Externals\IdentityServerAspNetIdentity\BuildIdentityServerAspNetIdentity.sh to create image.
+    image: jayroblack/dynamodb-local:1.1
+    ports:
+      - "8000:8000"
+  identityserver: # Run GTDToDo\Externals\MakeDnaymoDbDockerImage\BuildCustomDyanmoDbDocker.sh to create image.
+    image: jayroblack/identity-server-netidentity:1.0
     ports:
       - "5000:80"

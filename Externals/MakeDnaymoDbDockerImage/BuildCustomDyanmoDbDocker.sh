@@ -1,5 +1,11 @@
 #!/bin/sh
 
+docker stop jay-dyn
+docker stop jay-dyn1
+docker rm jay-dyn
+docker rm jay-dyn1
+rm ./db/shared-local-instance.db
+
 # Build our Docker File Based on the DynamoDB base. 
 docker build --no-cache -t jayroblack/dynamodb-local:1.0 -f DockerFile1 .
 
