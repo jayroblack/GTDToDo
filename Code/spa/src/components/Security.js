@@ -17,6 +17,7 @@ class Security extends React.Component{
 
         var mgr = new OpenId.UserManager(config);
         //mgr.events.   <== Need a way to subscribe to when a user is logged in or out - update redux state
+        // This looks very promissing:  https://github.com/maxmantz/redux-oidc
         mgr.getUser().then((user) => {
             if( user ){
                 this.setState( { isSignedIn: true } );
