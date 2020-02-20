@@ -1,7 +1,8 @@
 import React from 'react'
-import { AppBar, Toolbar, IconButton, Typography, Button } from '@material-ui/core'
+import { AppBar, Toolbar, IconButton, Typography} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
+import Security from './Security'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,7 +28,7 @@ const Header = ()=> {
                 <Typography variant="h6" className={classes.title}>
                     GTD To Do
                 </Typography>
-                <Button color="inherit">Login</Button>
+                <Security />
             </Toolbar>
         </AppBar>
     );
