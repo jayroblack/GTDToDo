@@ -1,4 +1,9 @@
 
+## Local Development Procedure
+1. Make sure that Visual Studio solution is building and is running. 
+2. Ensure that it is running the docker-compose version so that the identity server docker and the dynamo db docker run. 
+3. Manually run react usig `npm run`
+
 ## Developer Depenencies
 * [Docker Desktop 2.1.0.5 (40693)](https://docs.docker.com/docker-for-windows/install/)
 * [Dotnet Core 3.1.101](https://dotnet.microsoft.com/download/dotnet-core/3.1)
