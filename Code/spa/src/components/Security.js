@@ -16,12 +16,12 @@ class Security extends React.Component{
     }
 
     renderAuthButton() {
-        return (
-            <React.Fragment>
-                <Button onClick={this.onLogoutButtonClick} color="inherit">Logout</Button>
-                <Button onClick={this.onLoginButtonClick} color="inherit">Login</Button>
-            </React.Fragment>
-        );
+        if( this.props.user == null){
+            return <Button onClick={this.onLoginButtonClick} color="inherit">Login</Button>
+        }
+        else{
+            return <Button onClick={this.onLogoutButtonClick} color="inherit">Logout</Button>
+        }
     }
 
     render(){
