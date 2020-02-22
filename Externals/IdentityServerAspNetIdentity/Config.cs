@@ -90,8 +90,8 @@ namespace IdentityServerAspNetIdentity
                     RequirePkce = true,
                     RequireClientSecret = false,
 
-                    RedirectUris = {"http://localhost:5003/callback.html"},
-                    PostLogoutRedirectUris = {"http://localhost:5003/index.html"},
+                    RedirectUris = {"http://localhost:5003/callback"},
+                    PostLogoutRedirectUris = {"http://localhost:5003/"},
                     AllowedCorsOrigins = {"http://localhost:5003"},
 
                     AllowedScopes =
