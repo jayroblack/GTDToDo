@@ -10,6 +10,7 @@ import { Router, Route } from 'react-router-dom'
 import CallbackPage from './Callback';
 import history from '../history';
 import HomePage from './Home';
+import Root from './root';
 
 // https://www.gistia.com/react-authentication-security-private-routes/ for learning how to secure routes.
 
@@ -18,17 +19,19 @@ const App = ()=> {
         <React.Fragment>
             <Provider store={store}>
             <OidcProvider store={store} userManager={userManager}>
+            <Root>
             <Container maxWidth="lg">
                 <Typography component="div" style={{ backgroundColor: '#d3d3d3', height: '100vh' }}>
                     <Header />
                     <Router history={history}>
                         <div>
                             <Route path="/" exact component={HomePage} />
-                            <Route path="/#/callback" component={CallbackPage} />
+                            <Route path="/callback" component={CallbackPage} />
                         </div>
                     </Router>
                 </Typography>
             </Container>
+            </Root>
             </OidcProvider>
             </Provider>
         </React.Fragment>

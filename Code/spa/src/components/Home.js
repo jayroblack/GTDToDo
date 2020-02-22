@@ -9,4 +9,16 @@ class HomePage extends React.Component {
     }
 }
 
-export default connect()(HomePage);
+function mapStateToProps(state) {
+    return {
+      user: state.oidc.user
+    };
+  }
+
+function mapDispatchToProps(dispatch) {
+    return {
+      dispatch
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
