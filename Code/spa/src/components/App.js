@@ -9,12 +9,9 @@ import userManager from '../userManager';
 import { Router, Route } from 'react-router-dom'
 import CallbackPage from './Callback';
 import history from '../history';
+import HomePage from './Home';
 
 // https://www.gistia.com/react-authentication-security-private-routes/ for learning how to secure routes.
-
-const Login = () => {
-    return <div>Please Login to Begin</div>
-}
 
 const App = ()=> {
     return( 
@@ -26,8 +23,8 @@ const App = ()=> {
                     <Header />
                     <Router history={history}>
                         <div>
-                            <Route path="/" exact component={Login} />
-                            <Route path="/callback" component={CallbackPage} />
+                            <Route path="/" exact component={HomePage} />
+                            <Route path="/#/callback" component={CallbackPage} />
                         </div>
                     </Router>
                 </Typography>

@@ -1,18 +1,26 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
+import userManager from "../userManager";
 
 class Security extends React.Component{
-    state = { isSignedIn: null };
+
+    onLoginButtonClick = (event) => {
+        event.preventDefault();
+        userManager.signinRedirect();
+    }
+
+    onLogoutButtonClick = (event) => {
+        event.preventDefault();
+        userManager.signoutRedirect();
+    }
 
     renderAuthButton() {
-        if( this.state.isSignedIn === null){
-            return <div>Loading...</div>
-        }
-        else if (this.state.isSignedIn){
+        if (this.props.user){
             return <Button color="inherit">Logout</Button>
         }
         else{
-            return <Button color="inherit">Login</Button>
+            return <Button onClick={this.onLoginButtonClick} color="inherit">Login</Button>
         }
     }
 
@@ -25,4 +33,10 @@ class Security extends React.Component{
     }
 }
 
-export default Security
+const mapPropsToState = (state) => {
+    return {
+        user : state.oidc.user
+    }
+};
+
+export default connect(mapPropsToState)(Security);
