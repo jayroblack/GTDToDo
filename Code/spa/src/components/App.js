@@ -2,8 +2,16 @@ import React from 'react'
 import Header from './Header'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { HashRouter, Route } from 'react-router-dom'
+import { Provider } from 'react-redux';
+import { OidcProvider } from 'redux-oidc';
+import store from '../store';
+import userManager from '../userManager';
+import { Router, Route } from 'react-router-dom'
+import CallbackPage from './Callback';
+import history from '../history';
+
 // https://www.gistia.com/react-authentication-security-private-routes/ for learning how to secure routes.
+
 const Login = () => {
     return <div>Please Login to Begin</div>
 }
@@ -11,17 +19,21 @@ const Login = () => {
 const App = ()=> {
     return( 
         <React.Fragment>
+            <Provider store={store}>
+            <OidcProvider store={store} userManager={userManager}>
             <Container maxWidth="lg">
                 <Typography component="div" style={{ backgroundColor: '#d3d3d3', height: '100vh' }}>
                     <Header />
-                    <HashRouter>
-                        <dib>
+                    <Router history={history}>
+                        <div>
                             <Route path="/" exact component={Login} />
-                        </dib>
-                        
-                    </HashRouter>
+                            <Route path="/callback" component={CallbackPage} />
+                        </div>
+                    </Router>
                 </Typography>
             </Container>
+            </OidcProvider>
+            </Provider>
         </React.Fragment>
     );
 };
