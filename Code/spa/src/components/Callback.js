@@ -11,14 +11,12 @@ class CallbackPage extends React.Component {
         <CallbackComponent
           userManager={userManager}
           successCallback={(user) => {
-            console.log("Success!");
-            console.log(user);
-            history.push('/')
+            history.push('/todo')
           } }
           errorCallback={error => {
             console.log("ERROR BRO");
             console.log(error);
-            history.push('/')
+            //history.push('/')
           }}
           >
           <div>Redirecting...</div>
