@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Button } from '@material-ui/core'
 import userManager from "../userManager";
 
-class Security extends React.Component{
+class LoginLogout extends React.Component{
 
     onLoginButtonClick = (event) => {
         event.preventDefault();
@@ -39,4 +39,4 @@ const mapPropsToState = (state) => {
     }
 };
 
-export default connect(mapPropsToState)(Security);
+export default connect(mapPropsToState)(LoginLogout);

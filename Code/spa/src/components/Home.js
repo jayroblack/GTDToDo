@@ -3,16 +3,25 @@ import { connect } from "react-redux";
 
 class HomePage extends React.Component {
     render(){
+      if( !this.props.user ){
         return (
-            <div>This is the Home Page</div>
+          <div>Welcome, please Login to begin.</div>
         );
+      }
+      else{
+        return (
+        <div>Welcome { this.props.userName }, you are logged in.</div>
+        );
+      }
     }
 }
 
 function mapStateToProps(state) {
-    return {
-      user: state.oidc.user
-    };
+    const user = state.oidc.user;
+    if( !user ){
+      return { user: null, userName: null };
+    }
+    return { user: user, userName: user.profile.name };
   }
 
 function mapDispatchToProps(dispatch) {
