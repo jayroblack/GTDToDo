@@ -12,6 +12,7 @@ import history from '../history';
 import HomePage from './Home';
 import Root from './root';
 import ToDo  from './ToDo';
+import PrivateRoute from './PrivateRoute';
 
 // https://www.gistia.com/react-authentication-security-private-routes/ for learning how to secure routes.
 // Need to learn how to use Hooks first.  
@@ -28,7 +29,7 @@ const App = ()=> {
                         <Switch>
                             <Route path="/" exact component={HomePage} />
                             <Route path="/callback" component={CallbackPage} />
-                            <Route path="/todo" component={ToDo} />
+                            <PrivateRoute path="/todo" component={ToDo} />
                         </Switch>
                     </Router>
                 </Typography>
