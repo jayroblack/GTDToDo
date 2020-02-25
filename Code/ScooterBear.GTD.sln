@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.MailMerge",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScooterBear.GTD.AWS", "ScooterBear.GTD.AWS\ScooterBear.GTD.AWS.csproj", "{7D073C98-07A0-4202-953D-7B032C9CF79C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServerAspNetIdentity", "IdentityServerAspNetIdentity\IdentityServerAspNetIdentity.csproj", "{408F1CD9-5874-4C13-8C1E-8E09749F05A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D073C98-07A0-4202-953D-7B032C9CF79C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{408F1CD9-5874-4C13-8C1E-8E09749F05A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{408F1CD9-5874-4C13-8C1E-8E09749F05A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{408F1CD9-5874-4C13-8C1E-8E09749F05A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{408F1CD9-5874-4C13-8C1E-8E09749F05A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

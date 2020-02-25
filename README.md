@@ -8,10 +8,14 @@ An application heavily inspired by the great ideas from David Allen's book: Gett
 ## Purpose
 Showcase skils, play with new technology, memorialize biolerplate code for re use.
 
-[Take me to the Code!!!](./Code/README.md)
+## [Code](./Code/README.md)
+> If this is the first time you are running the code - be sure to look at the readme and run the scripts outlined and that you have all of the requirements.
+
+## Design
+* [Early UI Design Concept](./Docs/Design/README.md)
 
 ## Architecture
-* [Early UI Design Concept](./Docs/Design/README.md)
 * [DynamoDb Design](./Docs/DynamoDbModeling/README.md)
-* [Create custom DynamoDB Docker image for Development and Testing](./Docs/MakeDnaymoDbDockerImage/README.md)
+* [Create custom DynamoDB Docker image for Development and Testing](./Externals/MakeDnaymoDbDockerImage/README.md)
+* [Create a custom Identity Server for development.](./Externals/IdentityServerAspNetIdentity/README.md)  
 * [High Level Architecture](./Docs/Architecture/README.md)

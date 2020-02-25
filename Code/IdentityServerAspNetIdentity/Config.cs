@@ -14,7 +14,7 @@ namespace IdentityServerAspNetIdentity
             new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile()
             };
 
 
@@ -90,9 +90,9 @@ namespace IdentityServerAspNetIdentity
                     RequirePkce = true,
                     RequireClientSecret = false,
 
-                    RedirectUris = {"http://localhost:5003/callback.html"},
-                    PostLogoutRedirectUris = {"http://localhost:5003/index.html"},
-                    AllowedCorsOrigins = {"http://localhost:5003"},
+                    RedirectUris = {"http://localhost:3000/callback"},
+                    PostLogoutRedirectUris = {"http://localhost:3000/"},
+                    AllowedCorsOrigins = {"http://localhost:3000"},
 
                     AllowedScopes =
                     {
