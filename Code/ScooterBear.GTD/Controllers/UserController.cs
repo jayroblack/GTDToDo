@@ -30,6 +30,7 @@ namespace ScooterBear.GTD.Controllers
         [Route("/GetOrCreateUser")]
         public IActionResult GetOrCreateUser()
         {
+            //Need to find out why the identity server is not returning all of the jwt claims.
             throw new NotImplementedException();
         }
 
