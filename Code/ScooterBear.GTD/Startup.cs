@@ -26,6 +26,26 @@ namespace ScooterBear.GTD
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "http://localhost:5000";
+                    options.RequireHttpsMetadata = false;
+
+                    options.Audience = "api1";
+                });
+
+            services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -51,20 +71,14 @@ namespace ScooterBear.GTD
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseCors("default");
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("It's All Good!");
-                });
             });
         }
     }

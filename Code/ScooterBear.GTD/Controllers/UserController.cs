@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.New;
@@ -9,6 +10,7 @@ using ScooterBear.GTD.Patterns.CQRS;
 namespace ScooterBear.GTD.Controllers
 {
     [Route("/api/user")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;

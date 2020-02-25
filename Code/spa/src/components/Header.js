@@ -4,6 +4,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import LoginLogout from './LoginLogout';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 
 const useStyles = theme => ({
     root: {
@@ -26,7 +27,9 @@ class Header extends React.Component{
         <AppBar position="static">
             <Toolbar>
                 <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                    <MenuIcon  />
+                    <Link to="/todo">
+                      <MenuIcon  />
+                    </Link>
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
                     GTD To Do {userNameToPrint}

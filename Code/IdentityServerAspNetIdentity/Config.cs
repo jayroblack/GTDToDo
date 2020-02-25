@@ -28,22 +28,6 @@ namespace IdentityServerAspNetIdentity
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                new Client
-                {
-                    ClientId = "client",
-
-                    // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                    // secret for authentication
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
-                    // scopes that client has access to
-                    AllowedScopes = {"api1"}
-                },
                 // resource owner password grant client
                 new Client
                 {
@@ -69,8 +53,9 @@ namespace IdentityServerAspNetIdentity
                         new Secret("secret".Sha256())
                     },
 
-                    RedirectUris = {"http://localhost:5002/signin-oidc"},
-                    PostLogoutRedirectUris = {"http://localhost:5002/signout-callback-oidc"},
+                    RedirectUris = {"http://localhost:3000/callback"},
+                    PostLogoutRedirectUris = {"http://localhost:3000/"},
+                    AllowedCorsOrigins = {"http://localhost:3000"},
 
                     AllowedScopes =
                     {

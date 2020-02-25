@@ -24,8 +24,8 @@ const App = ()=> {
             <Root>
             <Container maxWidth="lg">
                 <Typography component="div" style={{ backgroundColor: '#d3d3d3', height: '100vh' }}>
-                    <Header />
                     <Router history={history}>
+                        <Header />
                         <Switch>
                             <Route path="/" exact component={HomePage} />
                             <Route path="/callback" component={CallbackPage} />
