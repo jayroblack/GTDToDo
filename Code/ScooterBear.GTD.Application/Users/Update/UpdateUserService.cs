@@ -42,7 +42,7 @@ namespace ScooterBear.GTD.Application.Users.Update
             {
                 var existingUser = some.User;
                 user = new User(existingUser.ID, existingUser.FirstName, existingUser.LastName, existingUser.Email,
-                    existingUser.IsEmailVerified, existingUser.BillingId, existingUser.AuthId,
+                    existingUser.BillingId, existingUser.AuthId,
                     existingUser.VersionNumber, existingUser.DateCreated);
             });
 
@@ -54,9 +54,6 @@ namespace ScooterBear.GTD.Application.Users.Update
                 user.SetBillingId(arg.BillingId);
                 user.SetAuthId(arg.AuthId);
                 user.SetVersionNumber(arg.VersionNumber);
-
-                if (arg.IsEmailVerified.HasValue && arg.IsEmailVerified.GetValueOrDefault())
-                    user.VerifyEmail();
             }
             catch (ArgumentException e)
             {

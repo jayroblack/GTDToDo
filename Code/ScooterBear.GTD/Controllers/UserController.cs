@@ -9,7 +9,7 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
 {
-    [Route("/api/user")]
+    [Route("/user")]
     [Authorize]
     public class UserController : Controller
     {
@@ -24,6 +24,13 @@ namespace ScooterBear.GTD.Controllers
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
             _updateUser = updateUser ?? throw new ArgumentNullException(nameof(updateUser));
+        }
+
+        [HttpGet]
+        [Route("/GetOrCreateUser")]
+        public IActionResult GetOrCreateUser()
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet("/{userId}")]
@@ -53,7 +60,7 @@ namespace ScooterBear.GTD.Controllers
                 outcome => Conflict($"User already exists for this id {values.ID}"));
         }
 
-        //Question: Does the ID have to be in the URL for a Put?  Ask around / research
+        //Question: Does the ID have to be in the URL for a Put?  Ask around / research  - I THINK YES
         [HttpPut]
         public async Task<IActionResult> Put(UpdateUserServiceArgs userValues)
         {

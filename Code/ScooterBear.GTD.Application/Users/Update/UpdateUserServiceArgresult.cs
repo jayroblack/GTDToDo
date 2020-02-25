@@ -19,18 +19,16 @@ namespace ScooterBear.GTD.Application.Users.Update
         public string FirstName { get; }
         public string LastName { get; }
         public string Email { get; }
-        public bool? IsEmailVerified { get; }
         public string BillingId { get; }
         public string AuthId { get; }
         public int VersionNumber { get; }
 
-        public UpdateUserServiceArgs(string id, string firstName, string lastName, string email, bool? isEmailVerified, string billingId, string authId, int versionNumber)
+        public UpdateUserServiceArgs(string id, string firstName, string lastName, string email, string billingId, string authId, int versionNumber)
         {
             ID = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
-            IsEmailVerified = isEmailVerified;
             BillingId = billingId;
             AuthId = authId;
             VersionNumber = versionNumber;

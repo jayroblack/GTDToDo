@@ -27,7 +27,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
                 UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
 
             var updateOption = await updateUser.Run(new UpdateUserServiceArgs(user.ID, user.FirstName, user.LastName,
-                user.Email, user.IsEmailVerified, user.BillingId, user.AuthId, user.VersionNumber));
+                user.Email, user.BillingId, user.AuthId, user.VersionNumber));
             
             updateOption.Match(
                 some => Assert.True(false, "Should Fail"), 
@@ -48,7 +48,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
                 UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
 
             var updateOption = await updateUser.Run(new UpdateUserServiceArgs(user.ID, null, null,
-                null, user.IsEmailVerified, user.BillingId, user.AuthId, user.VersionNumber));
+                null, user.BillingId, user.AuthId, user.VersionNumber));
 
             updateOption.Match(
                 some => Assert.True(false, "Should Fail"),
@@ -76,12 +76,11 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var newFirstName = "Mc";
             var newLastName = "Tastey";
             var newEmail = "mcTastey@McLuvn";
-            var isEmailverified = true;
             var billingId = "NewBillingId";
             var authId = "NewAuthId";
 
             var updateOption = await _updateUser.Run(new UpdateUserServiceArgs(user.ID, newFirstName, newLastName,
-                newEmail, isEmailverified, billingId, authId, existingVeresionNumber));
+                newEmail, billingId, authId, existingVeresionNumber));
 
             updateOption.Match(
                 some =>
@@ -90,7 +89,6 @@ namespace ScooterBear.GTD.IntegrationTests.User
                     user.FirstName.Should().Be(newFirstName);
                     user.LastName.Should().Be(newLastName);
                     user.Email.Should().Be(newEmail);
-                    user.IsEmailVerified.Should().Be(true);
                     user.BillingId.Should().Be(billingId);
                     user.AuthId.Should().Be(authId);
                     user.IsAccountEnabled.Should().Be(true);
@@ -114,12 +112,11 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var newFirstName = "Mc";
             var newLastName = "Tastey";
             var newEmail = "mcTastey@McLuvn";
-            var isEmailverified = true;
             var billingId = "NewBillingId";
             var authId = "NewAuthId";
 
             var updateOption = await _updateUser.Run(new UpdateUserServiceArgs(user.ID, newFirstName, newLastName,
-                newEmail, isEmailverified, billingId, authId, 100));
+                newEmail, billingId, authId, 100));
 
             updateOption.Match(
                 some =>

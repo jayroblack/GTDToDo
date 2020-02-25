@@ -103,15 +103,14 @@ namespace ScooterBear.GTD.UnitTests.Users
             var firstName = "FirstName";
             var lastName = "LastName";
             var email = "Email";
-            var isEmailVerfied = true;
             var billingId = "BilllingId";
             var versionNumber = 4;
             var authId = "AuthId";
 
-            this.UpdateUserServiceArgs = new UpdateUserServiceArgs(id, firstName, lastName, email, isEmailVerfied,
+            this.UpdateUserServiceArgs = new UpdateUserServiceArgs(id, firstName, lastName, email, 
                 billingId, authId, versionNumber);
             
-            this.User = new User(id, firstName, lastName, email, isEmailVerfied, billingId, authId, versionNumber, DateTime.Now);
+            this.User = new User(id, firstName, lastName, email, billingId, authId, versionNumber, DateTime.Now);
         }
 
         public void Dispose()

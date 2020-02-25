@@ -8,7 +8,6 @@ namespace ScooterBear.GTD.Application.Users
         string FirstName { get; }
         string LastName { get; }
         string Email { get; }
-        bool? IsEmailVerified { get; }
         string BillingId { get; }
         string AuthId { get; }
         int VersionNumber { get; }
@@ -20,7 +19,6 @@ namespace ScooterBear.GTD.Application.Users
         string FirstName { get; }
         string LastName { get; }
         string Email { get; }
-        bool? IsEmailVerified { get; }
         string BillingId { get; }
         string AuthId { get; }
         bool? IsAccountEnabled { get; }

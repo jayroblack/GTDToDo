@@ -15,7 +15,6 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 Email = newUser.Email,
-                IsEmailVerified = newUser.IsEmailVerified,
                 IsAccountEnabled = newUser.IsAccountEnabled,
                 DateCreated = newUser.DateCreated
             };

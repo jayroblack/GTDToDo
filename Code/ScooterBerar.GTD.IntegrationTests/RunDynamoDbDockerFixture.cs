@@ -134,7 +134,7 @@ namespace ScooterBear.GTD.IntegrationTests
             var last = "Rhodes";
             var email = $"jayroblack+{id}@here.com";
 
-            return new Application.Users.Update.User(id, name, last, email, true, "billingId", "authId", 0,
+            return new Application.Users.Update.User(id, name, last, email, "billingId", "authId", 0,
                 DateTime.UtcNow);
         }
     }

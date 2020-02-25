@@ -14,7 +14,7 @@ namespace ScooterBear.GTD.UnitTests.Users
         [InlineData("Id", "FirstName", "LastName", null)]
         public void ShouldThrowWhenArgumentIsNull(string id, string firstName, string lastName, string email)
         {
-            Action toRun = () => new User(id, firstName, lastName, email, true, "BillingId", "AuthId", 1, DateTime.Now);
+            Action toRun = () => new User(id, firstName, lastName, email, "BillingId", "AuthId", 1, DateTime.Now);
             toRun.Should().Throw<ArgumentException>();
         }
 
@@ -26,7 +26,7 @@ namespace ScooterBear.GTD.UnitTests.Users
         public void ShouldNotThrowRegardless(string billingId, string authId)
         {
             Action toRun = () =>
-                new User("Id", "FirstName", "LastName", "Email", true, billingId, authId, 1, DateTime.Now);
+                new User("Id", "FirstName", "LastName", "Email", billingId, authId, 1, DateTime.Now);
             toRun.Should().NotThrow<ArgumentException>();
         }
 
@@ -34,49 +34,30 @@ namespace ScooterBear.GTD.UnitTests.Users
         public void ShouldThrowWhenVersionIsLessThan0()
         {
             Action toRun = () =>
-                new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", -1, DateTime.Now);
+                new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", -1, DateTime.Now);
             toRun.Should().Throw<ArgumentException>();
         }
 
         [Fact]
         public void ShouldThrowIfDateHasNotBeenSet()
         {
-            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0,
+            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", 0,
                 DateTime.MinValue);
             toRun.Should().Throw<ArgumentException>();
         }
 
-        [Fact]
-        public void ShouldMarkEmailUnVerifiedWhenChanged()
-        {
-            var user = new User("Id", "FirstName", "LastName", "Email", false, "BillingId", "AuthId", 0, DateTime.Now);
-
-            user.VerifyEmail();
-            user.IsEmailVerified.Should().BeTrue("We called VerifyEmail");
-            user.SetEmail("NewEmail");
-            user.IsEmailVerified.Should().BeFalse("We changed email, and it has not been verified.");
-
-            user = new User("Id", "FirstName", "LastName", "Email", null, "BillingId", "AuthId", 0, DateTime.Now);
-
-            user.VerifyEmail();
-            user.IsEmailVerified.Should().BeTrue("We called VerifyEmail");
-            user.SetEmail("NewEmail");
-            user.IsEmailVerified.Should().BeFalse("We changed email, and it has not been verified.");
-        }
-
         [Theory]
-        [InlineData(false, true, true, false)]
-        [InlineData(null, true, true, false)]
-        [InlineData(true, false, true, false)]
-        [InlineData(true, true, false, false)]
-        [InlineData(true, true, true, true)]
-        public void ShouldOnlyMakeAccountEnabledWhen(bool? isEmailVerfied, bool billingIdSet, bool authIdIsSet,
+        [InlineData(true, true, false)]
+        [InlineData(false, true, false)]
+        [InlineData(true, false, false)]
+        [InlineData(true, true, true)]
+        public void ShouldOnlyMakeAccountEnabledWhen(bool billingIdSet, bool authIdIsSet,
             bool userEnabled)
         {
             var billingId = billingIdSet ? "BillingId" : null;
             var authId = authIdIsSet ? "AuthId" : null;
 
-            var user = new User("Id", "FirstName", "LastName", "Email", isEmailVerfied, billingId, authId, 0,
+            var user = new User("Id", "FirstName", "LastName", "Email", billingId, authId, 0,
                 DateTime.Now);
 
             user.IsAccountEnabled.GetValueOrDefault().Should().Be(userEnabled);

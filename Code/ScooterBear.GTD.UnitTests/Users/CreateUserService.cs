@@ -82,7 +82,7 @@ namespace ScooterBear.GTD.UnitTests.Users
             this.NewUserCreated = new Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>>();
             this.CreateUserService = new CreateUserService(IKnowTheDate.Object, CreateIdsStrategy.Object,
                 PersistNewUserService.Object, GetUserService.Object, this.NewUserCreated.Object);
-            this.User = new User("Id", "FirstName", "LastName", "Email", true, "BillingId", "AuthId", 0, DateTime.Now);
+            this.User = new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", 0, DateTime.Now);
         }
 
         public void Dispose()
