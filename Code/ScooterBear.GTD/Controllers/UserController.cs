@@ -16,21 +16,28 @@ namespace ScooterBear.GTD.Controllers
         private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
         private readonly IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> _createUser;
         private readonly IServiceOptOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> _updateUser;
+        private readonly IServiceOpt<GetOrCreateUserServiceArgs, GetOrCreateUserServiceResult> _getOrCreateUser;
 
         public UserController(IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser,
             IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> createUser,
-            IServiceOptOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> updateUser)
+            IServiceOptOutcomes<UpdateUserServiceArgs, UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome> updateUser,
+            IServiceOpt<GetOrCreateUserServiceArgs, GetOrCreateUserServiceResult> getOrCreateUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUser = createUser ?? throw new ArgumentNullException(nameof(createUser));
             _updateUser = updateUser ?? throw new ArgumentNullException(nameof(updateUser));
+            _getOrCreateUser = getOrCreateUser ?? throw new ArgumentNullException(nameof(getOrCreateUser));
         }
 
         [HttpPost]
         [Route("users/GetOrCreateUser")]
-        public IActionResult GetOrCreateUser([FromBody] NewUserValues values)
+        public async Task<IActionResult> GetOrCreateUser([FromBody] NewUserValues values)
         {
-            throw new NotImplementedException();
+            var resultOption =
+                await _getOrCreateUser.Run(new GetOrCreateUserServiceArgs(values.ID, values.FirstName, values.LastName,
+                    values.Email));
+
+            return resultOption.Match<IActionResult>(some => Json(some.User), UnprocessableEntity);
         }
 
         [HttpGet("/{userId}")]

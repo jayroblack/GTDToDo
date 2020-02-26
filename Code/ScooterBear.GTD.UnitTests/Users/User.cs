@@ -47,7 +47,6 @@ namespace ScooterBear.GTD.UnitTests.Users
         }
 
         [Theory]
-        [InlineData(true, true, false)]
         [InlineData(false, true, false)]
         [InlineData(true, false, false)]
         [InlineData(true, true, true)]

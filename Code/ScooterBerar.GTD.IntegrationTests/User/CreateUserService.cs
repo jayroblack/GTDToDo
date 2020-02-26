@@ -55,30 +55,6 @@ namespace ScooterBear.GTD.IntegrationTests.User
         }
 
         [Fact]
-        public async void ShouldSendNewUserEmailWithLinkToValidate()
-        {
-            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
-            var name = "James";
-            var last = "Blah";
-            var email = $"jayroblack+{id}@here.com";
-
-            var createUserService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome>>();
-
-            var optionResult =
-                await createUserService.Run(new CreateUserServiceArg(id, name, last, email));
-
-            var mailTrap = _fixture.Container.Resolve<IMailTrap>();
-            mailTrap.Should().NotBeNull();
-            var emails = mailTrap.ForEmail(email);
-            emails.Should().NotBeNull();
-            emails.Count.Should().Be(1);
-
-            var firstEmai = emails.First();
-            firstEmai.Data.Should().NotBeNull();
-        }
-
-        [Fact]
         public async void ShouldCreateDefaultProjectInbox()
         {
             var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
