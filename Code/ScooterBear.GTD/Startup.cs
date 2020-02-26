@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
@@ -24,7 +25,9 @@ namespace ScooterBear.GTD
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ContractResolver =
+                    new CamelCasePropertyNamesContractResolver());
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>

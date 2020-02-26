@@ -23,3 +23,19 @@ export const GetIdentity = async (token) => {
         return { success:false, errorMessage:err.errorMessage, data: null };
     }
 };
+
+export const GetOrCreateUser = async (token, data) => {
+    const client = createClient(token);
+    if( !client ){
+        return {success: false, errorMessage:"No Token.", data: null}
+    }
+
+    try{
+        const response = await client.post('users/GetOrCreateUser', data );
+        return { success:true, errorMessage:null, data: response.data }
+    }
+    catch(err){
+        return { success:false, errorMessage:err.errorMessage, data: null };
+    }
+
+}

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Application.Users.Update;
@@ -9,7 +10,6 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
 {
-    [Route("/user")]
     [Authorize]
     public class UserController : Controller
     {
@@ -26,11 +26,10 @@ namespace ScooterBear.GTD.Controllers
             _updateUser = updateUser ?? throw new ArgumentNullException(nameof(updateUser));
         }
 
-        [HttpGet]
-        [Route("/GetOrCreateUser")]
-        public IActionResult GetOrCreateUser()
+        [HttpPost]
+        [Route("users/GetOrCreateUser")]
+        public IActionResult GetOrCreateUser([FromBody] NewUserValues values)
         {
-            //Need to find out why the identity server is not returning all of the jwt claims.
             throw new NotImplementedException();
         }
 
@@ -44,9 +43,13 @@ namespace ScooterBear.GTD.Controllers
 
         public class NewUserValues
         {
+            [JsonProperty("id")]
             public string ID { get; set; }
+            [JsonProperty("firstName")]
             public string FirstName { get; set; }
+            [JsonProperty("lastName")]
             public string LastName { get; set; }
+            [JsonProperty("email")]
             public string Email { get; set; }
         }
 

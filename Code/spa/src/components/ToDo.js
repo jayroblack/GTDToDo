@@ -1,9 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
+import { GetOrCreateUser } from '../api/todo';
 
 class ToDo extends React.Component {
     async componentDidMount(){
-
+     if( this.props.user ){
+        const { access_token } = this.props.user;
+        const { given_name, family_name, email, sub } = this.props.user.profile;
+        const data = { id: sub, firstName: given_name, lastName: family_name, email };
+        console.log(data);
+        GetOrCreateUser(access_token, data)
+          .then(data => console.log(data) )
+          .catch(err=> console.log(err));
+      }
     }
 
     render(){
