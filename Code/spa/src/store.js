@@ -8,16 +8,8 @@ import createOidcMiddleware from 'redux-oidc';
 const oidcMiddleware = createOidcMiddleware(userManager);
 const initialState = {};
 
-const loggerMiddleware = store => next => action => {
-    console.log("Action type:", action.type);
-    console.log("Action payload:", action.payload);
-    console.log("State before:", store.getState());
-    next(action);
-    console.log("State after:", store.getState());
-  };
-
 const createStoreWithMiddleware = compose(
-    applyMiddleware(loggerMiddleware, oidcMiddleware)
+    applyMiddleware(oidcMiddleware)
   )(createStore);
 
 const store = createStoreWithMiddleware(reducer, initialState, devToolsEnhancer());
