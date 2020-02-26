@@ -4,7 +4,6 @@ using Autofac;
 using FluentAssertions;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Application.Users.New;
-using ScooterBear.GTD.Fakes;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;

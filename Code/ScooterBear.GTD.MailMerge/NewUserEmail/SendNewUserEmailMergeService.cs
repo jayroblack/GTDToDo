@@ -12,17 +12,13 @@ namespace ScooterBear.GTD.MailMerge.NewUserEmail
         {
             var user = arg.User;
 
-            //Imaging there are many emails we need to send - and that these emails will be moore
-            //complicated.  Also imagine a world where the templates can be changed without having to deploy the code.
-            var subjectTemplate = @"Thank you for joining GTD To Do, please verify your email.";
+            var subjectTemplate = @"Thank you for joining GTD To Do";
 
             var bodytemplateText = @"
-                Thank you {{FirstName}} for signing up for GTD.  
-                Please lick the link or paste the link into a browser to verify your email address: {{route}}?secret={{secret}}&key={{key}}";
+                Thank you {{FirstName}} for signing up for GTD.";
 
             var bodyTemplateHtml = @"
-                Thank you {{FirstName}} for signing up for GTD.  
-                Please lick the link or paste the link into a browser to verify your email address: {{route}}?secret={{secret}}&key={{key}}";
+                Thank you {{FirstName}} for signing up for GTD.";
 
             var subjectCompiled = Handlebars.Compile(subjectTemplate);
             var bodyTextCompiled = Handlebars.Compile(bodytemplateText);
@@ -32,10 +28,7 @@ namespace ScooterBear.GTD.MailMerge.NewUserEmail
                 user.FirstName,
                 user.LastName,
                 user.Email,
-                user.VersionNumber,
-                arg.Key,
-                arg.Route,
-                arg.Secret
+                user.VersionNumber
             };
 
             var subjectResult = subjectCompiled(data);

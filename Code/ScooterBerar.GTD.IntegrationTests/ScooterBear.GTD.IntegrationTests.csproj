@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.1" />
@@ -28,10 +34,6 @@
     <ProjectReference Include="..\ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.MailMerge\ScooterBear.GTD.MailMerge.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\Security\" />
   </ItemGroup>
 
 </Project>
