@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Autofac;
 using FluentAssertions;
 using ScooterBear.GTD.Application.Users;

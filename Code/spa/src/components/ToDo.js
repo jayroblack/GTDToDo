@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { GetOrCreateUser } from '../api/todo';
+import { GetOrCreateUser, GetToDos } from '../api/todo';
 
 class ToDo extends React.Component {
 
@@ -12,9 +12,15 @@ class ToDo extends React.Component {
         const { given_name, family_name, email, sub } = this.props.user.profile;
         const data = { id: sub, firstName: given_name, lastName: family_name, email };
         
+        //TODO: Add to Redux - Action/Reducer
         GetOrCreateUser(access_token, data)
           .then(data => console.log(data) )
           .catch(err=> console.log(err));
+
+          //TODO: Add to Redux - Action/Reducer
+        GetToDos(access_token)
+        .then(data => console.log(data) )
+        .catch(err=> console.log(err));
       }
     }
 

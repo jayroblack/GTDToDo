@@ -68,9 +68,9 @@ namespace ScooterBear.GTD.IntegrationTests.User
                 await createUserService.Run(new CreateUserServiceArg(id, name, last, email));
 
             var getProjectsQuery =
-                _fixture.Container.Resolve<IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult>>();
+                _fixture.Container.Resolve<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>>();
 
-            var result = await getProjectsQuery.Run(new GetUserProjectQuery(id));
+            var result = await getProjectsQuery.Run(new GetUserProjectsQuery(id));
 
             result.HasValue.Should().BeTrue();
             result.MatchSome(some =>

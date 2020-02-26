@@ -17,12 +17,12 @@ namespace ScooterBear.GTD.Application.UserProject
 
     public class CreateNewUserProjectService : IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>
     {
-        private readonly IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult> _query;
+        private readonly IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> _query;
         private readonly IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult> _persistService;
         private readonly IKnowTheDate _iKnowTheDate;
 
         public CreateNewUserProjectService(
-            IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult> query, 
+            IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> query, 
             IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult> persistService,
             IKnowTheDate iKnowTheDate)
         {
@@ -33,7 +33,7 @@ namespace ScooterBear.GTD.Application.UserProject
 
         public async Task<Option<CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>> Run(CreateNewUserProjectServiceArg arg)
         {
-            var userProjects = await _query.Run(new GetUserProjectQuery(arg.UserId));
+            var userProjects = await _query.Run(new GetUserProjectsQuery(arg.UserId));
 
             var dateTimeCreated = _iKnowTheDate.UtcNow();
 

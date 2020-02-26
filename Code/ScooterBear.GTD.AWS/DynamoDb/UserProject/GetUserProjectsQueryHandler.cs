@@ -13,18 +13,18 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.UserProject
 {
-    public class GetUserProjectQueryHandler : IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult>
+    public class GetUserProjectsQueryHandler : IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> _mapTo;
 
-        public GetUserProjectQueryHandler(IDynamoDBFactory dynamoDbFactory, IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> mapTo)
+        public GetUserProjectsQueryHandler(IDynamoDBFactory dynamoDbFactory, IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> mapTo)
         {
             _dynamoDbFactory = dynamoDbFactory ?? throw new ArgumentNullException(nameof(dynamoDbFactory));
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<Option<GetUserProjectQueryResult>> Run(GetUserProjectQuery query)
+        public async Task<Option<GetUserProjectsQueryResult>> Run(GetUserProjectsQuery query)
         {
             if (query == null) throw new ArgumentNullException(nameof(query));
 
@@ -46,11 +46,11 @@ namespace ScooterBear.GTD.AWS.DynamoDb.UserProject
                 }
 
                 if (results.Count == 0)
-                    return Option.None<GetUserProjectQueryResult>();
+                    return Option.None<GetUserProjectsQueryResult>();
 
                 var resultsMapped = results.Select(x => _mapTo.MapTo(x)).ToList();
 
-                return Option.Some(new GetUserProjectQueryResult(new UserProjects(query.UserId, resultsMapped)));
+                return Option.Some(new GetUserProjectsQueryResult(new UserProjects(query.UserId, resultsMapped)));
             }
         }
     }

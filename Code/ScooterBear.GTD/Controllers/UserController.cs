@@ -37,7 +37,9 @@ namespace ScooterBear.GTD.Controllers
                 await _getOrCreateUser.Run(new GetOrCreateUserServiceArgs(values.ID, values.FirstName, values.LastName,
                     values.Email));
 
-            return resultOption.Match<IActionResult>(some => Json(some.User), UnprocessableEntity);
+            var result = resultOption.Match<IActionResult>(some => Json(some.User), UnprocessableEntity);
+
+            return result;
         }
 
         [HttpGet("/{userId}")]

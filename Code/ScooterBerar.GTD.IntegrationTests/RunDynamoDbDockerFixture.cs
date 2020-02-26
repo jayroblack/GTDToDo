@@ -111,7 +111,6 @@ namespace ScooterBear.GTD.IntegrationTests
                 builder
                     .AddFilter("Microsoft", LogLevel.Warning)
                     .AddFilter("System", LogLevel.Warning)
-                    .AddFilter("LoggingConsoleApp.Program", LogLevel.Debug)
                     .AddDebug()
                     .AddConsole();
             });

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.AWS.DynamoDb;
@@ -56,6 +57,21 @@ namespace ScooterBear.GTD
             builder.RegisterModule<DynamoDbAutofacModule>();
             builder.RegisterModule<PatternsAutofacModule>();
             builder.RegisterType<DynamoDBLocalFactory>().As<IDynamoDBFactory>();
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddFilter("System", LogLevel.Warning)
+                    .AddDebug()
+                    .AddConsole();
+            });
+
+            //ToDo: Add custom logic later to dynamically resolve at runtime.
+            //TODO: If we are in lambda - then attach to cloud watch - otherwise attach to Console and Debug
+            builder.RegisterInstance(loggerFactory).As<ILoggerFactory>();
+            builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger<DynamoDb>()).As<ILogger<DynamoDb>>();
+            builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger("")).As<ILogger>();
         }
 
         public ILifetimeScope AutofacContainer { get; private set; }

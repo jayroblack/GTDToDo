@@ -28,8 +28,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             var fixture = CreateNewUserProjectFixture;
 
             fixture.Query.Setup(x=> 
-                x.Run(It.IsAny<GetUserProjectQuery>()))
-                .Returns(Task.FromResult(Option.None<GetUserProjectQueryResult>()));
+                x.Run(It.IsAny<GetUserProjectsQuery>()))
+                .Returns(Task.FromResult(Option.None<GetUserProjectsQueryResult>()));
 
             fixture.PersistService.Setup(x => 
                     x.Run(It.IsAny<PersistNewProjectServiceArg>()))
@@ -48,8 +48,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             var fixture = CreateNewUserProjectFixture;
 
             fixture.Query.Setup(x =>
-                    x.Run(It.IsAny<GetUserProjectQuery>()))
-                .Returns(Task.FromResult(Option.Some(new GetUserProjectQueryResult(new UserProjects("UserId", new []{fixture.Project} )))));
+                    x.Run(It.IsAny<GetUserProjectsQuery>()))
+                .Returns(Task.FromResult(Option.Some(new GetUserProjectsQueryResult(new UserProjects("UserId", new []{fixture.Project} )))));
 
             var returnOption = await
                 fixture.Service.Run(
@@ -65,8 +65,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             var fixture = CreateNewUserProjectFixture;
 
             fixture.Query.Setup(x =>
-                    x.Run(It.IsAny<GetUserProjectQuery>()))
-                .Returns(Task.FromResult(Option.Some(new GetUserProjectQueryResult(new UserProjects("UserId", new[] { fixture.Project })))));
+                    x.Run(It.IsAny<GetUserProjectsQuery>()))
+                .Returns(Task.FromResult(Option.Some(new GetUserProjectsQueryResult(new UserProjects("UserId", new[] { fixture.Project })))));
 
             var returnOption = await
                 fixture.Service.Run(
@@ -82,8 +82,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             var fixture = CreateNewUserProjectFixture;
 
             fixture.Query.Setup(x =>
-                    x.Run(It.IsAny<GetUserProjectQuery>()))
-                .Returns(Task.FromResult(Option.Some(new GetUserProjectQueryResult(new UserProjects("UserId", new[] { fixture.Project })))));
+                    x.Run(It.IsAny<GetUserProjectsQuery>()))
+                .Returns(Task.FromResult(Option.Some(new GetUserProjectsQueryResult(new UserProjects("UserId", new[] { fixture.Project })))));
 
             var returnOption = await
                 fixture.Service.Run(
@@ -95,14 +95,14 @@ namespace ScooterBear.GTD.UnitTests.UserProject
 
     public class CreateNewUserProjectFixture : IDisposable
     {
-        public readonly Mock<IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult>> Query;
+        public readonly Mock<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>> Query;
         public readonly Mock<IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult>> PersistService;
         public readonly Mock<IKnowTheDate> IKnowTheDate;
         public readonly CreateNewUserProjectService Service;
         public readonly ReadOnlyProject Project;
         public CreateNewUserProjectFixture()
         {
-            Query = new Mock<IQueryHandler<GetUserProjectQuery, GetUserProjectQueryResult>>();
+            Query = new Mock<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>>();
             PersistService = new Mock<IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult>>();
             IKnowTheDate = new Mock<IKnowTheDate>();
             IKnowTheDate.Setup(x => x.UtcNow()).Returns(DateTime.UtcNow);
