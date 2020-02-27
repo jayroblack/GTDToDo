@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.AWS.DynamoDb;
@@ -36,6 +37,14 @@ namespace ScooterBear.GTD
                     options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
                     options.Audience = "api1";
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidIssuer = "http://localhost:5000",
+                        ValidateIssuer = true,
+                        ValidAudience = "api1",
+                        ValidateAudience = true,
+                        //ValidateIssuerSigningKey = true  //<-- Turn this on before going to production!!!!
+                    };
                 });
 
             services.AddCors(options =>
@@ -48,6 +57,7 @@ namespace ScooterBear.GTD
                         .AllowAnyMethod();
                 });
             });
+            services.AddHttpContextAccessor();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

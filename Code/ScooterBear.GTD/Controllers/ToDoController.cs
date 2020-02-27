@@ -5,35 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScooterBear.GTD.Application.Label;
 using ScooterBear.GTD.Application.Projects;
+using ScooterBear.GTD.Application.UserLabel;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Controllers
 {
-    public interface IProfileFactory
-    {
-        Profile GetCurrentProfile();
-    }
-
-    public class Profile
-    {
-        public string UserId { get; }
-
-        public Profile(string userId)
-        {
-            UserId = userId ?? throw new ArgumentNullException(nameof(userId));
-        }
-    }
-
-    //TODO:  Implement Autofac MultiTenant Scheme - Make sure that we set the Profile per request in the middleware.
-    public class HardCodedProfileFactory : IProfileFactory
-    {
-        public Profile GetCurrentProfile()
-        {
-            return new Profile("23ed3941-1b33-49e6-a634-38767ad7ed61");
-        }
-    }
-
     [Authorize]
     public class ToDoController : Controller
     {

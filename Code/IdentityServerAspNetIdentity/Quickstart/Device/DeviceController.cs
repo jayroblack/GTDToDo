@@ -10,11 +10,12 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
+using IdentityServerAspNetIdentity.Quickstart.Consent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityServer4.Quickstart.UI.Device
+namespace IdentityServerAspNetIdentity.Quickstart.Device
 {
     [Authorize]
     [SecurityHeaders]

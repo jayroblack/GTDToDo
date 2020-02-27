@@ -6,6 +6,7 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Optional;
 using ScooterBear.GTD.Application.Label;
+using ScooterBear.GTD.Application.UserLabel;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;

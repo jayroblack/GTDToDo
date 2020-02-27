@@ -7,11 +7,10 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Optional;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
-using ScooterBear.GTD.AWS.DynamoDb.Project;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.UserProject
+namespace ScooterBear.GTD.AWS.DynamoDb.Project
 {
     public class GetUserProjectsQueryHandler : IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>
     {
@@ -30,7 +29,6 @@ namespace ScooterBear.GTD.AWS.DynamoDb.UserProject
 
             using (var dynamoDb = _dynamoDbFactory.Create())
             {
-                //Intention is to query the GSI IndexProjectLabelByUserId which projects labels and projects based on the UserId attribute.
                 var search = dynamoDb.QueryAsync<UserProjectLabelDynamoDbTable>(query.UserId, new DynamoDBOperationConfig()
                 {
                     IndexName = UserProjectLabelTableData.IndexProjectLabelByUserId,

@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DynamoDb\UserLabel\**" />
+    <EmbeddedResource Remove="DynamoDb\UserLabel\**" />
+    <None Remove="DynamoDb\UserLabel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.104.23" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.99" />
@@ -15,10 +21,6 @@
     <ProjectReference Include="..\ScooterBear.GTD.Application\ScooterBear.GTD.Application.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Fakes\ScooterBear.GTD.Fakes.csproj" />
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DynamoDb\UserLabel\" />
   </ItemGroup>
 
 </Project>
