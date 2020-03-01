@@ -45,7 +45,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task SaveAsync<T>(T value, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task SaveAsync<T>(T value, bool consistentRead = false, CancellationToken cancellationToken = default(CancellationToken))
             where T : IDynamoDbTable
         {
             try
@@ -53,7 +53,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
                 //TODO:  Come back we should have an exponential back off and retry
                 //TODO:  Fall and surface back to the user!!!
                 //RESEARCH:  Does the .Net Framework use Polly or do I have to implement it?
-                await _context.SaveAsync(value, cancellationToken);
+                await _context.SaveAsync(value, new DynamoDBOperationConfig(){ConsistentRead = consistentRead }, cancellationToken);
             }
             catch (Exception ex)
             {

@@ -36,7 +36,8 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Project
 
             using (var dynamoDb = _dynamoDbFactory.Create())
             {
-                await dynamoDb.SaveAsync(table, CancellationToken.None);
+                
+                await dynamoDb.SaveAsync(table, arg.ConsistentRead);
 
                 var projectRetrieved =
                     await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.Project, CancellationToken.None);

@@ -20,8 +20,9 @@ namespace ScooterBear.GTD.Application.Services.Persistence
         public string UserId { get; }
         public string ProjectName { get; }
         public DateTime DateTimeCreated { get; }
+        public bool ConsistentRead { get; set; }
 
-        public PersistNewProjectServiceArg(string id, string userId, string projectName, DateTime dateTimeCreated)
+        public PersistNewProjectServiceArg(string id, string userId, string projectName, DateTime dateTimeCreated, bool consistentRead = false)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException($"{nameof(id)} is required.");
@@ -39,6 +40,7 @@ namespace ScooterBear.GTD.Application.Services.Persistence
             UserId = userId;
             ProjectName = projectName;
             DateTimeCreated = dateTimeCreated;
+            ConsistentRead = consistentRead;
         }
     }
 }

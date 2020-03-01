@@ -30,7 +30,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
 
             using (var dynamoDb = _dynamoDbFactory.Create())
             {
-                await dynamoDb.SaveAsync(table, CancellationToken.None);
+                await dynamoDb.SaveAsync(table);
                 var userRetrieved =
                     await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.User, CancellationToken.None);
 
