@@ -1,26 +1,20 @@
 import React from "react";
 import { connect } from "react-redux";
-import { GetOrCreateUser, GetToDos } from '../api/todo';
+import { GetorCreateUser, LoadLabelsAndProjectsForUser  } from '../actions';
 
 class ToDo extends React.Component {
 
     async componentDidMount(){
-
+      
      if( this.props.user ){
-        //In the event that this is the first time the user has visited, create the user. 
+        //This is ugly as shit!
+        //TODO:  Why is there no default project created?
         const { access_token } = this.props.user;
         const { given_name, family_name, email, sub } = this.props.user.profile;
         const data = { id: sub, firstName: given_name, lastName: family_name, email };
         
-        //TODO: Add to Redux - Action/Reducer
-        GetOrCreateUser(access_token, data)
-          .then(data => console.log(data) )
-          .catch(err=> console.log(err));
-
-          //TODO: Add to Redux - Action/Reducer
-        GetToDos(access_token)
-        .then(data => console.log(data) )
-        .catch(err=> console.log(err));
+        this.props.dispatch(GetorCreateUser(access_token, data));
+        this.props.dispatch(LoadLabelsAndProjectsForUser(access_token));
       }
     }
 
