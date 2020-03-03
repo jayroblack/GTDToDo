@@ -8,6 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const drawerWidth = 240;
 
@@ -68,20 +72,43 @@ class ToDo extends React.Component {
             ))}
           </List>
           <Divider />
-          <List>
-            {['Projects'].map((text, index) => (
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Projects</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List>
+              {['Project 1', 'Project 2', 'Project 3'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
-          </List>
-          <List>
-            {['Labels'].map((text, index) => (
+              </List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <Divider />
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1b-content"
+              id="panel1b-header"
+            >
+              <Typography>Labels</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <List>
+              {['Label 1', 'Label 2', 'Label 3'].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
-          </List>
+              </List>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />

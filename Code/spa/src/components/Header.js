@@ -22,9 +22,7 @@ const useStyles = theme => ({
 
 class Header extends React.Component {
   render() {
-
     const { classes } = this.props;
-    const userNameToPrint = this.props.user ? " :: " + this.props.userName : "";
     return (
       <AppBar position="fixed" className={classes.appBar} >
         <Toolbar>

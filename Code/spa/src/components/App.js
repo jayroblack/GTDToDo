@@ -14,8 +14,6 @@ import HomePage from './Home';
 import ToDo from './ToDo';
 import PrivateRoute from './PrivateRoute';
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
