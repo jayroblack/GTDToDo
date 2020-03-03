@@ -14,8 +14,6 @@ import Root from './root';
 import ToDo  from './ToDo';
 import PrivateRoute from './PrivateRoute';
 
-// https://www.gistia.com/react-authentication-security-private-routes/ for learning how to secure routes.
-// Need to learn how to use Hooks first.  
 const App = ()=> {
     return( 
         <React.Fragment>
