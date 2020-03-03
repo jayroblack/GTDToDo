@@ -1,8 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles';
+
+const useStyles = theme => ({
+  toolbar: theme.mixins.toolbar,
+});
 
 class HomePage extends React.Component {
     render(){
+      const { classes } = this.props;
+
       if( !this.props.user ){
         return (
           <div>Welcome, please Login to begin.</div>
@@ -10,7 +18,7 @@ class HomePage extends React.Component {
       }
       else{
         return (
-        <div>Welcome { this.props.userName }, you are logged in.</div>
+          <Redirect to="/todo" />
         );
       }
     }
@@ -30,4 +38,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(useStyles)(HomePage)));

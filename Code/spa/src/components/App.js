@@ -1,6 +1,8 @@
 import React from 'react'
 import Header from './Header'
-import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider, makeStyles } from '@material-ui/core/styles';
+import theme from '../theme';
 import { Provider } from 'react-redux';
 import { OidcProvider } from 'redux-oidc';
 import store from '../store';
@@ -12,12 +14,22 @@ import HomePage from './Home';
 import ToDo from './ToDo';
 import PrivateRoute from './PrivateRoute';
 
+const drawerWidth = 240;
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+  }
+}));
+
 const App = () => {
+    const classes = useStyles();
     return (
-        <React.Fragment>
-            <Provider store={store}>
-                <OidcProvider store={store} userManager={userManager}>
-                    <Container maxWidth="lg" style={{ height: '100vh' }}>
+        <div className={classes.root}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Provider store={store}>
+                    <OidcProvider store={store} userManager={userManager}>
                         <Router history={history}>
                             <Header />
                             <Switch>
@@ -26,10 +38,10 @@ const App = () => {
                                 <PrivateRoute path="/todo" component={ToDo} />
                             </Switch>
                         </Router>
-                    </Container>
-                </OidcProvider>
-            </Provider>
-        </React.Fragment>
+                    </OidcProvider>
+                </Provider>
+            </ThemeProvider>
+        </div>
     );
 };
 

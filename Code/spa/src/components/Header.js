@@ -4,11 +4,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import LoginLogout from './LoginLogout';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
 
 const useStyles = theme => ({
   root: {
     flexGrow: 1,
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -24,15 +26,13 @@ class Header extends React.Component {
     const { classes } = this.props;
     const userNameToPrint = this.props.user ? " :: " + this.props.userName : "";
     return (
-      <AppBar position="static">
+      <AppBar position="fixed" className={classes.appBar} >
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <Link to="/todo">
               <MenuIcon />
-            </Link>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            GTD To Do {userNameToPrint}
+            To Do List
           </Typography>
           <LoginLogout />
         </Toolbar>
