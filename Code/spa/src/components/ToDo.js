@@ -33,12 +33,9 @@ const useStyles = theme => ({
 class ToDo extends React.Component {
 
   async componentDidMount() {
-    if (this.props.user) {
-
-      //There has got to be a better way to do this - I would maybe attach to the reducer and snip off the profile part that I want to make it easier. 
-      const { access_token } = this.props.user;
-      const { given_name, family_name, email, sub } = this.props.user.profile;
-      const data = { id: sub, firstName: given_name, lastName: family_name, email };
+    if (this.props.userProfile) {
+      const { access_token, given_name, family_name, email, userId } = this.props.userProfile;
+      const data = { id: userId, firstName: given_name, lastName: family_name, email };
 
       //Here is something on nesting Routers: https://reacttraining.com/react-router/web/example/nesting
 
@@ -144,11 +141,10 @@ class ToDo extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const user = state.oidc.user;
-  if (!user) {
-    return { user: null };
+  if (!state.userProfile) {
+    return { userProfile: null };
   }
-  return { user: user };
+  return { userProfile: state.userProfile };
 }
 
 function mapDispatchToProps(dispatch) {
