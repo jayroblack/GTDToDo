@@ -8,12 +8,12 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Project
 {
-    public class ProjectsQueryHandler : IQueryHandler<ProjectQuery, ProjectQueryResult>
+    public class ProjectQueryHandler : IQueryHandler<ProjectQuery, ProjectQueryResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> _mapTo;
 
-        public ProjectsQueryHandler(IDynamoDBFactory dynamoDbFactory,
+        public ProjectQueryHandler(IDynamoDBFactory dynamoDbFactory,
             IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> mapTo)
         {
             _dynamoDbFactory = dynamoDbFactory ?? throw new ArgumentNullException(nameof(dynamoDbFactory));
