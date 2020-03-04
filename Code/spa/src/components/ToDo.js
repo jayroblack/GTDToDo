@@ -40,6 +40,8 @@ class ToDo extends React.Component {
       const { given_name, family_name, email, sub } = this.props.user.profile;
       const data = { id: sub, firstName: given_name, lastName: family_name, email };
 
+      //Here is something on nesting Routers: https://reacttraining.com/react-router/web/example/nesting
+
       this.props.dispatch(GetorCreateUser(access_token, data));
       this.props.dispatch(LoadLabelsAndProjectsForUser(access_token));
 
