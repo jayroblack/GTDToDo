@@ -29,8 +29,8 @@ const UserProfileReducer = (userProfile = null, action) => {
 const reducer = combineReducers(
     {
       oidc: oidcReducer,
-      GetorCreateUserReducer,
-      LoadLabelsAndProjectsReducer,
+      userData: GetorCreateUserReducer,
+      labelsAndProjects: LoadLabelsAndProjectsReducer,
       userProfile: UserProfileReducer
     }
   );

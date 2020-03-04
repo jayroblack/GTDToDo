@@ -4,6 +4,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import LoginLogout from './LoginLogout';
 import { connect } from 'react-redux';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = theme => ({
   root: {
@@ -27,11 +29,17 @@ class Header extends React.Component {
       <AppBar position="fixed" className={classes.appBar} >
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon />
+            <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             To Do List
           </Typography>
+          <IconButton aria-label="add" color="inherit">
+            <AddIcon />
+          </IconButton>
+          <IconButton aria-label="settings" color="inherit">
+            <SettingsIcon />
+          </IconButton>
           <LoginLogout />
         </Toolbar>
       </AppBar>
