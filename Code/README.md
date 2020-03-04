@@ -16,8 +16,7 @@ __NOTE: You must be using Visual Studio 2019 16.4.3 or above to work with Dotnet
 
 ## Before you run the code for the first time!!
 You must create a few docker images.  The primary reason for this was that the images change rarely, and the time to build was getting obnoxious.  
-1. Run from Git Bash: `GTDToDo/Externals/IdentityServerAspNetIdentity/BuildIdentityServerAspNetIdentity.sh`
-2. Run from Git Bash: `GTDToDo/Externals/MakeDnaymoDbDockerImage/BuildCustomDyanmoDbDocker.sh`
+1. Run from Git Bash: `GTDToDo/Externals/MakeDnaymoDbDockerImage/BuildCustomDyanmoDbDocker.sh`
 
 ### Dynamo DB
 If it is the intention of the developer to alter the Dynamo DB schema - that should require a special check out and an iterating of the docker container version so that all developers are aware of the changes.  The new code as well as the schema changes should be checked in as a single unit.  
