@@ -1,6 +1,5 @@
 import React from 'react'
 import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import LoginLogout from './LoginLogout';
 import { connect } from 'react-redux';
@@ -64,7 +63,8 @@ class Header extends React.Component {
   }
 
   handleMenu = event => {
-    this.setState({anchorEl: event.currentTarget})
+    console.log(event.currentTarget);
+    this.setState({anchorEl: event.currentTarget});
   };
 
   handleClose = () => {
@@ -76,9 +76,6 @@ class Header extends React.Component {
     return (
       <AppBar position="fixed" className={classes.appBar} >
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" className={classes.title}>
             To Do List
           </Typography>
@@ -92,18 +89,10 @@ class Header extends React.Component {
             <AddIcon />
           </IconButton>
 
-          <Menu
+          <StyledMenu
             id="menu-add"
             anchorEl={this.state.anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
             keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
             open={this.state.anchorEl != null}
             onClose={this.handleClose}
           >
@@ -125,7 +114,7 @@ class Header extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Add Label" />
             </StyledMenuItem>
-          </Menu>
+          </StyledMenu>
 
           <IconButton aria-label="settings" color="inherit">
             <SettingsIcon />
