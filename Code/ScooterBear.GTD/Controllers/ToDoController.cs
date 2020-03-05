@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ScooterBear.GTD.Application.Label;
-using ScooterBear.GTD.Application.Projects;
 using ScooterBear.GTD.Application.UserLabel;
 using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;

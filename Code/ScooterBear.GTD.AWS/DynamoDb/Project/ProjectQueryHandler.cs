@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Optional;
-using ScooterBear.GTD.Application.Projects;
+using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;

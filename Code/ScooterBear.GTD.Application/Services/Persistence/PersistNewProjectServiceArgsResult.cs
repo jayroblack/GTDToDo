@@ -1,5 +1,5 @@
 ﻿using System;
-using ScooterBear.GTD.Application.Projects;
+using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Services.Persistence

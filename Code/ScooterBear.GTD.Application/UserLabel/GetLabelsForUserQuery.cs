@@ -1,5 +1,4 @@
 ﻿using System;
-using ScooterBear.GTD.Application.Label;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.UserLabel

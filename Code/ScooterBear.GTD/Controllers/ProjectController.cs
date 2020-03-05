@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ScooterBear.GTD.Application.Projects;
 using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Patterns;
@@ -70,6 +69,10 @@ namespace ScooterBear.GTD.Controllers
         [Route("/project/{projectId}")]
         public Task<IActionResult> Put([FromRoute]int projectId, [FromBody]MutableProject projectItem)
         {
+            //OK - Return fresh copy
+            //Does Not Exist
+            //Unprocessable Entity
+            //Conflict
             throw new NotImplementedException();
         }
     }

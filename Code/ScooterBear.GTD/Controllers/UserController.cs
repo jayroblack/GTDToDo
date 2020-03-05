@@ -30,7 +30,7 @@ namespace ScooterBear.GTD.Controllers
         }
 
         [HttpPost]
-        [Route("users/GetOrCreateUser")]
+        [Route("/users/GetOrCreateUser")]
         public async Task<IActionResult> GetOrCreateUser([FromBody] NewUserValues values)
         {
             var resultOption =
@@ -42,7 +42,8 @@ namespace ScooterBear.GTD.Controllers
             return result;
         }
 
-        [HttpGet("/{userId}")]
+        [HttpGet]
+        [Route("/user/{userId}")]
         public async Task<IActionResult> Get(string userId)
         {
             var resultOption = await _getUser.Run(new GetUserQueryArgs(userId));
@@ -63,6 +64,7 @@ namespace ScooterBear.GTD.Controllers
         }
 
         [HttpPost]
+        [Route("/user")]
         public async Task<IActionResult> Post(NewUserValues values)
         {
             var args = new CreateUserServiceArg(values.ID, values.FirstName, values.LastName, values.Email);
@@ -73,9 +75,9 @@ namespace ScooterBear.GTD.Controllers
                 outcome => Conflict($"User already exists for this id {values.ID}"));
         }
 
-        //Question: Does the ID have to be in the URL for a Put?  Ask around / research  - I THINK YES
         [HttpPut]
-        public async Task<IActionResult> Put(UpdateUserServiceArgs userValues)
+        [Route("user/{userId}")]
+        public async Task<IActionResult> Put([FromRoute]string userId, [FromBody]UpdateUserServiceArgs userValues)
         {
             if (userValues == null) return BadRequest("Cannot parse required values.");
             if (string.IsNullOrEmpty(userValues.ID)) return BadRequest("ID is required.");
@@ -87,12 +89,12 @@ namespace ScooterBear.GTD.Controllers
                 outcome =>
                 {
                     if (outcome == UpdateUserService.UpdateUserOutcome.UnprocessableEntity)
-                        return UnprocessableEntity();
+                        return UnprocessableEntity(outcome.ToString());
 
                     if (outcome == UpdateUserService.UpdateUserOutcome.VersionConflict)
-                        return Conflict();
+                        return Conflict("Version of the user does not match the version stored.  Get a fresh copy and try again.");
 
-                    return NotFound();
+                    return NotFound("Could not find the user with this Id.");
 
                 });
         }

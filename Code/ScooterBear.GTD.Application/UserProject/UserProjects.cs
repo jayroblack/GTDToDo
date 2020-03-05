@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ScooterBear.GTD.Application.Projects;
 
 namespace ScooterBear.GTD.Application.UserProject
 {

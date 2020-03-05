@@ -1,7 +1,7 @@
 ﻿using System;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Application.Label
+namespace ScooterBear.GTD.Application.UserLabel
 {
     public class LabelQueryResult : IQueryResult
     {

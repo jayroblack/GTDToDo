@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace ScooterBear.GTD.Application.Projects
+namespace ScooterBear.GTD.Application.UserProject
 {
     public class Project : IProject
     {
         public string Id { get; }
-        public string Name { get; }
+        public string Name { get; private set; }
         public string UserId { get; }
         public int Count { get; private set; }
         public bool IsDeleted { get; private set; }
@@ -23,6 +23,11 @@ namespace ScooterBear.GTD.Application.Projects
             CountOverDue = countOverDue;
             VersionNumber = versionNumber;
             DateCreated = dateCreated;
+        }
+
+        public void SetName(string name)
+        {
+            this.Name = name;
         }
 
         public void SetCount(int count)

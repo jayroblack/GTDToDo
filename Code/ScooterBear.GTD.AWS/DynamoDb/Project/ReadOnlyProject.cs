@@ -1,5 +1,5 @@
 ﻿using System;
-using ScooterBear.GTD.Application.Projects;
+using ScooterBear.GTD.Application.UserProject;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Project
 {

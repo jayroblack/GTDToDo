@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ScooterBear.GTD.Application.Projects
+namespace ScooterBear.GTD.Application.UserLabel
 {
-    public interface IProject
+    public interface ILabel
     {
         string Id { get; }
         string Name { get; }

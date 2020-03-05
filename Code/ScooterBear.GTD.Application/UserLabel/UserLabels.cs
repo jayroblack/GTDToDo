@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ScooterBear.GTD.Application.Label
+namespace ScooterBear.GTD.Application.UserLabel
 {
     public class UserLabels
     {

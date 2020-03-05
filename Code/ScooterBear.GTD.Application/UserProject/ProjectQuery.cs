@@ -1,7 +1,7 @@
 ﻿using System;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.Application.Projects
+namespace ScooterBear.GTD.Application.UserProject
 {
     public class ProjectQueryResult : IQueryResult
     {
