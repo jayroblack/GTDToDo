@@ -14,7 +14,7 @@ namespace ScooterBear.GTD.Application.Services.Persistence
         }
     }
 
-    public class PersistNewProjectServiceArg : IServiceArgs<PersistNewProjectServiceResult>
+    public class PersistNewProjectServiceArg : IServiceArgs<PersistNewProjectServiceResult>, IServiceArgs<PersistUpdateProjectServiceResult>
     {
         public string Id { get; }
         public string UserId { get; }

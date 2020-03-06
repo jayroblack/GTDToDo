@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using FluentAssertions;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns.CQRS;
@@ -22,7 +23,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
         public async void ShouldDetectIfItemDoesNotExist()
         {
             var user = _fixture.GenerateUser();
-
+            this._fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
             var updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
                 UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
 
@@ -38,6 +39,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
         public async void ShouldBeUnprocessableWithRubbish()
         {
             var user = _fixture.GenerateUser();
+            this._fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
 
             var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();
@@ -59,7 +61,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
         public async void ShouldUpdateValues()
         {
             var user = _fixture.GenerateUser();
-
+            this._fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
             var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();
 
@@ -97,10 +99,10 @@ namespace ScooterBear.GTD.IntegrationTests.User
         }
 
         [Fact]
-        public async void ShouldReturnVersionConflict()
+        public async void ShouldReturnVersionConflictIfModifyingStaleRead()
         {
             var user = _fixture.GenerateUser();
-
+            this._fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
             var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
                 CreateUserServiceResult, CreateUserServiceOutcome>>();
 
@@ -122,6 +124,40 @@ namespace ScooterBear.GTD.IntegrationTests.User
                 some =>
                 Assert.False(true, "Should not pass."),
                 outcome => outcome.Should().Be(UpdateUserService.UpdateUserOutcome.VersionConflict));
+        }
+
+        [Fact]
+        public async void ShouldReturnUnauthorizedIfUserDoesNotMatchProfile()
+        {
+            var user = _fixture.GenerateUser();
+            this._fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
+            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
+                CreateUserServiceResult, CreateUserServiceOutcome>>();
+
+            var createUserOptional =
+                await createUser.Run(new CreateUserServiceArg(user.ID, user.FirstName, user.LastName, user.Email));
+            createUserOptional.HasValue.Should().BeTrue();
+
+            var existingVeresionNumber = 0;
+            createUserOptional.MatchSome(x => existingVeresionNumber = x.User.VersionNumber);
+
+            this._fixture.ProfileFactory.SetUserProfile(new Profile(Guid.NewGuid().ToString()));
+            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserServiceArgs,
+                UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>>();
+
+            var newFirstName = "Mc";
+            var newLastName = "Tastey";
+            var newEmail = "mcTastey@McLuvn";
+            var billingId = "NewBillingId";
+            var authId = "NewAuthId";
+
+            var updateOption = await _updateUser.Run(new UpdateUserServiceArgs(user.ID, newFirstName, newLastName,
+                newEmail, billingId, authId, existingVeresionNumber));
+
+            updateOption.Match(
+                some =>
+                    Assert.False(true, "Should not pass."),
+                outcome => outcome.Should().Be(UpdateUserService.UpdateUserOutcome.NotAuthorized));
         }
     }
 }

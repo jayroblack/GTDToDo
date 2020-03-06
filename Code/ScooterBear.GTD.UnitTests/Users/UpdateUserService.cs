@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Optional;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.Application.Services.Persistence;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.Application.Users.Update;
 using ScooterBear.GTD.Patterns.CQRS;
@@ -84,11 +86,12 @@ namespace ScooterBear.GTD.UnitTests.Users
     public class UpdateUserServiceFixture : IDisposable
     {
         public readonly Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>> GetUser;
-
+        public readonly Mock<IProfileFactory> ProfileFactory;
         public readonly Mock<IServiceOptOutcomes<PersistUpdatedUserServiceArgs,
             PersistUpdatedUserServiceResult,
             PersistUpdatedUserOutcome>> PersistUpdatedUser;
 
+        public readonly Mock<ILogger<UpdateUserService>> Logger;
         public readonly UpdateUserService UpdateUserService;
         public readonly UpdateUserServiceArgs UpdateUserServiceArgs;
         public readonly User User;
@@ -98,8 +101,13 @@ namespace ScooterBear.GTD.UnitTests.Users
             this.GetUser = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
             this.PersistUpdatedUser = new Mock<IServiceOptOutcomes<
                 PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>>();
-            this.UpdateUserService = new UpdateUserService(this.GetUser.Object, this.PersistUpdatedUser.Object);
             var id = new GuidCreateIdStrategy().NewId();
+            this.ProfileFactory = new Mock<IProfileFactory>();
+            var profile = new Application.UserProfile.Profile(id);
+            this.ProfileFactory.Setup(x => x.GetCurrentProfile()).Returns(profile);
+            this.Logger = new Mock<ILogger<UpdateUserService>>();
+            this.UpdateUserService = new UpdateUserService(this.ProfileFactory.Object, this.Logger.Object, this.GetUser.Object, this.PersistUpdatedUser.Object);
+            
             var firstName = "FirstName";
             var lastName = "LastName";
             var email = "Email";
@@ -112,6 +120,9 @@ namespace ScooterBear.GTD.UnitTests.Users
             
             this.User = new User(id, firstName, lastName, email, billingId, authId, versionNumber, DateTime.Now);
         }
+
+        
+
 
         public void Dispose()
         {

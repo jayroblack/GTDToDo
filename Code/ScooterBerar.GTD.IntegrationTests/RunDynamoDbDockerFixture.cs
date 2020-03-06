@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Builder;
 using Microsoft.Extensions.Logging;
 using ScooterBear.GTD.Application;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.Users;
 using ScooterBear.GTD.AWS.DynamoDb;
 using ScooterBear.GTD.AWS.DynamoDb.Core;
@@ -123,8 +124,14 @@ namespace ScooterBear.GTD.IntegrationTests
             //Overrides
             builder.RegisterType<MailTrap>().As<IMailTrap>().SingleInstance();
             builder.RegisterType<DynamoDBIntegrationFactory>().As<IDynamoDBFactory>();
+
+            this.ProfileFactory = new FakedProfileFactory();
+            builder.RegisterInstance(this.ProfileFactory).As<IProfileFactory>();
+
             return builder;
         }
+
+        public FakedProfileFactory ProfileFactory { get; private set; }
 
         public IUser GenerateUser()
         {
@@ -135,6 +142,21 @@ namespace ScooterBear.GTD.IntegrationTests
 
             return new Application.Users.Update.User(id, name, last, email, "billingId", "authId", 0,
                 DateTime.UtcNow);
+        }
+    }
+
+    public class FakedProfileFactory : IProfileFactory
+    {
+        public Profile Profile { get; private set; }
+
+        public void SetUserProfile(Profile profile)
+        {
+            this.Profile = profile ?? throw new ArgumentNullException(nameof(profile));
+        }
+
+        public Profile GetCurrentProfile()
+        {
+            return this.Profile;
         }
     }
 }

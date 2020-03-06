@@ -10,7 +10,7 @@ using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Project
+namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
     public class GetUserProjectsQueryHandler : IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>
     {

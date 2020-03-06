@@ -1,7 +1,7 @@
 ﻿using System;
 using ScooterBear.GTD.Application.UserProject;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Project
+namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
     public class ReadOnlyProject : IProject
     {

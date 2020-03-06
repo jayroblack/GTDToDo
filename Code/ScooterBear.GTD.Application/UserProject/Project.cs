@@ -27,11 +27,17 @@ namespace ScooterBear.GTD.Application.UserProject
 
         public void SetName(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException(nameof(name));
+            
             this.Name = name;
         }
 
         public void SetCount(int count)
         {
+            if( count < 0 )
+                throw new ArgumentOutOfRangeException(nameof(count));
+
             this.Count = count;
         }
 
@@ -42,6 +48,9 @@ namespace ScooterBear.GTD.Application.UserProject
 
         public void SetCountOverDue(int countOverDue)
         {
+            if (countOverDue < 0)
+                throw new ArgumentOutOfRangeException(nameof(countOverDue));
+
             this.CountOverDue = countOverDue;
         }
     }

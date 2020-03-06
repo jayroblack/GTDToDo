@@ -8,7 +8,7 @@ using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;
 using Optional;
-using ScooterBear.GTD.AWS.DynamoDb.Project;
+using ScooterBear.GTD.AWS.DynamoDb.Projects;
 
 namespace ScooterBear.GTD.UnitTests.UserProject
 {

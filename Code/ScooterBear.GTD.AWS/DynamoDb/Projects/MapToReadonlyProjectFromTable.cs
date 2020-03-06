@@ -1,7 +1,7 @@
 ﻿using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Project
+namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
     public class MapToReadonlyProjectFromTable :
         IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject>
