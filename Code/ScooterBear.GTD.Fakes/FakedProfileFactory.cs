@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using ScooterBear.GTD.Application.UserProfile;
 
 namespace ScooterBear.GTD.Fakes

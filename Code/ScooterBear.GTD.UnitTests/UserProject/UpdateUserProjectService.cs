@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Optional;
 using ScooterBear.GTD.Application.Services.Persistence;
-using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Fakes;
 using ScooterBear.GTD.Patterns.CQRS;

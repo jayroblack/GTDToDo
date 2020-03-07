@@ -36,8 +36,4 @@
     <ProjectReference Include="..\ScooterBear.GTD.Patterns\ScooterBear.GTD.Patterns.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UserProject\" />
-  </ItemGroup>
-
 </Project>

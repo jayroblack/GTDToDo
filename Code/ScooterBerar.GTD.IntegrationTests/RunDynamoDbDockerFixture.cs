@@ -126,7 +126,7 @@ namespace ScooterBear.GTD.IntegrationTests
             builder.RegisterType<DynamoDBIntegrationFactory>().As<IDynamoDBFactory>();
 
             this.ProfileFactory = new FakedProfileFactory();
-            builder.RegisterInstance(this.ProfileFactory).As<IProfileFactory>();
+            builder.RegisterInstance(this.ProfileFactory).As<IProfileFactory>().SingleInstance();
 
             return builder;
         }

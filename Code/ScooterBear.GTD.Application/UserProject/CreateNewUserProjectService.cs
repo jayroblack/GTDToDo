@@ -12,7 +12,7 @@ namespace ScooterBear.GTD.Application.UserProject
     public enum CreateUserProjectOutcomes
     {
         ProjectNameAlreadyExists,
-        ProjectIdAlreadyExists,
+        ProjectIdAlreadyExists
     }
 
     public class CreateNewUserProjectService : IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>
