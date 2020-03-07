@@ -13,8 +13,8 @@ namespace ScooterBear.GTD.Application.UserProject
 
         public UpdateUserProjectServiceArg(string projectId, string name, int count, bool isDeleted, int countOverdue)
         {
-            ProjectId = projectId ?? throw new ArgumentNullException(nameof(projectId));
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            ProjectId = projectId;
+            Name = name;
             Count = count;
             IsDeleted = isDeleted;
             CountOverdue = countOverdue;

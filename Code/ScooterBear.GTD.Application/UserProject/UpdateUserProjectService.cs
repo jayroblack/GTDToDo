@@ -38,10 +38,21 @@ namespace ScooterBear.GTD.Application.UserProject
 
         public async Task<Option<UpdateUserProjectServiceResult, UpdateProjectOutcome>> Run(UpdateUserProjectServiceArg arg)
         {
-            var userProjectOption = await _getProject.Run(new ProjectQuery(arg.ProjectId));
-            if (!userProjectOption.HasValue)
+            Option<ProjectQueryResult> userProjectOption = Option.None<ProjectQueryResult>();
+
+            try
+            {
+                userProjectOption = await _getProject.Run(new ProjectQuery(arg.ProjectId));
+                if (!userProjectOption.HasValue)
+                    return Option.None<UpdateUserProjectServiceResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                        .DoesNotExist);
+            }
+            catch (ArgumentException e)
+            {
+                _logger.Log(LogLevel.Error, e.Message);
                 return Option.None<UpdateUserProjectServiceResult, UpdateProjectOutcome>(UpdateProjectOutcome
-                    .DoesNotExist);
+                    .UnprocessableEntity);
+            }
 
             Project project = null;
             userProjectOption.MatchSome(some =>

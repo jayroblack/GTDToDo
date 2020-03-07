@@ -144,19 +144,4 @@ namespace ScooterBear.GTD.IntegrationTests
                 DateTime.UtcNow);
         }
     }
-
-    public class FakedProfileFactory : IProfileFactory
-    {
-        public Profile Profile { get; private set; }
-
-        public void SetUserProfile(Profile profile)
-        {
-            this.Profile = profile ?? throw new ArgumentNullException(nameof(profile));
-        }
-
-        public Profile GetCurrentProfile()
-        {
-            return this.Profile;
-        }
-    }
 }
