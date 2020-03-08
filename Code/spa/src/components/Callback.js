@@ -14,7 +14,7 @@ class CallbackPage extends React.Component {
             history.push('/todo')
           } }
           errorCallback={error => {
-            console.log(error);
+            console.log(error);//TODO - How do I show these errors?  
             //history.push('/')
           }}
           >

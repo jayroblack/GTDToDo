@@ -15,13 +15,17 @@ class NewProjectDialog extends React.Component {
     };
 
     handleSave = () => {
-
-        //this.props.dispatch(SaveNewProjectDialog(cancelled));
+        //How do I get the value of the project? 
+        //If length == 0 then 1) Make field Red - show error message 2) Disable the Save Button
+        //If Length > 0 however the Project Name already exists 1) Make field Red - show error message 2) Disable the Save Button
+        
+        //When saving, - change to spinner - save and cancel are disabled
+        //When Save Returns Succeesful - Close Dialog - show Snack Bar Success.
+        //When Save Returns Failed - 1) Make Field Red - show error message - cancel and save are enabled again.
+        //this.props.dispatch(SaveNewProjectDialog());
     };
 
     render() {
-        console.log(this.props.newProjectDialog);
-        console.log(this.props.newProjectDialog.status !== 'closed');
         return (
             <Dialog open={this.props.newProjectDialog.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add New Project</DialogTitle>
