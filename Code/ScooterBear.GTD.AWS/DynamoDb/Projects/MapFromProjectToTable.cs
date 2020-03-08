@@ -15,6 +15,8 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
                 Name = input.Name,
                 UserId = input.UserId,
                 Count = input.Count,
+                Data = UserProjectLabelTableData.Project,
+                DateCreated = input.DateCreated,
                 IsDeleted = input.IsDeleted,
                 CountOverDue = input.CountOverDue,
                 VersionNumber = input.VersionNumber,

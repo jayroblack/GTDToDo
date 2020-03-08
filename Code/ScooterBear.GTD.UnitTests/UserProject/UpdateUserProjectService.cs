@@ -97,6 +97,34 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.NotAuthorized));
         }
+
+        [Fact]
+        public async void ShouldReturnConflictIfStaleRead()
+        {
+            var userId = Guid.NewGuid().ToString();
+
+            var project = new Project("ProjectId", "ProjectName",
+                userId, 0, false, 2, 0, DateTime.UtcNow);
+
+            this._fixture.ProfileFactory.SetUserProfile(new Application.UserProfile.Profile(userId));
+            var option = Option.Some<ProjectQueryResult>(new ProjectQueryResult(project));
+
+            _fixture.MockedGetProject.Setup(x =>
+                x.Run(It.IsAny<ProjectQuery>())).Returns(Task.FromResult(option));
+
+            var persistOption =
+                Option.None<PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome>(PersistUpdateProjectOutcome
+                    .Conflict);
+
+            this._fixture.MockedPersistProject.Setup(x => x.Run(It.IsAny<PersistUpdateProjectServiceArgs>()))
+                .Returns(Task.FromResult(persistOption));
+
+            var testOptionResult = await
+                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue));
+
+            testOptionResult.Match(some => Assert.False(true, "Should Return None"),
+                outcome => outcome.Should().Be(UpdateProjectOutcome.VersionConflict));
+        }
     }
 
     public class UpdateUserProjectFixture : IDisposable

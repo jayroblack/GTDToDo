@@ -19,18 +19,6 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        private class ProjectItem
-        {
-            public string Id { get; }
-            public string Name { get; }
-
-            public ProjectItem(string id, string name)
-            {
-                Id = id;
-                Name = name;
-            }
-        }
-
         [Fact]
         public async void ShouldPersistProjectsAndQueryThem()
         {
