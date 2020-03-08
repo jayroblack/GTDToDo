@@ -9,6 +9,8 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import LabelIcon from '@material-ui/icons/Label';
 
+import NewProjectDialog from './NewProjectDialog';
+
 const useStyles = theme => ({
   root: {
     flexGrow: 1,
@@ -59,7 +61,7 @@ class Header extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = { anchorEl:null };
+    this.state = { anchorEl:null, buttonEnabled: false };
   }
 
   handleMenu = event => {
@@ -78,12 +80,12 @@ class Header extends React.Component {
           <Typography variant="h6" className={classes.title}>
             To Do List
           </Typography>
-          <IconButton 
+          <IconButton disabled={this.props.buttonDisabled}
             aria-label="Add Task, Project or Label" 
             aria-controls="menu-add"
             aria-haspopup="true"
             onClick={this.handleMenu}
-            color="inherit"
+            color="inherit" 
           >
             <AddIcon />
           </IconButton>
@@ -115,7 +117,7 @@ class Header extends React.Component {
             </StyledMenuItem>
           </StyledMenu>
 
-          <IconButton aria-label="settings" color="inherit">
+          <IconButton aria-label="settings" color="inherit" disabled={this.props.buttonDisabled} >
             <SettingsIcon />
           </IconButton>
           <LoginLogout />
@@ -127,11 +129,12 @@ class Header extends React.Component {
 
 const mapPropsToState = (state) => {
   const user = state.oidc.user;
+  
   if (!user) {
-    return { user: null, userName: null };
+    return { user: null, userName: null, buttonDisabled: true };
   }
   else {
-    return { user: user, userName: user.profile.name };
+    return { user: user, userName: user.profile.name, buttonDisabled: false };
   }
 };
 
