@@ -14,7 +14,6 @@ class CallbackPage extends React.Component {
             history.push('/todo')
           } }
           errorCallback={error => {
-            console.log("ERROR BRO");
             console.log(error);
             //history.push('/')
           }}

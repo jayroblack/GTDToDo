@@ -8,8 +8,8 @@ import AddIcon from '@material-ui/icons/Add';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import LabelIcon from '@material-ui/icons/Label';
-
 import NewProjectDialog from './NewProjectDialog';
+import { OpenNewProjectDialog } from '../actions/newProjectDialog';
 
 const useStyles = theme => ({
   root: {
@@ -61,7 +61,7 @@ class Header extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = { anchorEl:null, buttonEnabled: false };
+    this.state = { anchorEl:null };
   }
 
   handleMenu = event => {
@@ -71,6 +71,11 @@ class Header extends React.Component {
   handleClose = () => {
     this.setState({anchorEl: null})
   };
+
+  handleNewProject = () => {
+    this.setState({anchorEl: null})
+    this.props.dispatch(OpenNewProjectDialog());
+  }
 
   render() {
     const { classes } = this.props;
@@ -103,7 +108,7 @@ class Header extends React.Component {
               </ListItemIcon>
               <ListItemText primary="Add To Do" />
             </StyledMenuItem>
-            <StyledMenuItem onClick={this.handleClose}>
+            <StyledMenuItem onClick={this.handleNewProject}>
               <ListItemIcon>
                 <AccountTreeIcon fontSize="small" />
               </ListItemIcon>
@@ -116,7 +121,7 @@ class Header extends React.Component {
               <ListItemText primary="Add Label" />
             </StyledMenuItem>
           </StyledMenu>
-
+          <NewProjectDialog />
           <IconButton aria-label="settings" color="inherit" disabled={this.props.buttonDisabled} >
             <SettingsIcon />
           </IconButton>
@@ -131,11 +136,17 @@ const mapPropsToState = (state) => {
   const user = state.oidc.user;
   
   if (!user) {
-    return { user: null, userName: null, buttonDisabled: true };
+    return { user: null, userName: null, buttonDisabled: true, newProjectDialog: state.NewProjectDialog };
   }
   else {
-    return { user: user, userName: user.profile.name, buttonDisabled: false };
+    return { user: user, userName: user.profile.name, buttonDisabled: false, newProjectDialog: state.NewProjectDialog };
   }
 };
 
-export default connect(mapPropsToState)(withStyles(useStyles)(Header));
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch
+  };
+}
+
+export default connect(mapPropsToState, mapDispatchToProps)(withStyles(useStyles)(Header));

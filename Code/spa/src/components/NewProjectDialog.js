@@ -2,28 +2,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core'
+import { CloseNewProjectDialog, InvalidateNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 
 const useStyles = theme => ({
 
 });
 
 class NewProjectDialog extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { newProjectIsOpen: false };
-    }
-
-    handleClickOpen = () => {
-        this.setState({ newProjectIsOpen: true })
+    
+    handleDismiss = (cancelled) => {
+        this.props.dispatch(CloseNewProjectDialog(cancelled));
     };
 
-    handleClose = () => {
-        this.setState({ newProjectIsOpen: false })
+    handleSave = () => {
+
+        //this.props.dispatch(SaveNewProjectDialog(cancelled));
     };
 
     render() {
+        console.log(this.props.newProjectDialog);
+        console.log(this.props.newProjectDialog.status !== 'closed');
         return (
-            <Dialog open={this.state.newProjectIsOpen} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={this.props.newProjectDialog.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add New Project</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -39,10 +39,10 @@ class NewProjectDialog extends React.Component {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
+                    <Button onClick={ ()=> this.handleDismiss(true)} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={this.handleClose} color="primary">
+                    <Button onClick={this.handleSave} color="primary">
                         Save
                     </Button>
                 </DialogActions>
@@ -52,10 +52,13 @@ class NewProjectDialog extends React.Component {
 }
 
 function mapStateToProps(state) {
-    if (!state.LabelsAndProjects) {
-        return { projects: null };
-    }
-    return { projects: state.LabelsAndProjects.data.projects };
+    return { projects: state.labelsAndProjects, newProjectDialog: state.newProjectDialog };
 }
 
-export default connect(mapStateToProps)(withStyles(useStyles)(NewProjectDialog));
+function mapDispatchToProps(dispatch) {
+    return {
+      dispatch
+    };
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(NewProjectDialog));

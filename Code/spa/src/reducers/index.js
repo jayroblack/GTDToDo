@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { reducer as oidcReducer } from 'redux-oidc';
 import {GET_OR_CRTEATE_USER , LOAD_LABELS_AND_PROJECTS } from '../actions/types';
 import { USER_FOUND } from 'redux-oidc/src/constants';
+import NewProjectDialog from './newProjectDialog';
 
 const GetorCreateUserReducer = (user = null, action) => {
   if( action.type === GET_OR_CRTEATE_USER ){
@@ -10,7 +11,7 @@ const GetorCreateUserReducer = (user = null, action) => {
   return user;
 }
 
-const LoadLabelsAndProjectsReducer = (labelsAndProjects = null, action) => {
+const LoadLabelsAndProjectsReducer = (labelsAndProjects = {}, action) => {
   if( action.type === LOAD_LABELS_AND_PROJECTS ){
     return action.payload;
   }
@@ -31,7 +32,8 @@ const reducer = combineReducers(
       oidc: oidcReducer,
       userData: GetorCreateUserReducer,
       labelsAndProjects: LoadLabelsAndProjectsReducer,
-      userProfile: UserProfileReducer
+      userProfile: UserProfileReducer,
+      newProjectDialog: NewProjectDialog
     }
   );
 
