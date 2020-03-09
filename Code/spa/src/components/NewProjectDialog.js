@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField } from '@material-ui/core'
-import { CloseNewProjectDialog } from '../actions/newProjectDialog';
+import { CloseNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 
 const useStyles = theme => ({
 
@@ -16,8 +16,12 @@ class NewProjectDialog extends React.Component {
     };
 
     onSubmit = (formValues) => {
+        this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, formValues.projectName));
         //When saving, - change to spinner - save and cancel are disabled
+
         //When Save Returns Succeesful - Close Dialog - show Snack Bar Success.
+
+        //throw new SubmissionError({ projectName: 'Project name already exists.', _error: 'Project name already exists.' })
         //When Save Returns Failed - 1) Make Field Red - show error message - cancel and save are enabled again.
         //this.props.dispatch(SaveNewProjectDialog());
     };
@@ -43,6 +47,15 @@ class NewProjectDialog extends React.Component {
     }
 
     render() {
+        let disabledOptoins = {};
+
+        if( this.props.newProjectDialogState.status === 'saving' ){
+            disabledOptoins = { disabled:true };
+        }
+        else{
+            disabledOptoins = { };
+        }
+
         return (
             <form name="newProjectDialog" >
             <Dialog open={this.props.newProjectDialogState.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
@@ -54,10 +67,10 @@ class NewProjectDialog extends React.Component {
                     <Field name="projectName" label="Project Name" component={this.renderTextField} type="text" />
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary">
+                    <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary" {...disabledOptoins}>
                         Cancel
                     </Button>
-                    <Button variant="contained" onClick={this.props.handleSubmit(this.onSubmit)} color="primary">
+                    <Button variant="contained" onClick={this.props.handleSubmit(this.onSubmit)} color="primary" {...disabledOptoins}>
                         Save
                     </Button>
                 </DialogActions>
@@ -96,7 +109,8 @@ NewProjectDialog = connect(
       return { 
           projects: state.labelsAndProjects.data.projects, 
           newProjectDialogState: state.newProjectDialog,
-          myForm: state.form.newProjectDialog
+          myForm: state.form.newProjectDialog,
+          userProfile: state.userProfile
         };
     }, 
     dispatch => {

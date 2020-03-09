@@ -1,5 +1,5 @@
 import { GET_OR_CRTEATE_USER , LOAD_LABELS_AND_PROJECTS } from './types';
-import { GetOrCreateUser, GetToDos } from '../api/todo';
+import { GetOrCreateUser, GetToDos } from '../api/users';
 
 export const GetorCreateUser = (token, data) => {
 
