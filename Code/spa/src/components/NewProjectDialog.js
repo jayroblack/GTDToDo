@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
 import { CloseNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 
 const useStyles = theme => ({
@@ -17,13 +17,8 @@ class NewProjectDialog extends React.Component {
 
     onSubmit = (formValues) => {
         this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, formValues.projectName));
-        //When saving, - change to spinner - save and cancel are disabled
-
-        //When Save Returns Succeesful - Close Dialog - show Snack Bar Success.
-
-        //throw new SubmissionError({ projectName: 'Project name already exists.', _error: 'Project name already exists.' })
-        //When Save Returns Failed - 1) Make Field Red - show error message - cancel and save are enabled again.
-        //this.props.dispatch(SaveNewProjectDialog());
+        //When Save Returns Successful - Close Dialog - How can I show that it worked?  Show Snack Bar Success?  
+        //When Save Returns Failed throw new SubmissionError({ projectName: 'Message.', _error: 'Save Failed.' })
     };
 
     renderTextField = ({ input, label, meta, ...custom }) => {
@@ -47,13 +42,13 @@ class NewProjectDialog extends React.Component {
     }
 
     render() {
-        let disabledOptoins = {};
+        let disabledOptions = {};
 
         if( this.props.newProjectDialogState.status === 'saving' ){
-            disabledOptoins = { disabled:true };
+            disabledOptions = { disabled:true };
         }
         else{
-            disabledOptoins = { };
+            disabledOptions = { };
         }
 
         return (
@@ -64,16 +59,17 @@ class NewProjectDialog extends React.Component {
                     <DialogContentText>
                         Enter the new project name and click save.
                     </DialogContentText>
-                    <Field name="projectName" label="Project Name" component={this.renderTextField} type="text" />
+                    <Field name="projectName" label="Project Name" component={this.renderTextField} type="text" {...disabledOptions} />
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary" {...disabledOptoins}>
+                    <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary" {...disabledOptions}>
                         Cancel
                     </Button>
-                    <Button variant="contained" onClick={this.props.handleSubmit(this.onSubmit)} color="primary" {...disabledOptoins}>
+                    <Button variant="contained" onClick={this.props.handleSubmit(this.onSubmit)} color="primary" {...disabledOptions}>
                         Save
                     </Button>
                 </DialogActions>
+                {this.props.newProjectDialogState.status === 'saving' && <LinearProgress />}
             </Dialog>
             </form>
         );
