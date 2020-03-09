@@ -4,7 +4,6 @@ import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField } from '@material-ui/core'
 import { CloseNewProjectDialog } from '../actions/newProjectDialog';
-//import _ from 'lodash';
 
 const useStyles = theme => ({
 
@@ -25,15 +24,15 @@ class NewProjectDialog extends React.Component {
 
     renderTextField = ({ input, label, meta, ...custom }) => {
         const opts = {};
-        if( meta.error ){
+        if( meta.error && meta.touched){
             opts["error"] = true;
+            opts["helperText"] = meta.error;
         }
         
         return (
         <TextField autoFocus
             required 
             {... opts}
-            helperText={meta.error}
             label={label}
             margin="dense"
             fullWidth
@@ -76,11 +75,13 @@ const validate = (formValues) => {
         return errors;
     }
 
-    //TODO:  Still need to use lodash to discover if this project name already exists
-    //var projectName = formValues.projectName;
+    if( formValues.projectName === 'Inbox'){
+        errors.projectName = "Inbox is a reserved project name."
+        return errors;
+    }
     
-    //If length == 0 then 1) Make field Red - show error message 2) Disable the Save Button
-    //If Length > 0 however the Project Name already exists 1) Make field Red - show error message 2) Disable the Save Button
+    //TODO:  I would love to be able to verify that the projects do not already exist before sending to server.
+    //Problem is that I cannot register this external validation function and have it be aware of my map state to props. :(
 
     return errors;
 }
