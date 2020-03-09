@@ -12,7 +12,7 @@ const GetorCreateUserReducer = (user = null, action) => {
   return user;
 }
 
-const LoadLabelsAndProjectsReducer = (labelsAndProjects = {}, action) => {
+const LoadLabelsAndProjectsReducer = (labelsAndProjects = { data: { labels:[], projects:[] } }, action) => {
   if( action.type === LOAD_LABELS_AND_PROJECTS ){
     return action.payload;
   }
