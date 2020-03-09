@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
-import { CloseNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
+import { CloseNewProjectDialog, SavingNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 
 const useStyles = theme => ({
 
@@ -16,7 +16,8 @@ class NewProjectDialog extends React.Component {
     };
 
     onSubmit = (formValues) => {
-        this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, formValues.projectName));
+        this.props.dispatch(SavingNewProjectDialog());
+        //this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, formValues.projectName));
         //When Save Returns Successful - Close Dialog - How can I show that it worked?  Show Snack Bar Success?  
         //When Save Returns Failed throw new SubmissionError({ projectName: 'Message.', _error: 'Save Failed.' })
     };

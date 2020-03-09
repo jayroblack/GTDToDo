@@ -1,5 +1,5 @@
 import { NEWPROJECTDIALOG_OPEN, NEWPROJECTDIALOG_CLOSE, 
-    NEWPROJECTDIALOG_INVALID, NEWPROJECTDIALOG_SAVE,
+    NEWPROJECTDIALOG_INVALID, NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE,
     NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED } from '../actions/types';
 
 
@@ -35,6 +35,13 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
                 return Object.assign({}, { ...newProjectDialogState }, { status: 'invalid', errorMessage: action.payload.errorMessage, cancelled: false });
             }
             
+            return newProjectDialogState;
+        case NEWPROJECTDIALOG_SAVING:
+            
+            if( newProjectDialogState.status === 'open' || newProjectDialogState.status === 'saveFailed'){
+                return Object.assign({}, { ...newProjectDialogState }, { status: 'saving', errorMessage: null, cancelled: false });
+            }
+
             return newProjectDialogState;
         case NEWPROJECTDIALOG_SAVE:
             
