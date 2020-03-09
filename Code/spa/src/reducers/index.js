@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as oidcReducer } from 'redux-oidc';
+import { reducer as formReducer } from 'redux-form';
 import {GET_OR_CRTEATE_USER , LOAD_LABELS_AND_PROJECTS } from '../actions/types';
 import { USER_FOUND } from 'redux-oidc/src/constants';
 import NewProjectDialog from './newProjectDialog';
@@ -29,6 +30,7 @@ const UserProfileReducer = (userProfile = null, action) => {
 
 const reducer = combineReducers(
     {
+      form: formReducer,
       oidc: oidcReducer,
       userData: GetorCreateUserReducer,
       labelsAndProjects: LoadLabelsAndProjectsReducer,

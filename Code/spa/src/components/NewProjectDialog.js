@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Field, reduxForm, formValueSelector  } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Button } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField } from '@material-ui/core'
 import { CloseNewProjectDialog, InvalidateNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 
 const useStyles = theme => ({
@@ -25,22 +26,27 @@ class NewProjectDialog extends React.Component {
         //this.props.dispatch(SaveNewProjectDialog());
     };
 
+    renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
+        <TextField autoFocus
+            required 
+            label={label}
+            margin="dense"
+            fullWidth
+          {...input}
+          {...custom}
+        />
+    )
+
     render() {
         return (
+            <form name="newProjectDialog">
             <Dialog open={this.props.newProjectDialog.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add New Project</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Enter the new project name and click save.
                     </DialogContentText>
-                    <TextField
-                        autoFocus
-                        required 
-                        margin="dense"
-                        id="project"
-                        label="Project Name"
-                        fullWidth
-                    />
+                    <Field name="projectName" label="Project Name" component={this.renderTextField} type="text" />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={ ()=> this.handleDismiss(true)} color="primary">
@@ -51,18 +57,26 @@ class NewProjectDialog extends React.Component {
                     </Button>
                 </DialogActions>
             </Dialog>
+            </form>
         );
     }
 }
 
-function mapStateToProps(state) {
-    return { projects: state.labelsAndProjects, newProjectDialog: state.newProjectDialog };
-}
+NewProjectDialog = reduxForm({
+    form: 'newProjectDialog'
+})(NewProjectDialog)
 
-function mapDispatchToProps(dispatch) {
-    return {
-      dispatch
-    };
-  }
+NewProjectDialog = connect(
+    state => {
+      return { 
+          projects: state.labelsAndProjects, 
+          newProjectDialog: state.newProjectDialog 
+        };
+    }, 
+    dispatch => {
+        return { dispatch }
+    }
+  )(NewProjectDialog)
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(useStyles)(NewProjectDialog));
+
+export default (withStyles(useStyles))(NewProjectDialog);
