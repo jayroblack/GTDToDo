@@ -1,6 +1,6 @@
 import { NEWPROJECTDIALOG_OPEN, NEWPROJECTDIALOG_CLOSE, 
-NEWPROJECTDIALOG_INVALID, NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE,
-NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED } from './types';
+NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED } from './types';
+import { CreateProject } from '../api/projects';
 
 export const OpenNewProjectDialog = () => {
     return {
@@ -8,7 +8,8 @@ export const OpenNewProjectDialog = () => {
         payload: {
             status: 'open',
             errorMessage: null,
-            cancelled: false
+            cancelled: false,
+            data: null
         }
     }
 };
@@ -19,64 +20,52 @@ export const CloseNewProjectDialog = (cancelled) => {
         payload: {
             status: 'closed',
             errorMessage: null, 
-            cancelled: cancelled
+            cancelled: cancelled,
+            data: null
         }
     }
 };
 
-export const InvalidateNewProjectDialog = (errorMessage) => {
-    return {
-        type: NEWPROJECTDIALOG_INVALID, 
-        payload: {
-            status: 'invalid',
-            errorMessage: errorMessage,
-            cancelled: false
-        }
-    }
-};
-
-//Splitting because I need the state to be put in saving before sending the REST CALL.
 export const SavingNewProjectDialog = () => {
     return {
         type: NEWPROJECTDIALOG_SAVING, 
         payload: {
             status: 'saving',
             errorMessage: null,
-            cancelled: false
+            cancelled: false,
+            data: null
         }
     }
 };
 
 export const SaveNewProjectDialog = (token, data) => {
-    //TODO - Need to figure this out
-    return {
-        type: NEWPROJECTDIALOG_SAVE, 
-        payload: {
-            status: 'saving',
-            errorMessage: null,
-            cancelled: false
-        }
-    }
-};
 
-export const SaveNewProjectDialogSucceeded = () => {
-    return {
-        type: NEWPROJECTDIALOG_SAVE_SUCCEEDED, 
-        payload: {
-            status: 'saveSuceeded',
-            errorMessage: null,
-            cancelled: false
-        }
-    }
-};
+    return async (dispatch) => {
+        const response = await CreateProject(token, data);
 
-export const SaveNewProjectDialogFailed = (errorMessage) => {
-    return {
-        type: NEWPROJECTDIALOG_SAVE_FAILED, 
-        payload: {
-            status: 'saveFailed',
-            errorMessage: errorMessage,
-            cancelled: false
+        if( response.success){
+            dispatch(
+            {
+                type: NEWPROJECTDIALOG_SAVE_SUCCEEDED, 
+                payload: {
+                    status: 'saveSuceeded',
+                    errorMessage: null,
+                    cancelled: false,
+                    data: response.data
+                }
+            });
+        }
+        else{
+            dispatch(
+            {
+                type: NEWPROJECTDIALOG_SAVE_FAILED, 
+                payload: {
+                    status: 'saveFailed',
+                    errorMessage: response.errorMessage,
+                    cancelled: false,
+                    data: null
+                }
+            });
         }
     }
 };

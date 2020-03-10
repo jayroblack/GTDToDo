@@ -17,7 +17,8 @@ class NewProjectDialog extends React.Component {
 
     onSubmit = (formValues) => {
         this.props.dispatch(SavingNewProjectDialog());
-        //this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, formValues.projectName));
+        const data = { projectName: formValues.projectName };
+        this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, data));
         //When Save Returns Successful - Close Dialog - How can I show that it worked?  Show Snack Bar Success?  
         //When Save Returns Failed throw new SubmissionError({ projectName: 'Message.', _error: 'Save Failed.' })
     };
@@ -29,6 +30,11 @@ class NewProjectDialog extends React.Component {
             opts["helperText"] = meta.error;
         }
         
+        if( this.props.newProjectDialogState.status === 'saveFailed' ){
+            opts["error"] = true;
+            opts["helperText"] = this.props.newProjectDialogState.errorMessage;
+        }
+
         return (
         <TextField autoFocus
             required 
@@ -36,8 +42,8 @@ class NewProjectDialog extends React.Component {
             label={label}
             margin="dense"
             fullWidth
-          {...input}
-          {...custom}
+            {...input}
+            {...custom}
         />
         );
     }
@@ -89,9 +95,6 @@ const validate = (formValues) => {
         errors.projectName = "Inbox is a reserved project name."
         return errors;
     }
-    
-    //TODO:  I would love to be able to verify that the projects do not already exist before sending to server.
-    //Problem is that I cannot register this external validation function and have it be aware of my map state to props. :(
 
     return errors;
 }

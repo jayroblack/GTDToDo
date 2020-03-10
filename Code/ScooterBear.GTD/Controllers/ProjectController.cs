@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Patterns;
@@ -53,14 +54,20 @@ namespace ScooterBear.GTD.Controllers
                 NotFound);
         }
 
+        public class NewProjectValues
+        {
+            [JsonProperty("projectName")]
+            public string NewProjectName { get; set; }  
+        }
+
         [HttpPost]
         [Route("/project")]
-        public async Task<IActionResult> Post([FromBody]string projectName)
+        public async Task<IActionResult> Post([FromBody]NewProjectValues data)
         {
             var id = _createIdsStrategy.NewId();
             var profile = _profileFactory.GetCurrentProfile();
             var optionResult = 
-                await _createNewProjectService.Run(new CreateNewUserProjectServiceArg(id, profile.UserId, projectName));
+                await _createNewProjectService.Run(new CreateNewUserProjectServiceArg(id, profile.UserId, data.NewProjectName));
 
             return optionResult.Match<IActionResult>(some => Json(some.Project), outcomes => UnprocessableEntity(outcomes.ToString()));
         }
