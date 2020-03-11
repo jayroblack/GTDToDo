@@ -15,13 +15,13 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
         case NEWPROJECTDIALOG_CLOSE:
             
             if( newProjectDialogState.status === 'open' || newProjectDialogState.status === 'saveSuceeded' ){
-                return Object.assign({}, { ...newProjectDialogState }, { status: 'closed' });
+                return Object.assign({}, { ...newProjectDialogState }, { status: 'closed', errorMessage: null, cancelled: false, data: null });
             }
 
             if( newProjectDialogState.status === 'invalid' || newProjectDialogState.status === 'saveFailed' ){
                 //Cannot Close the Dialog if it is in an invalid state unless the use has specifically clicked on the cancel button.
-                if( action.payload.cancelled){
-                    return Object.assign({}, { ...newProjectDialogState }, { status: 'close', errorMessage: 'Cancelling, no changes were made.' });
+                if( action.payload.cancelled ){
+                    return Object.assign({}, { ...newProjectDialogState }, { status: 'closed', errorMessage: null, cancelled: false, data: null });
                 }
                 
                 return newProjectDialogState;
@@ -38,8 +38,7 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
         case NEWPROJECTDIALOG_SAVE_SUCCEEDED:
             
             if( newProjectDialogState.status === 'saving'){
-                //return Object.assign({}, { ...newProjectDialogState }, { status: 'saveSuceeded', errorMessage: null, cancelled: false, data: action.payload.data });
-                return Object.assign({}, { ...newProjectDialogState }, { status: 'saveSuceeded', errorMessage: null, cancelled: false, data: action.payload.data });
+                return Object.assign({}, { ...newProjectDialogState }, { status: 'closed', errorMessage: null, cancelled: false, data: null });
             }
 
             return newProjectDialogState;

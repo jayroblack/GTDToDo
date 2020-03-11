@@ -12,6 +12,11 @@ export const CreateProject = async (token, data) => {
         return { success:true, errorMessage:null, data: response.data }
     }
     catch(err){
-        return { success:false, errorMessage:err.errorMessage, data: null };
+        if( err.message === 'Request failed with status code 422' ){
+            return { success:false, errorMessage: "Project Name already exists, try another.", data: null };
+        }
+        else{
+            return { success:false, errorMessage:err.errorMessage, data: null, err: err };
+        }
     }
 }

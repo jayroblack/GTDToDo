@@ -15,6 +15,7 @@ export const OpenNewProjectDialog = () => {
 };
 
 export const CloseNewProjectDialog = (cancelled) => {
+    console.log(cancelled);
     return {
         type: NEWPROJECTDIALOG_CLOSE, 
         payload: {
@@ -42,7 +43,7 @@ export const SaveNewProjectDialog = (token, data) => {
 
     return async (dispatch) => {
         const response = await CreateProject(token, data);
-
+        
         if( response.success){
             dispatch(
             {
