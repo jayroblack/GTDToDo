@@ -10,7 +10,6 @@ const useStyles = theme => ({
 });
 
 class NewProjectDialog extends React.Component {
-    timer = null;
 
     handleDismiss = (cancelled) => {
         this.props.dispatch(CloseNewProjectDialog(cancelled));
@@ -27,16 +26,11 @@ class NewProjectDialog extends React.Component {
         //When Save Returns Failed throw new SubmissionError({ projectName: 'Message.', _error: 'Save Failed.' })
     };
 
+    componentWillMount(){
+        this.timer = null;
+    }
+
     componentWillUnmount(){
-        this.props.dispatch({
-            type: "@@redux-form/CLEAR_FIELDS",
-            payload: {
-                form: "newProjectDialog",
-                keepTouched: false, 
-                persistentSubmitErrors: false,
-                fields: [ 'projectName' ]
-            }
-        });
         clearTimeout(this.timer);
     }
 

@@ -3,14 +3,25 @@ NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_
 import { CreateProject } from '../api/projects';
 
 export const OpenNewProjectDialog = () => {
-    return {
-        type: NEWPROJECTDIALOG_OPEN, 
-        payload: {
-            status: 'open',
-            errorMessage: null,
-            cancelled: false,
-            data: null
-        }
+
+    return async (dispatch) => {
+        dispatch({
+            type: "@@redux-form/INITIALIZE",
+            meta: { form: "newProjectDialog" },
+            payload: {
+                projectName: ''
+            }
+        });
+
+        dispatch({
+            type: NEWPROJECTDIALOG_OPEN, 
+            payload: {
+                status: 'open',
+                errorMessage: null,
+                cancelled: false,
+                data: null
+                }
+        });
     }
 };
 
