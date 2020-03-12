@@ -13,11 +13,12 @@ import history from '../history';
 import HomePage from './Home';
 import ToDo from './ToDo';
 import PrivateRoute from './PrivateRoute';
+import { SnackbarProvider } from 'notistack';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  }
+    root: {
+        display: 'flex',
+    }
 }));
 
 const App = () => {
@@ -28,14 +29,19 @@ const App = () => {
                 <CssBaseline />
                 <Provider store={store}>
                     <OidcProvider store={store} userManager={userManager}>
-                        <Router history={history}>
-                            <Header />
-                            <Switch>
-                                <Route path="/" exact component={HomePage} />
-                                <Route path="/callback" component={CallbackPage} />
-                                <PrivateRoute path="/todo" component={ToDo} />
-                            </Switch>
-                        </Router>
+                        <SnackbarProvider anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            }}>
+                            <Router history={history}>
+                                <Header />
+                                <Switch>
+                                    <Route path="/" exact component={HomePage} />
+                                    <Route path="/callback" component={CallbackPage} />
+                                    <PrivateRoute path="/todo" component={ToDo} />
+                                </Switch>
+                            </Router>
+                        </SnackbarProvider>
                     </OidcProvider>
                 </Provider>
             </ThemeProvider>

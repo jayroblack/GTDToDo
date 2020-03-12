@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
 import { CloseNewProjectDialog, SavingNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
+import { withSnackbar } from 'notistack';
 
 const useStyles = theme => ({
 
@@ -21,9 +22,6 @@ class NewProjectDialog extends React.Component {
             const data = { projectName: formValues.projectName };
             this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, data));
         } , 2000)
-        
-        //When Save Returns Successful - Close Dialog - How can I show that it worked?  Show Snack Bar Success?  
-        //When Save Returns Failed throw new SubmissionError({ projectName: 'Message.', _error: 'Save Failed.' })
     };
 
     componentWillMount(){
@@ -32,6 +30,14 @@ class NewProjectDialog extends React.Component {
 
     componentWillUnmount(){
         clearTimeout(this.timer);
+    }
+
+    componentDidUpdate(prevProps){
+        if( prevProps.newProjectDialogState.status === 'saving' && 
+        this.props.newProjectDialogState.status === 'saveSucceeded' ){
+            this.props.enqueueSnackbar('New Project Saved.', { key: "NewProjectSaveSucceeded", persist: false, variant: 'success' });
+            this.props.dispatch(CloseNewProjectDialog(true));
+        }
     }
 
     renderTextField = ({ input, label, meta, ...custom }) => {
@@ -68,7 +74,7 @@ class NewProjectDialog extends React.Component {
         else{
             disabledOptions = { };
         }
-
+        
         return (
             <form name="newProjectDialog" >
             <Dialog open={this.props.newProjectDialogState.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
@@ -129,5 +135,4 @@ NewProjectDialog = connect(
     }
   )(NewProjectDialog)
 
-
-export default (withStyles(useStyles))(NewProjectDialog);
+export default (withStyles(useStyles))( withSnackbar(NewProjectDialog));

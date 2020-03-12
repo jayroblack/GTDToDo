@@ -14,7 +14,7 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
         }
         case NEWPROJECTDIALOG_CLOSE:
             
-            if( newProjectDialogState.status === 'open' || newProjectDialogState.status === 'saveSuceeded' ){
+            if( newProjectDialogState.status === 'open' || newProjectDialogState.status === 'saveSucceeded' ){
                 return Object.assign({}, { ...newProjectDialogState }, { status: 'closed', errorMessage: null, cancelled: false, data: null });
             }
 
@@ -37,8 +37,9 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
             return newProjectDialogState;
         case NEWPROJECTDIALOG_SAVE_SUCCEEDED:
             
+            //STOP AUTOMATICALLY CLOSING ON SAVE SUCCEEDED - we need this status, instead invoke the close action optionally based on outcome from the Action.
             if( newProjectDialogState.status === 'saving'){
-                return Object.assign({}, { ...newProjectDialogState }, { status: 'closed', errorMessage: null, cancelled: false, data: null });
+                return Object.assign({}, { ...newProjectDialogState }, { status: 'saveSucceeded', errorMessage: null, cancelled: false, data: null });
             }
 
             return newProjectDialogState;

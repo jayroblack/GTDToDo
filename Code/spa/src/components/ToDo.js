@@ -12,6 +12,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { withSnackbar } from 'notistack';
 
 const drawerWidth = 240;
 
@@ -47,6 +48,7 @@ class ToDo extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <React.Fragment>
         <Drawer
@@ -142,9 +144,9 @@ class ToDo extends React.Component {
 
 function mapStateToProps(state) {
   if (!state.userProfile) {
-    return { userProfile: null };
+    return { userProfile: null, snackBar: null };
   }
-  return { userProfile: state.userProfile };
+  return { userProfile: state.userProfile, snackBar: state.snackBar };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -153,4 +155,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)((withStyles(useStyles)(ToDo))); 
+export default connect(mapStateToProps, mapDispatchToProps)((withStyles(useStyles)(withSnackbar(ToDo)))); 
