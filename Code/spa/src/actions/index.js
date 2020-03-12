@@ -10,6 +10,7 @@ export const GetorCreateUser = (token, data) => {
             type: GET_OR_CRTEATE_USER,
             payload : response
         });
+        dispatch(LoadLabelsAndProjectsForUser(token));
     }
 }
 

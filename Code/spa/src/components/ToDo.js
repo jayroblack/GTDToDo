@@ -41,8 +41,7 @@ class ToDo extends React.Component {
       //Here is something on nesting Routers: https://reacttraining.com/react-router/web/example/nesting
 
       this.props.dispatch(GetorCreateUser(access_token, data));
-      this.props.dispatch(LoadLabelsAndProjectsForUser(access_token));
-
+      // this.props.dispatch(LoadLabelsAndProjectsForUser(access_token));
     }
   }
 

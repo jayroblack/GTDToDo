@@ -8,10 +8,12 @@ namespace ScooterBear.GTD.Application.Services.Persistence
     public class PersistNewUserServiceArgs : IServiceArgs<PersistNewUserServiceResult>
     {
         public NewUser NewUser { get; }
+        public bool ConsistentRead { get; }
 
-        public PersistNewUserServiceArgs(NewUser newUser)
+        public PersistNewUserServiceArgs(NewUser newUser, bool consistentRead = false)
         {
             NewUser = newUser ?? throw new ArgumentNullException(nameof(newUser));
+            ConsistentRead = consistentRead;
         }
     }
 

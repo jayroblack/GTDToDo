@@ -60,7 +60,7 @@ namespace ScooterBear.GTD.Application.UserProject
             async () =>
             {
                 var persistResult = await 
-                    _persistService.Run(new PersistNewProjectServiceArg(arg.Id, arg.UserId, arg.NewProjectName, dateTimeCreated));
+                    _persistService.Run(new PersistNewProjectServiceArg(arg.Id, arg.UserId, arg.NewProjectName, dateTimeCreated, arg.ConsistentRead));
 
                 return Option.Some<CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>(
                     new CreateNewUserProjectServiceResult(persistResult.Project));

@@ -18,8 +18,9 @@ namespace ScooterBear.GTD.Application.UserProject
         public string Id { get; }
         public string UserId { get; }
         public string NewProjectName { get; }
+        public bool ConsistentRead { get; }
 
-        public CreateNewUserProjectServiceArg(string id, string userId, string newProjectName)
+        public CreateNewUserProjectServiceArg(string id, string userId, string newProjectName, bool consistentRead = false)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException($"{nameof(id)} is required.");
@@ -33,6 +34,7 @@ namespace ScooterBear.GTD.Application.UserProject
             Id = id;
             UserId = userId;
             NewProjectName = newProjectName;
+            ConsistentRead = consistentRead;
         }
     }
 }
