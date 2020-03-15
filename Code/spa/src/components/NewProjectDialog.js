@@ -124,7 +124,7 @@ NewProjectDialog = reduxForm({
 NewProjectDialog = connect(
     state => {
       return { 
-          projects: state.labelsAndProjects.data.projects, 
+          projects: state.projects, 
           newProjectDialogState: state.newProjectDialog,
           myForm: state.form.newProjectDialog,
           userProfile: state.userProfile

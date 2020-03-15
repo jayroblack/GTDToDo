@@ -1,5 +1,6 @@
-import { GET_OR_CRTEATE_USER , LOAD_LABELS_AND_PROJECTS } from './types';
+import { GET_OR_CRTEATE_USER , LOAD_LABELS, LOAD_PROJECTS } from './types';
 import { GetOrCreateUser, GetToDos } from '../api/users';
+import _ from 'lodash';
 
 export const GetorCreateUser = (token, data) => {
 
@@ -18,10 +19,21 @@ export const LoadLabelsAndProjectsForUser = (token) => {
 
     return async (dispatch) => {
         const response = await GetToDos(token);
-        dispatch(
-        {
-            type: LOAD_LABELS_AND_PROJECTS,
-            payload: response
-        });
+
+        if( response && response.data){
+            const labels = _.mapKeys(response.data.labels, 'id');
+            const projects = _.mapKeys(response.data.projects, 'id');
+
+            dispatch({
+                type: LOAD_LABELS,
+                payload: labels
+            });
+
+            dispatch({
+                type: LOAD_PROJECTS,
+                payload: projects
+            });
+
+        }
     }
 }

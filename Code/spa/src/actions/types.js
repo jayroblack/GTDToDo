@@ -1,5 +1,7 @@
 export const GET_OR_CRTEATE_USER = "GET_OR_CRTEATE_USER";
-export const LOAD_LABELS_AND_PROJECTS = "LOAD_LABELS_AND_PROJECTS";
+export const LOAD_LABELS = "LOAD_LABELS";
+export const LOAD_PROJECTS = "LOAD_PROJECTS";
+export const ADD_PROJECT = "ADD_PROJECT";
 export const NEWPROJECTDIALOG_OPEN = "newProjectDialog/OPEN";
 export const NEWPROJECTDIALOG_CLOSE = "newProjectDialog/CLOSE";
 export const NEWPROJECTDIALOG_SAVING = "newProjectDialog/SAVING";

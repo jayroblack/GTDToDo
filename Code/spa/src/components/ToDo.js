@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { GetorCreateUser, LoadLabelsAndProjectsForUser } from '../actions';
+import { GetorCreateUser } from '../actions';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -37,11 +37,7 @@ class ToDo extends React.Component {
     if (this.props.userProfile) {
       const { access_token, given_name, family_name, email, userId } = this.props.userProfile;
       const data = { id: userId, firstName: given_name, lastName: family_name, email };
-
-      //Here is something on nesting Routers: https://reacttraining.com/react-router/web/example/nesting
-
       this.props.dispatch(GetorCreateUser(access_token, data));
-      // this.props.dispatch(LoadLabelsAndProjectsForUser(access_token));
     }
   }
 

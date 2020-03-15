@@ -1,5 +1,5 @@
 import { NEWPROJECTDIALOG_OPEN, NEWPROJECTDIALOG_CLOSE, 
-NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED } from './types';
+NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED, ADD_PROJECT } from './types';
 import { CreateProject } from '../api/projects';
 
 export const OpenNewProjectDialog = () => {
@@ -65,6 +65,10 @@ export const SaveNewProjectDialog = (token, data) => {
                     cancelled: false,
                     data: response.data
                 }
+            });
+            dispatch({
+                type: ADD_PROJECT,
+                payload: response.data
             });
         }
         else{
