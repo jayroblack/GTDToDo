@@ -47,7 +47,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             for(int i = 0; i < listOfProjectsToCreate.Count; i++)
             {
                 var updateOptionResult = await
-                    service.Run(new UpdateUserProjectServiceArg(listOfProjectsToCreate[i].Id, $"Project {i + 4}", 1, false, 1));
+                    service.Run(new UpdateUserProjectServiceArg(listOfProjectsToCreate[i].Id, $"Project {i + 4}", 1, false, 1, 0));
 
                 updateOptionResult.Match(some =>
                 {
@@ -67,7 +67,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                 UpdateUserProjectServiceResult, UpdateProjectOutcome>>();
 
             var updateOptionResult = await
-                service.Run(new UpdateUserProjectServiceArg(Guid.NewGuid().ToString(), $"Project No Exist", 1, false, 1));
+                service.Run(new UpdateUserProjectServiceArg(Guid.NewGuid().ToString(), $"Project No Exist", 1, false, 1,0));
 
             updateOptionResult.Match(some => Assert.False(true, "Should not FIne"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.DoesNotExist));

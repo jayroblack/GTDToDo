@@ -88,6 +88,9 @@ namespace ScooterBear.GTD.Controllers
                 some => Ok(some.User), 
                 outcome =>
                 {
+                    if (outcome == UpdateUserService.UpdateUserOutcome.NotAuthorized)
+                        return Unauthorized();
+
                     if (outcome == UpdateUserService.UpdateUserOutcome.UnprocessableEntity)
                         return UnprocessableEntity(outcome.ToString());
 

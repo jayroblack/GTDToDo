@@ -19,18 +19,22 @@ namespace ScooterBear.GTD.Controllers
         private readonly ICreateIdsStrategy _createIdsStrategy;
         private readonly IQueryHandler<ProjectQuery, ProjectQueryResult> _projectQuery;
         private readonly IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> _createNewProjectService;
+        private readonly IServiceOptOutcomes<UpdateUserProjectServiceArg, UpdateUserProjectServiceResult, UpdateProjectOutcome> _updatProjectService;
 
         public ProjectController(IProfileFactory profileFactory,
             ICreateIdsStrategy createIdsStrategy,
             IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> getProjects,
             IQueryHandler<ProjectQuery, ProjectQueryResult> projectQuery,
-            IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> createNewProjectService)
+            IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> createNewProjectService,
+            IServiceOptOutcomes<UpdateUserProjectServiceArg,
+                UpdateUserProjectServiceResult, UpdateProjectOutcome> updatProjectService)
         {
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
             _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));
             _projectQuery = projectQuery ?? throw new ArgumentNullException(nameof(projectQuery));
             _createNewProjectService = createNewProjectService ?? throw new ArgumentNullException(nameof(createNewProjectService));
+            _updatProjectService = updatProjectService ?? throw new ArgumentNullException(nameof(updatProjectService));
         }
 
         [HttpGet]
@@ -74,25 +78,48 @@ namespace ScooterBear.GTD.Controllers
 
         [HttpPut]
         [Route("/project/{projectId}")]
-        public Task<IActionResult> Put([FromRoute]int projectId, [FromBody]MutableProject projectItem)
+        public async Task<IActionResult> Put([FromRoute] string projectId, [FromBody] MutableProject projectItem)
         {
-            //OK - Return fresh copy
-            //Does Not Exist
-            //Unprocessable Entity
-            //Conflict
-            throw new NotImplementedException();
+            var optionResult = await
+                _updatProjectService.Run(new UpdateUserProjectServiceArg(projectId, projectItem.Name, projectItem.Count,
+                    projectItem.IsDeleted, projectItem.CountOverdue, projectItem.VersionNumber));
+
+            return optionResult.Match<IActionResult>(
+                some => Ok(some),
+                outcome =>
+                {
+                    if (outcome == UpdateProjectOutcome.NotAuthorized)
+                        return Unauthorized();
+
+                    if (outcome == UpdateProjectOutcome.DoesNotExist)
+                        return NotFound();
+
+                    if (outcome == UpdateProjectOutcome.UnprocessableEntity)
+                        return UnprocessableEntity(outcome.ToString());
+
+                    return Conflict(outcome);
+                });
+        }
+
+        [HttpDelete]
+        [Route("/project/{projectId}")]
+        public async Task<IActionResult> Delete([FromRoute]string projectId)
+        {
+
         }
     }
 
     public class MutableProject
     {
-        public string Id { get; set; }
+        [JsonProperty("name")]
         public string Name { get; set; }
+        [JsonProperty("count")]
         public int Count { get; set; }
+        [JsonProperty("countOverdue")]
         public int CountOverdue { get; set; }
+        [JsonProperty("isDeleted")]
         public bool IsDeleted { get; set; }
-        public int CountOverDue { get; set; }
+        [JsonProperty("versionNumber")]
         public int VersionNumber { get; set; }
-        public DateTime DateCreated { get; set; }
     }
 }

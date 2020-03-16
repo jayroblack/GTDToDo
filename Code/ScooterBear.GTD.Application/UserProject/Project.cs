@@ -10,7 +10,7 @@ namespace ScooterBear.GTD.Application.UserProject
         public int Count { get; private set; }
         public bool IsDeleted { get; private set; }
         public int CountOverDue { get; private set; }
-        public int? VersionNumber { get; }
+        public int? VersionNumber { get; private set; }
         public DateTime DateCreated { get; }
 
         public Project(string id, string name, string userId, int count, bool isDeleted, int countOverDue, int? versionNumber, DateTime dateCreated)
@@ -52,6 +52,14 @@ namespace ScooterBear.GTD.Application.UserProject
                 throw new ArgumentOutOfRangeException(nameof(countOverDue));
 
             this.CountOverDue = countOverDue;
+        }
+
+        public void SetVersionNumber(int versionNumber)
+        {
+            if( versionNumber < 0)
+                throw new ArgumentOutOfRangeException(nameof(versionNumber));
+
+            this.VersionNumber = versionNumber;
         }
     }
 }

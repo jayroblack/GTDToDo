@@ -16,8 +16,8 @@ namespace ScooterBear.GTD.Application.UserProject
         NotAuthorized
     }
 
-    public class UpdateUserProjectService : IServiceOptOutcomes<UpdateUserProjectServiceArg,
-        UpdateUserProjectServiceResult, UpdateProjectOutcome>
+            public class UpdateUserProjectService : IServiceOptOutcomes<UpdateUserProjectServiceArg,
+                UpdateUserProjectServiceResult, UpdateProjectOutcome>
     {
         private readonly IProfileFactory _profileFactory;
         private readonly ILogger _logger;
@@ -72,6 +72,7 @@ namespace ScooterBear.GTD.Application.UserProject
                 project.SetCountOverDue(arg.CountOverdue);
                 project.SetIsDeleted(arg.IsDeleted);
                 project.SetName(arg.Name);
+                project.SetVersionNumber(arg.VersionNumber);
             }
             catch (ArgumentException e)
             {

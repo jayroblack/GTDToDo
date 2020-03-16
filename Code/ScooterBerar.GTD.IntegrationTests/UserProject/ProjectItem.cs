@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ScooterBear.GTD.IntegrationTests.UserProject
+﻿namespace ScooterBear.GTD.IntegrationTests.UserProject
 {
     public class ProjectItem
     {

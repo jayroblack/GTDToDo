@@ -10,14 +10,16 @@ namespace ScooterBear.GTD.Application.UserProject
         public int Count { get; }
         public bool IsDeleted { get; }
         public int CountOverdue { get; }
+        public int VersionNumber { get; }
 
-        public UpdateUserProjectServiceArg(string projectId, string name, int count, bool isDeleted, int countOverdue)
+        public UpdateUserProjectServiceArg(string projectId, string name, int count, bool isDeleted, int countOverdue, int versionNumber)
         {
             ProjectId = projectId;
             Name = name;
             Count = count;
             IsDeleted = isDeleted;
             CountOverdue = countOverdue;
+            VersionNumber = versionNumber;
         }
     }
 

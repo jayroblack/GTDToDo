@@ -63,7 +63,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(persistOption));
 
             var testOptionResult = await
-                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(projectId, projectName, count, isDeleted, countOverdue));
+                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(projectId, projectName, count, isDeleted, countOverdue,0));
 
             if (!shouldPass)
             {
@@ -92,7 +92,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 x.Run(It.IsAny<ProjectQuery>())).Returns(Task.FromResult(option));
 
             var testOptionResult = await
-                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue));
+                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue,0));
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.NotAuthorized));
@@ -120,7 +120,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(persistOption));
 
             var testOptionResult = await
-                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue));
+                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue,0));
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.VersionConflict));
@@ -144,7 +144,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             this.MockedPersistProject =
                 new Mock<IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult,
                     PersistUpdateProjectOutcome>>();
-            this.UpdateUserProjectServiceArg = new UpdateUserProjectServiceArg("ProjectId", "Name", 1, false, 3);
+            this.UpdateUserProjectServiceArg = new UpdateUserProjectServiceArg("ProjectId", "Name", 1, false, 3,0);
             this.UpdateUserProjectService = new UpdateUserProjectService(this.ProfileFactory, this.MockedLogger.Object, 
                 this.MockedGetProject.Object, this.MockedPersistProject.Object);
         }

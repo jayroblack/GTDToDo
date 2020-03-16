@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Autofac;
 using FluentAssertions;
 using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
-using ScooterBear.GTD.AWS.DynamoDb.Projects;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;
 
