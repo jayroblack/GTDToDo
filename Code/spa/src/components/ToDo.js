@@ -5,14 +5,15 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withSnackbar } from 'notistack';
+import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
@@ -67,7 +68,6 @@ class ToDo extends React.Component {
               </ListItem>
             ))}
           </List>
-          <Divider />
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -85,8 +85,11 @@ class ToDo extends React.Component {
             ))}
               </List>
             </ExpansionPanelDetails>
+            <ExpansionPanelActions>
+              <Button color="primary" variant="contained">Add</Button>
+              <Button variant="contained">Edit</Button>
+            </ExpansionPanelActions>
           </ExpansionPanel>
-          <Divider />
           <ExpansionPanel>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
@@ -104,6 +107,10 @@ class ToDo extends React.Component {
             ))}
               </List>
             </ExpansionPanelDetails>
+            <ExpansionPanelActions>
+              <Button variant="contained" color="primary">Add</Button>
+              <Button variant="contained">Edit</Button>
+            </ExpansionPanelActions>
           </ExpansionPanel>
         </Drawer>
         <main className={classes.content}>
