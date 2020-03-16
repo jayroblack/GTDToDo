@@ -16,7 +16,7 @@ namespace ScooterBear.GTD.Application.UserProject
         NotAuthorized
     }
 
-            public class UpdateUserProjectService : IServiceOptOutcomes<UpdateUserProjectServiceArg,
+    public class UpdateUserProjectService : IServiceOptOutcomes<UpdateUserProjectServiceArg,
                 UpdateUserProjectServiceResult, UpdateProjectOutcome>
     {
         private readonly IProfileFactory _profileFactory;

@@ -20,6 +20,7 @@ namespace ScooterBear.GTD.Controllers
         private readonly IQueryHandler<ProjectQuery, ProjectQueryResult> _projectQuery;
         private readonly IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> _createNewProjectService;
         private readonly IServiceOptOutcomes<UpdateUserProjectServiceArg, UpdateUserProjectServiceResult, UpdateProjectOutcome> _updatProjectService;
+        private readonly IServiceOptOutcomes<DeleteUserProjectServiceArgs, DeleteUserProjectServiceResult, DeleteUserProjectOutcome> _deleteProjectService;
 
         public ProjectController(IProfileFactory profileFactory,
             ICreateIdsStrategy createIdsStrategy,
@@ -27,14 +28,16 @@ namespace ScooterBear.GTD.Controllers
             IQueryHandler<ProjectQuery, ProjectQueryResult> projectQuery,
             IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> createNewProjectService,
             IServiceOptOutcomes<UpdateUserProjectServiceArg,
-                UpdateUserProjectServiceResult, UpdateProjectOutcome> updatProjectService)
+                UpdateUserProjectServiceResult, UpdateProjectOutcome> updateProjectService,
+            IServiceOptOutcomes<DeleteUserProjectServiceArgs, DeleteUserProjectServiceResult, DeleteUserProjectOutcome> deleteProjectService)
         {
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
             _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));
             _projectQuery = projectQuery ?? throw new ArgumentNullException(nameof(projectQuery));
             _createNewProjectService = createNewProjectService ?? throw new ArgumentNullException(nameof(createNewProjectService));
-            _updatProjectService = updatProjectService ?? throw new ArgumentNullException(nameof(updatProjectService));
+            _updatProjectService = updateProjectService ?? throw new ArgumentNullException(nameof(updateProjectService));
+            _deleteProjectService = deleteProjectService ?? throw new ArgumentNullException(nameof(deleteProjectService));
         }
 
         [HttpGet]
@@ -105,7 +108,24 @@ namespace ScooterBear.GTD.Controllers
         [Route("/project/{projectId}")]
         public async Task<IActionResult> Delete([FromRoute]string projectId)
         {
+            var optionResult = await
+                _deleteProjectService.Run(new DeleteUserProjectServiceArgs(projectId));
 
+            return optionResult.Match<IActionResult>(
+                some => Ok(),
+                outcome =>
+                {
+                    if (outcome == DeleteUserProjectOutcome.NotAuthorized)
+                        return Unauthorized();
+
+                    if (outcome == DeleteUserProjectOutcome.NotFound)
+                        return NotFound();
+
+                    if (outcome == DeleteUserProjectOutcome.HasAssociatedToDos)
+                        return UnprocessableEntity("Has associated To Do Items.");
+
+                    return Conflict(outcome);
+                });
         }
     }
 

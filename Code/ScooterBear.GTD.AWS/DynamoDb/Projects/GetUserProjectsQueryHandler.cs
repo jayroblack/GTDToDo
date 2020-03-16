@@ -32,7 +32,11 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
                 var search = dynamoDb.QueryAsync<UserProjectLabelDynamoDbTable>(query.UserId, new DynamoDBOperationConfig()
                 {
                     IndexName = UserProjectLabelTableData.IndexProjectLabelByUserId,
-                    QueryFilter = new List<ScanCondition>{ new ScanCondition("Data", ScanOperator.Equal, UserProjectLabelTableData.Project)}
+                    QueryFilter = new List<ScanCondition>
+                    {
+                        new ScanCondition("Data", ScanOperator.Equal, UserProjectLabelTableData.Project),
+                        new ScanCondition("IsDeleted", ScanOperator.Equal, false),
+                    }
                 });
 
                 List<UserProjectLabelDynamoDbTable> results = new List<UserProjectLabelDynamoDbTable>();

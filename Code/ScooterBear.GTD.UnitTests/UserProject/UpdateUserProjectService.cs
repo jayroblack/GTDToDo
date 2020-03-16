@@ -28,7 +28,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             _fixture.MockedGetProject.Setup(x =>
                 x.Run(It.IsAny<ProjectQuery>())).Returns(Task.FromResult(option));
 
-            var testOptionResult = await 
+            var testOptionResult = await
                 this._fixture.UpdateUserProjectService.Run(_fixture.UpdateUserProjectServiceArg);
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.DoesNotExist));
@@ -42,7 +42,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
         [InlineData("ProjectId", "Name", -1, false, 0, false)]
         [InlineData("ProjectId", "Name", 0, false, -1, false)]
         [InlineData("ProjectId", "Name", 0, false, 1, true)]
-        public async void ShouldReturnUnprocessableEntityIfValidationFails(string projectId, string projectName, int count, bool isDeleted, int countOverdue, bool shouldPass)
+        public async void ShouldReturnUnprocessableEntityIfValidationFails(string projectId, string projectName,
+            int count, bool isDeleted, int countOverdue, bool shouldPass)
         {
             var userId = Guid.NewGuid().ToString();
             var project = new Project(projectId, projectName,
@@ -63,7 +64,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(persistOption));
 
             var testOptionResult = await
-                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(projectId, projectName, count, isDeleted, countOverdue,0));
+                this._fixture.UpdateUserProjectService.Run(
+                    new UpdateUserProjectServiceArg(projectId, projectName, count, isDeleted, countOverdue, 0));
 
             if (!shouldPass)
             {
@@ -72,7 +74,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             }
             else
             {
-                testOptionResult.Match(some => Assert.True(true), 
+                testOptionResult.Match(some => Assert.True(true),
                     outcome => Assert.False(true, "Should Not Fail."));
             }
         }
@@ -92,7 +94,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 x.Run(It.IsAny<ProjectQuery>())).Returns(Task.FromResult(option));
 
             var testOptionResult = await
-                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue,0));
+                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name,
+                    project.Count, project.IsDeleted, project.CountOverDue, 0));
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.NotAuthorized));
@@ -120,7 +123,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(persistOption));
 
             var testOptionResult = await
-                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name, project.Count, project.IsDeleted, project.CountOverDue,0));
+                this._fixture.UpdateUserProjectService.Run(new UpdateUserProjectServiceArg(project.Id, project.Name,
+                    project.Count, project.IsDeleted, project.CountOverDue, 0));
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.VersionConflict));
@@ -129,7 +133,9 @@ namespace ScooterBear.GTD.UnitTests.UserProject
 
     public class UpdateUserProjectFixture : IDisposable
     {
-        public Mock<IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome>> MockedPersistProject { get; private set; }
+        public Mock<IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult,
+            PersistUpdateProjectOutcome>> MockedPersistProject { get; private set; }
+
         public UpdateUserProjectService UpdateUserProjectService { get; private set; }
         public Mock<IQueryHandler<ProjectQuery, ProjectQueryResult>> MockedGetProject { get; private set; }
         public FakedProfileFactory ProfileFactory { get; private set; }
@@ -144,8 +150,8 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             this.MockedPersistProject =
                 new Mock<IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult,
                     PersistUpdateProjectOutcome>>();
-            this.UpdateUserProjectServiceArg = new UpdateUserProjectServiceArg("ProjectId", "Name", 1, false, 3,0);
-            this.UpdateUserProjectService = new UpdateUserProjectService(this.ProfileFactory, this.MockedLogger.Object, 
+            this.UpdateUserProjectServiceArg = new UpdateUserProjectServiceArg("ProjectId", "Name", 1, false, 3, 0);
+            this.UpdateUserProjectService = new UpdateUserProjectService(this.ProfileFactory, this.MockedLogger.Object,
                 this.MockedGetProject.Object, this.MockedPersistProject.Object);
         }
 
