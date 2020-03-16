@@ -22,7 +22,9 @@ export const LoadLabelsAndProjectsForUser = (token) => {
 
         if( response && response.data){
             const labels = _.mapKeys(response.data.labels, 'id');
-            const projects = _.mapKeys(response.data.projects, 'id');
+            const inboxProject = response.data.projects.find( item => item.name === 'Inbox');
+            const projectsWithoutInbox = response.data.projects.filter( item => item.name !== 'Inbox' );
+            const projects = { Inbox: inboxProject, Data: _.mapKeys(projectsWithoutInbox, 'id') } ;
 
             dispatch({
                 type: LOAD_LABELS,

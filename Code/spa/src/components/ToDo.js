@@ -78,9 +78,9 @@ class ToDo extends React.Component {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <List>
-              {['Project 1', 'Project 2', 'Project 3'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
+              {this.props.projects.map((project, index) => (
+              <ListItem button key={project.id}>
+                <ListItemText primary={project.name} />
               </ListItem>
             ))}
               </List>
@@ -139,9 +139,14 @@ class ToDo extends React.Component {
 
 function mapStateToProps(state) {
   if (!state.userProfile) {
-    return { userProfile: null, snackBar: null };
+    return { userProfile: null, snackBar: null, projects: {} };
   }
-  return { userProfile: state.userProfile, snackBar: state.snackBar };
+  var projectData = [];
+  if( state.projects && state.projects.Data ){
+    projectData = Object.values( state.projects.Data );
+  }
+
+  return { userProfile: state.userProfile, snackBar: state.snackBar, projects: projectData };
 }
 
 function mapDispatchToProps(dispatch) {
