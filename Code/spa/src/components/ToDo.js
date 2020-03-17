@@ -14,6 +14,8 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
+import NewProjectDialog from './NewProjectDialog';
+import { OpenNewProjectDialog } from '../actions/newProjectDialog';
 
 const drawerWidth = 240;
 
@@ -40,6 +42,10 @@ class ToDo extends React.Component {
       const data = { id: userId, firstName: given_name, lastName: family_name, email };
       this.props.dispatch(GetorCreateUser(access_token, data));
     }
+  }
+
+  handleNewProject = () => {
+    this.props.dispatch(OpenNewProjectDialog());
   }
 
   render() {
@@ -86,7 +92,7 @@ class ToDo extends React.Component {
               </List>
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
-              <Button color="primary" variant="contained">Add</Button>
+              <Button color="primary" variant="contained" onClick={this.handleNewProject}>Add</Button>
               <Button variant="contained">Edit</Button>
             </ExpansionPanelActions>
           </ExpansionPanel>
@@ -139,6 +145,7 @@ class ToDo extends React.Component {
             accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
         </main>
+        <NewProjectDialog />
       </React.Fragment>
     );
   }

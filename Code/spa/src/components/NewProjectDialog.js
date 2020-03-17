@@ -12,6 +12,11 @@ const useStyles = theme => ({
 
 class NewProjectDialog extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.timer = null;
+    }
+
     handleDismiss = (cancelled) => {
         this.props.dispatch(CloseNewProjectDialog(cancelled));
     };
@@ -23,10 +28,6 @@ class NewProjectDialog extends React.Component {
             this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, data));
         } , 2000)
     };
-
-    componentWillMount(){
-        this.timer = null;
-    }
 
     componentWillUnmount(){
         clearTimeout(this.timer);
