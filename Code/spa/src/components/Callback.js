@@ -14,7 +14,7 @@ class CallbackPage extends React.Component {
             history.push('/todo')
           } }
           errorCallback={error => {
-            console.log(error);//TODO - How do I show these errors?  
+            console.log(error);//TODO - Create an Error Page with a Refresh Button to reload.
             //history.push('/')
           }}
           >

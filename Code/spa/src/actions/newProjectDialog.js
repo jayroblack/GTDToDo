@@ -1,13 +1,18 @@
-import { NEWPROJECTDIALOG_OPEN, NEWPROJECTDIALOG_CLOSE, 
-NEWPROJECTDIALOG_SAVING, NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED, ADD_PROJECT } from './types';
+import { NEWPROJECTDIALOG_OPEN, 
+    NEWPROJECTDIALOG_CLOSE, 
+    NEWPROJECTDIALOG_SAVING, 
+    NEWPROJECTDIALOG_SAVE_SUCCEEDED, 
+    NEWPROJECTDIALOG_SAVE_FAILED, 
+    ADD_PROJECT } from './types';
 import { CreateProject } from '../api/projects';
+import { FORM_NEW_PROJECT_DIALOG } from '../forms'
 
 export const OpenNewProjectDialog = () => {
 
     return async (dispatch) => {
         dispatch({
             type: "@@redux-form/INITIALIZE",
-            meta: { form: "newProjectDialog" },
+            meta: { form: FORM_NEW_PROJECT_DIALOG },
             payload: {
                 projectName: ''
             }
@@ -26,7 +31,6 @@ export const OpenNewProjectDialog = () => {
 };
 
 export const CloseNewProjectDialog = (cancelled) => {
-    console.log(cancelled);
     return {
         type: NEWPROJECTDIALOG_CLOSE, 
         payload: {

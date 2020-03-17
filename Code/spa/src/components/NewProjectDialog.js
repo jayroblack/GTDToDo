@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
 import { CloseNewProjectDialog, SavingNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 import { withSnackbar } from 'notistack';
+import { FORM_NEW_PROJECT_DIALOG } from '../forms'
 
 const useStyles = theme => ({
 
@@ -77,7 +78,7 @@ class NewProjectDialog extends React.Component {
         }
         
         return (
-            <form name="newProjectDialog" >
+            <form name={FORM_NEW_PROJECT_DIALOG} >
             <Dialog open={this.props.newProjectDialogState.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Add New Project</DialogTitle>
                 <DialogContent>
@@ -118,7 +119,7 @@ const validate = (formValues) => {
 }
 
 NewProjectDialog = reduxForm({
-    form: 'newProjectDialog',
+    form: FORM_NEW_PROJECT_DIALOG,
     validate
 })(NewProjectDialog)
 

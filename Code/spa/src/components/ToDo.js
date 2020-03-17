@@ -15,7 +15,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
 import NewProjectDialog from './NewProjectDialog';
+import EditProjectsDialog from './EditProjectsDialog';
 import { OpenNewProjectDialog } from '../actions/newProjectDialog';
+import { OpenEditProjectsDialog } from '../actions/editProjectsDialog'
 
 const drawerWidth = 240;
 
@@ -46,6 +48,10 @@ class ToDo extends React.Component {
 
   handleNewProject = () => {
     this.props.dispatch(OpenNewProjectDialog());
+  }
+
+  handleEditProjects = () => {
+    this.props.dispatch(OpenEditProjectsDialog());
   }
 
   render() {
@@ -93,7 +99,7 @@ class ToDo extends React.Component {
             </ExpansionPanelDetails>
             <ExpansionPanelActions>
               <Button color="primary" variant="contained" onClick={this.handleNewProject}>Add</Button>
-              <Button variant="contained">Edit</Button>
+              <Button variant="contained" onClick={this.handleEditProjects} >Edit</Button>
             </ExpansionPanelActions>
           </ExpansionPanel>
           <ExpansionPanel>
@@ -146,6 +152,7 @@ class ToDo extends React.Component {
         </Typography>
         </main>
         <NewProjectDialog />
+        <EditProjectsDialog />
       </React.Fragment>
     );
   }
