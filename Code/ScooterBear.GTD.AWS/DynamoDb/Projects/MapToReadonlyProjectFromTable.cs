@@ -8,7 +8,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
     {
         public ReadOnlyProject MapTo(UserProjectLabelDynamoDbTable input)
         {
-            return new ReadOnlyProject(input.ID, input.UserId, input.Name, input.Count, input.IsDeleted, input.CountOverDue, input.VersionNumber, input.DateCreated);
+            return new ReadOnlyProject(input.ID, input.UserId, input.Name, input.Count, input.IsDeleted, input.CountOverDue, input.VersionNumber.GetValueOrDefault(), input.DateCreated);
         }
     }
 }

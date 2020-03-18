@@ -35,7 +35,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
                     QueryFilter = new List<ScanCondition>
                     {
                         new ScanCondition("Data", ScanOperator.Equal, UserProjectLabelTableData.Project),
-                        new ScanCondition("IsDeleted", ScanOperator.Equal, false),
+                        new ScanCondition("IsDeleted", ScanOperator.Equal, query.GetOnlyDeleted),
                     }
                 });
 

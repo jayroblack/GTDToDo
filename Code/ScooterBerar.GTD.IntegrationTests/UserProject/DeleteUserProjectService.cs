@@ -34,7 +34,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
 
             var projectId = Guid.NewGuid().ToString();
             var optionResult = await
-                createUserProject.Run(new CreateNewUserProjectServiceArg(projectId, userId, "IWillBeDeleted"));
+                createUserProject.Run(new CreateNewUserProjectServiceArg(projectId, "IWillBeDeleted"));
 
             optionResult.HasValue.Should().BeTrue("Failed To Create Project");
 

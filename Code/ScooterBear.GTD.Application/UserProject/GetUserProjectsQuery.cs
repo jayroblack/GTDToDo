@@ -16,13 +16,15 @@ namespace ScooterBear.GTD.Application.UserProject
     public class GetUserProjectsQuery : IQuery<GetUserProjectsQueryResult>
     {
         public string UserId { get; }
+        public bool GetOnlyDeleted { get; }
 
-        public GetUserProjectsQuery(string userId)
+        public GetUserProjectsQuery(string userId, bool getOnlyDeleted = false)
         {
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException($"{nameof(userId)} is required.");
 
             UserId = userId;
+            GetOnlyDeleted = getOnlyDeleted;
         }
     }
 }

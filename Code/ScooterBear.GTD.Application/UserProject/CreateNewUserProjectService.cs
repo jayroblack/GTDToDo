@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Optional;
 using Optional.Async.Extensions;
 using ScooterBear.GTD.Application.Services.Persistence;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
@@ -20,20 +21,25 @@ namespace ScooterBear.GTD.Application.UserProject
         private readonly IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> _query;
         private readonly IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult> _persistService;
         private readonly IKnowTheDate _iKnowTheDate;
+        private readonly IProfileFactory _profileFactory;
 
         public CreateNewUserProjectService(
             IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> query, 
             IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult> persistService,
-            IKnowTheDate iKnowTheDate)
+            IKnowTheDate iKnowTheDate, 
+            IProfileFactory profileFactory)
         {
             _query = query ?? throw new ArgumentNullException(nameof(query));
             _persistService = persistService ?? throw new ArgumentNullException(nameof(persistService));
             _iKnowTheDate = iKnowTheDate ?? throw new ArgumentNullException(nameof(iKnowTheDate));
+            _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
         }
 
         public async Task<Option<CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>> Run(CreateNewUserProjectServiceArg arg)
         {
-            var userProjects = await _query.Run(new GetUserProjectsQuery(arg.UserId));
+            var userId = _profileFactory.GetCurrentProfile().UserId;
+
+            var userProjects = await _query.Run(new GetUserProjectsQuery(userId));
 
             var dateTimeCreated = _iKnowTheDate.UtcNow();
 
@@ -51,7 +57,7 @@ namespace ScooterBear.GTD.Application.UserProject
                         CreateUserProjectOutcomes.ProjectIdAlreadyExists);
 
                 var persistResult = await
-                    _persistService.Run(new PersistNewProjectServiceArg(arg.Id, arg.UserId, arg.NewProjectName,
+                    _persistService.Run(new PersistNewProjectServiceArg(arg.Id, userId, arg.NewProjectName,
                         dateTimeCreated));
 
                 return Option.Some<CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>(
@@ -60,7 +66,7 @@ namespace ScooterBear.GTD.Application.UserProject
             async () =>
             {
                 var persistResult = await 
-                    _persistService.Run(new PersistNewProjectServiceArg(arg.Id, arg.UserId, arg.NewProjectName, dateTimeCreated, arg.ConsistentRead));
+                    _persistService.Run(new PersistNewProjectServiceArg(arg.Id, userId, arg.NewProjectName, dateTimeCreated, arg.ConsistentRead));
 
                 return Option.Some<CreateNewUserProjectServiceResult, CreateUserProjectOutcomes>(
                     new CreateNewUserProjectServiceResult(persistResult.Project));

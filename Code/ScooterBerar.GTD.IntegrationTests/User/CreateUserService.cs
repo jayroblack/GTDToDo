@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac;
 using FluentAssertions;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Application.Users.New;
 using ScooterBear.GTD.Patterns;
@@ -24,10 +25,11 @@ namespace ScooterBear.GTD.IntegrationTests.User
         public async void ShouldSaveNewUser()
         {
             var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
+            var userId = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
             var name = "James";
             var last = "Blah";
             var email = $"jayroblack+{id}@here.com";
-
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserService = _fixture.Container
                 .Resolve<IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome>>();
 
@@ -56,21 +58,23 @@ namespace ScooterBear.GTD.IntegrationTests.User
         [Fact]
         public async void ShouldCreateDefaultProjectInbox()
         {
-            var id = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
+            var userId = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
             var name = "James3";
             var last = "Blah3";
-            var email = $"jayroblack+{id}@here.com";
-
+            var email = $"jayroblack+{userId}@here.com";
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserService = _fixture.Container
                 .Resolve<IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome>>();
 
             var optionResult =
-                await createUserService.Run(new CreateUserServiceArg(id, name, last, email));
+                await createUserService.Run(new CreateUserServiceArg(userId, name, last, email));
+
+            optionResult.HasValue.Should().BeTrue();
 
             var getProjectsQuery =
                 _fixture.Container.Resolve<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>>();
 
-            var result = await getProjectsQuery.Run(new GetUserProjectsQuery(id));
+            var result = await getProjectsQuery.Run(new GetUserProjectsQuery(userId));
 
             result.HasValue.Should().BeTrue();
             result.MatchSome(some =>

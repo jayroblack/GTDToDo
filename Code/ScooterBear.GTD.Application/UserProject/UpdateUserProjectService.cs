@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Optional;
@@ -13,7 +14,8 @@ namespace ScooterBear.GTD.Application.UserProject
         DoesNotExist,
         VersionConflict,
         UnprocessableEntity,
-        NotAuthorized
+        NotAuthorized,
+        NameAlreadyExists
     }
 
     public class UpdateUserProjectService : IServiceOptOutcomes<UpdateUserProjectServiceArg,
@@ -21,19 +23,22 @@ namespace ScooterBear.GTD.Application.UserProject
     {
         private readonly IProfileFactory _profileFactory;
         private readonly ILogger _logger;
-        private readonly IQueryHandler<ProjectQuery, ProjectQueryResult> _getProject;
+        private readonly IQueryHandler<ProjectQuery, ProjectQueryResult> _getProjectQuery;
         private readonly IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome> _persistUpdateProject;
+        private readonly IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> _getProjectsQuery;
 
         public UpdateUserProjectService(
             IProfileFactory profileFactory,
             ILogger logger,
-            IQueryHandler<ProjectQuery, ProjectQueryResult> getProject,
-            IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome> persistUpdateProject)
+            IQueryHandler<ProjectQuery, ProjectQueryResult> getProjectQuery,
+            IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome> persistUpdateProject,
+            IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> getProjectsQuery)
         {
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _getProject = getProject ?? throw new ArgumentNullException(nameof(getProject));
+            _getProjectQuery = getProjectQuery ?? throw new ArgumentNullException(nameof(getProjectQuery));
             _persistUpdateProject = persistUpdateProject ?? throw new ArgumentNullException(nameof(persistUpdateProject));
+            _getProjectsQuery = getProjectsQuery ?? throw new ArgumentNullException(nameof(getProjectsQuery));
         }
 
         public async Task<Option<UpdateUserProjectServiceResult, UpdateProjectOutcome>> Run(UpdateUserProjectServiceArg arg)
@@ -42,12 +47,12 @@ namespace ScooterBear.GTD.Application.UserProject
 
             try
             {
-                userProjectOption = await _getProject.Run(new ProjectQuery(arg.ProjectId));
+                userProjectOption = await _getProjectQuery.Run(new ProjectQuery(arg.ProjectId));
                 if (!userProjectOption.HasValue)
                     return Option.None<UpdateUserProjectServiceResult, UpdateProjectOutcome>(UpdateProjectOutcome
                         .DoesNotExist);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException e)//<== Why did we add this again?
             {
                 _logger.Log(LogLevel.Error, e.Message);
                 return Option.None<UpdateUserProjectServiceResult, UpdateProjectOutcome>(UpdateProjectOutcome
@@ -58,13 +63,29 @@ namespace ScooterBear.GTD.Application.UserProject
             userProjectOption.MatchSome(some =>
             {
                 var proj = some.UserProject;
-                project = new Project(proj.Id, proj.Name, proj.UserId, proj.Count, proj.IsDeleted, proj.CountOverDue, proj.VersionNumber, proj.DateCreated);
+                project = new Project(proj.Id, proj.Name, proj.UserId, proj.Count , proj.CountOverDue, proj.DateCreated, proj.VersionNumber, proj.IsDeleted);
             });
 
             var profile = _profileFactory.GetCurrentProfile();
             if( project.UserId != profile.UserId)
                 return Option.None<UpdateUserProjectServiceResult, UpdateProjectOutcome>(UpdateProjectOutcome
                     .NotAuthorized);
+
+            if (project.Name != arg.Name)
+            {
+                var projectsOptional = await _getProjectsQuery.Run(new GetUserProjectsQuery(profile.UserId));
+
+                bool nameExists = false;
+                projectsOptional.MatchSome(some =>
+                {
+                    nameExists =
+                        some.UserProjects.Projects.Any(x => !x.IsDeleted && x.Name == arg.Name);
+                });
+
+                if (nameExists)
+                    return Option.None<UpdateUserProjectServiceResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                        .NameAlreadyExists);
+            }
 
             try
             {

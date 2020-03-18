@@ -52,7 +52,7 @@ namespace ScooterBear.GTD.Application.Users.New
                             _iKnowTheDate.UtcNow());
 
                         var result = await
-                            _persistNewUserService.Run(new PersistNewUserServiceArgs(newUser));
+                            _persistNewUserService.Run(new PersistNewUserServiceArgs(newUser, true));
 
                         await _newUserCreated.HandleEventsAsync(new NewUserCreatedEvent(result.ReadonlyUser),
                             CancellationToken.None);

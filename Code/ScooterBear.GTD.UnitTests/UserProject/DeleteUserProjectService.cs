@@ -4,7 +4,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Optional;
-using Optional.Async.Extensions;
 using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
@@ -42,7 +41,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             _fixture.ProfileFactoryMock.Setup(x => x.GetCurrentProfile())
                 .Returns(new Application.UserProfile.Profile(user));
 
-            var project = new Project(projectId, "name", Guid.NewGuid().ToString(), 0, false, 0, 0, DateTime.UtcNow);
+            var project = new Project(projectId, "name", Guid.NewGuid().ToString(), 0, 0, DateTime.UtcNow);
 
             _fixture.ProjectQueryMock.Setup(x => x.Run(It.IsAny<ProjectQuery>()))
                 .Returns(Task.FromResult(Option.Some<ProjectQueryResult>(new ProjectQueryResult(project))));

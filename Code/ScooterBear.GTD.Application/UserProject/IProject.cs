@@ -10,7 +10,7 @@ namespace ScooterBear.GTD.Application.UserProject
         int Count { get; }
         bool IsDeleted { get; }
         int CountOverDue { get; }
-        int? VersionNumber { get; }
+        int VersionNumber { get; }
         DateTime DateCreated { get; }
     }
 }

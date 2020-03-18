@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using FluentAssertions;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.Application.UserProject;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;
@@ -23,6 +24,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         public async void ShouldPersistProjectsAndQueryThem()
         {
             var userId = Guid.NewGuid().ToString();
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
                     CreateUserProjectOutcomes>>();
@@ -40,7 +42,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             foreach (var item in listOfProjectsToCreate)
             {
                 var optionResult = await
-                    createUserProject.Run(new CreateNewUserProjectServiceArg(item.Id, userId, item.Name));
+                    createUserProject.Run(new CreateNewUserProjectServiceArg(item.Id, item.Name));
 
                 optionResult.HasValue.Should().BeTrue("Failed To Create Project");
             }
@@ -63,6 +65,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         public async void ShouldNotAllowProjectsWithMultipleNamesForSameUserId()
         {
             var userId = Guid.NewGuid().ToString();
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
                     CreateUserProjectOutcomes>>();
@@ -71,12 +74,12 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             var secondItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
 
             var firstCreateOption = await 
-                createUserProject.Run(new CreateNewUserProjectServiceArg(firstItem.Id, userId, firstItem.Name));
+                createUserProject.Run(new CreateNewUserProjectServiceArg(firstItem.Id, firstItem.Name));
 
             firstCreateOption.HasValue.Should().BeTrue();
 
             var secondCreateOption =
-                await createUserProject.Run(new CreateNewUserProjectServiceArg(secondItem.Id, userId, secondItem.Name));
+                await createUserProject.Run(new CreateNewUserProjectServiceArg(secondItem.Id, secondItem.Name));
 
             secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
                 outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectNameAlreadyExists));
@@ -95,12 +98,12 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             var secondItem = new ProjectItem(id, "Project 2");
 
             var firstCreateOption = await
-                createUserProject.Run(new CreateNewUserProjectServiceArg(firstItem.Id, userId, firstItem.Name));
+                createUserProject.Run(new CreateNewUserProjectServiceArg(firstItem.Id, firstItem.Name));
 
             firstCreateOption.HasValue.Should().BeTrue();
 
             var secondCreateOption =
-                await createUserProject.Run(new CreateNewUserProjectServiceArg(secondItem.Id, userId, secondItem.Name));
+                await createUserProject.Run(new CreateNewUserProjectServiceArg(secondItem.Id, secondItem.Name));
 
             secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
                 outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectIdAlreadyExists));

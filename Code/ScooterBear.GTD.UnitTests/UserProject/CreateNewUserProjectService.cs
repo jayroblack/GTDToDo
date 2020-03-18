@@ -8,6 +8,7 @@ using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 using Xunit;
 using Optional;
+using ScooterBear.GTD.Application.UserProfile;
 using ScooterBear.GTD.AWS.DynamoDb.Projects;
 
 namespace ScooterBear.GTD.UnitTests.UserProject
@@ -37,7 +38,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
 
             var returnOption = await
                 fixture.Service.Run(
-                    new CreateNewUserProjectServiceArg("Id", "UserId", "Project"));
+                    new CreateNewUserProjectServiceArg("Id", "Project"));
 
             returnOption.HasValue.Should().BeTrue();
         }
@@ -53,7 +54,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
 
             var returnOption = await
                 fixture.Service.Run(
-                    new CreateNewUserProjectServiceArg("IdTwo", "UserId", "ProjectName"));
+                    new CreateNewUserProjectServiceArg("IdTwo", "ProjectName"));
 
             returnOption.HasValue.Should().BeFalse();
             returnOption.MatchNone(none=> none.Should().Be(CreateUserProjectOutcomes.ProjectNameAlreadyExists));
@@ -70,7 +71,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
 
             var returnOption = await
                 fixture.Service.Run(
-                    new CreateNewUserProjectServiceArg("Id", "UserId", "ProjectTwo"));
+                    new CreateNewUserProjectServiceArg("Id", "ProjectTwo"));
 
             returnOption.HasValue.Should().BeFalse();
             returnOption.MatchNone(none => none.Should().Be(CreateUserProjectOutcomes.ProjectIdAlreadyExists));
@@ -87,7 +88,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
 
             var returnOption = await
                 fixture.Service.Run(
-                    new CreateNewUserProjectServiceArg("IdTwo", "UserId", "ProjectTwo"));
+                    new CreateNewUserProjectServiceArg("IdTwo","ProjectTwo"));
 
             returnOption.HasValue.Should().BeTrue();
         }
@@ -100,16 +101,24 @@ namespace ScooterBear.GTD.UnitTests.UserProject
         public readonly Mock<IKnowTheDate> IKnowTheDate;
         public readonly CreateNewUserProjectService Service;
         public readonly ReadOnlyProject Project;
+        public readonly Mock<IProfileFactory> UserProfileFactory;
+
         public CreateNewUserProjectFixture()
         {
             Query = new Mock<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>>();
             PersistService = new Mock<IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult>>();
             IKnowTheDate = new Mock<IKnowTheDate>();
             IKnowTheDate.Setup(x => x.UtcNow()).Returns(DateTime.UtcNow);
-            Service = new CreateNewUserProjectService(Query.Object, PersistService.Object, IKnowTheDate.Object);
+            this.UserProfileFactory = new Mock<IProfileFactory>();
+            var userProfile = new Application.UserProfile.Profile(Guid.NewGuid().ToString());
+            this.UserProfileFactory.Setup(x => x.GetCurrentProfile()).Returns(userProfile);
+            Service = new CreateNewUserProjectService(Query.Object, PersistService.Object, 
+                IKnowTheDate.Object, this.UserProfileFactory.Object);
             Project = new ReadOnlyProject("Id", "UserId", "ProjectName", 0, false, 0, 0, DateTime.UtcNow);
         }
+
         
+
         public void Dispose()
         {
             

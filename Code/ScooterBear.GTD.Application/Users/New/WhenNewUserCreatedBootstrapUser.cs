@@ -22,7 +22,7 @@ namespace ScooterBear.GTD.Application.Users.New
         }
         public async Task HandleAsync(NewUserCreatedEvent domainEvent, CancellationToken cancellationToken)
         {
-            var createNewProjectService = new CreateNewUserProjectServiceArg(_createIdsStrategy.NewId(), domainEvent.User.ID, "Inbox", true);
+            var createNewProjectService = new CreateNewUserProjectServiceArg(_createIdsStrategy.NewId(), "Inbox", true);
             await _createInboxProject.Run(createNewProjectService);
         }
     }

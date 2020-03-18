@@ -47,7 +47,7 @@ namespace ScooterBear.GTD.Application.UserProject
             userProjectOption.MatchSome(some =>
             {
                 var proj = some.UserProject;
-                project = new Project(proj.Id, proj.Name, proj.UserId, proj.Count, proj.IsDeleted, proj.CountOverDue, proj.VersionNumber, proj.DateCreated);
+                project = new Project(proj.Id, proj.Name, proj.UserId, proj.Count, proj.CountOverDue, proj.DateCreated, proj.VersionNumber, proj.IsDeleted);
             });
 
             if( profile.UserId != project.UserId)

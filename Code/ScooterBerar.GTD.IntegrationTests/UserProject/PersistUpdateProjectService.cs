@@ -31,7 +31,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
 
             var projectId = Guid.NewGuid().ToString();
             var optionResult = await
-                createUserProject.Run(new CreateNewUserProjectServiceArg(projectId, userId, "Project"));
+                createUserProject.Run(new CreateNewUserProjectServiceArg(projectId, "Project"));
 
             var persistService = _fixture.Container
                 .Resolve<IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult,
@@ -40,7 +40,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             optionResult.Match(async some =>
             {
                 var project = some.Project;
-                var fudgedVersionProject = new Project(project.Id, project.UserId, project.Name, project.Count, project.IsDeleted, project.CountOverDue, 100, DateTime.UtcNow);
+                var fudgedVersionProject = new Project(project.Id, project.UserId, project.Name, project.Count, project.CountOverDue, DateTime.UtcNow, 100, project.IsDeleted);
 
                 var persistOptionResult =
                     await persistService.Run(new PersistUpdateProjectServiceArgs(fudgedVersionProject));

@@ -74,7 +74,7 @@ namespace ScooterBear.GTD.Controllers
             var id = _createIdsStrategy.NewId();
             var profile = _profileFactory.GetCurrentProfile();
             var optionResult = 
-                await _createNewProjectService.Run(new CreateNewUserProjectServiceArg(id, profile.UserId, data.NewProjectName));
+                await _createNewProjectService.Run(new CreateNewUserProjectServiceArg(id, data.NewProjectName));
 
             return optionResult.Match<IActionResult>(some => Json(some.Project), outcomes => UnprocessableEntity(outcomes.ToString()));
         }

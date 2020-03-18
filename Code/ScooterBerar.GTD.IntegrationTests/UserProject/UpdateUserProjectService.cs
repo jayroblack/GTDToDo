@@ -39,7 +39,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             foreach (var item in listOfProjectsToCreate)
             {
                 var optionResult = await
-                    createUserProject.Run(new CreateNewUserProjectServiceArg(item.Id, userId, item.Name));
+                    createUserProject.Run(new CreateNewUserProjectServiceArg(item.Id, item.Name));
 
                 optionResult.HasValue.Should().BeTrue("Failed To Create Project");
             }
@@ -54,7 +54,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                     some.Project.Name.Should().Be($"Project {i + 4}");
                     some.Project.Id.Should().Be(listOfProjectsToCreate[i].Id);
                     some.Project.UserId.Should().Be(userId);
-                }, outcome => Assert.True(false, "Failed To Update Project"));
+                }, outcome => Assert.True(false, $"Failed To Update Project: {outcome.ToString()}"));
             }
         }
 

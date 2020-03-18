@@ -11,10 +11,10 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
         public int Count { get; }
         public bool IsDeleted { get; }
         public int CountOverDue { get; }
-        public int? VersionNumber { get; }
+        public int VersionNumber { get; }
         public DateTime DateCreated { get; }
 
-        public ReadOnlyProject(string id,string userId, string name, int count,  bool isDeleted, int countOverDue, int? versionNumber, DateTime dateCreated)
+        public ReadOnlyProject(string id,string userId, string name, int count,  bool isDeleted, int countOverDue, int versionNumber, DateTime dateCreated)
         {
             Id = id;
             UserId = userId;
