@@ -60,6 +60,10 @@ export const SaveNewProjectDialog = (token, data) => {
         const response = await CreateProject(token, data);
         
         if( response.success){
+            dispatch({
+                type: ADD_PROJECT,
+                payload: response.data
+            });
             dispatch(
             {
                 type: NEWPROJECTDIALOG_SAVE_SUCCEEDED, 
@@ -69,10 +73,6 @@ export const SaveNewProjectDialog = (token, data) => {
                     cancelled: false,
                     data: response.data
                 }
-            });
-            dispatch({
-                type: ADD_PROJECT,
-                payload: response.data
             });
         }
         else{

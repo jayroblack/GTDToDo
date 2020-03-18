@@ -20,3 +20,20 @@ export const CreateProject = async (token, data) => {
         }
     }
 }
+
+export const DeleteProject = async (token, projectId) => {
+    const client = createClient(token);
+    
+    if( !client ){
+        return {success: false, errorMessage:"No Token.", data: null}
+    }
+
+    try{
+        const response = await client.delete('/project/' + projectId);
+        console.log(response);
+        return { success:true, errorMessage:null, data: response.data }
+    }
+    catch(err){
+        return { success:false, errorMessage:err.errorMessage, data: null, err: err };
+    }
+}

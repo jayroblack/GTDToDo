@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, 
+    DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
 import { CloseNewProjectDialog, SavingNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
 import { withSnackbar } from 'notistack';
 import { FORM_NEW_PROJECT_DIALOG } from '../forms'
