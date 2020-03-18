@@ -16,7 +16,9 @@ const useStyles = theme => ({
 });
 
 class EditProjectsDialog extends React.Component{
-
+//TODO: Add Sobriety Prompt before Deleting Project. 
+//TODO: Show Error Message if Delete Fails. Snackbar?
+//TODO: Figure out how to refactor New Project dialog for Edit Project dialog. 
     constructor(props){
         super(props);
         this.timer = null;
