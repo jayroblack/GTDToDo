@@ -8,7 +8,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
     {
         public UserProjectLabelDynamoDbTable MapFrom(User user)
         {
-            var table = new UserProjectLabelDynamoDbTable()
+            var table = new UserProjectLabelDynamoDbTable
             {
                 ID = user.ID,
                 Data = UserProjectLabelTableData.User,

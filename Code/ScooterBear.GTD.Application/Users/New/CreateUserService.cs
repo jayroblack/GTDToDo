@@ -15,18 +15,18 @@ namespace ScooterBear.GTD.Application.Users.New
         UserExists
     }
 
-    public class CreateUserService : IServiceOptOutcomes<CreateUserServiceArg,
-        CreateUserServiceResult, CreateUserServiceOutcome>
+    public class CreateUserService : IServiceOptOutcomes<CreateUserArg,
+        CreateUserResult, CreateUserServiceOutcome>
     {
+        private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
         private readonly IKnowTheDate _iKnowTheDate;
-        private readonly IService<PersistNewUserServiceArgs, PersistNewUserServiceResult> _persistNewUserService;
-        private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
         private readonly IDomainEventHandlerStrategyAsync<NewUserCreatedEvent> _newUserCreated;
+        private readonly IService<PersistNewUserArgs, PersistNewUserResult> _persistNewUserService;
 
         public CreateUserService(IKnowTheDate iKnowTheDate,
             ICreateIdsStrategy createIdsStrategy,
-            IService<PersistNewUserServiceArgs, PersistNewUserServiceResult> persistNewUserService,
-            IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser,
+            IService<PersistNewUserArgs, PersistNewUserResult> persistNewUserService,
+            IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
             IDomainEventHandlerStrategyAsync<NewUserCreatedEvent> newUserCreated)
         {
             _iKnowTheDate = iKnowTheDate ?? throw new ArgumentNullException(nameof(iKnowTheDate));
@@ -36,15 +36,15 @@ namespace ScooterBear.GTD.Application.Users.New
             _newUserCreated = newUserCreated ?? throw new ArgumentNullException(nameof(newUserCreated));
         }
 
-        public async Task<Option<CreateUserServiceResult, CreateUserServiceOutcome>> Run(CreateUserServiceArg arg)
+        public async Task<Option<CreateUserResult, CreateUserServiceOutcome>> Run(CreateUserArg arg)
         {
             if (arg == null) throw new ArgumentNullException(nameof(arg));
 
-            var queryOption = await _getUser.Run(new GetUserQueryArgs(arg.Id));
+            var queryOption = await _getUser.Run(new GetUserArg(arg.Id));
 
-            return await 
+            return await
                 queryOption.MatchAsync(
-                    async some => Option.None<CreateUserServiceResult, CreateUserServiceOutcome>(
+                    async some => Option.None<CreateUserResult, CreateUserServiceOutcome>(
                         CreateUserServiceOutcome.UserExists),
                     async () =>
                     {
@@ -52,13 +52,13 @@ namespace ScooterBear.GTD.Application.Users.New
                             _iKnowTheDate.UtcNow());
 
                         var result = await
-                            _persistNewUserService.Run(new PersistNewUserServiceArgs(newUser, true));
+                            _persistNewUserService.Run(new PersistNewUserArgs(newUser, true));
 
                         await _newUserCreated.HandleEventsAsync(new NewUserCreatedEvent(result.ReadonlyUser),
                             CancellationToken.None);
 
-                        return Option.Some<CreateUserServiceResult, CreateUserServiceOutcome>(
-                            new CreateUserServiceResult(result.ReadonlyUser));
+                        return Option.Some<CreateUserResult, CreateUserServiceOutcome>(
+                            new CreateUserResult(result.ReadonlyUser));
                     });
         }
     }

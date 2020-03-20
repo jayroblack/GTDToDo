@@ -37,8 +37,9 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
                 {
                     await _dynamoDb.SaveAsync(table);
 
-                    UserProjectLabelDynamoDbTable userRetrieved =
-                        await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.User,
+                    var userRetrieved =
+                        await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID,
+                            UserProjectLabelTableData.User,
                             CancellationToken.None);
 
                     var readonlyUser = _mapTo.MapTo(userRetrieved);

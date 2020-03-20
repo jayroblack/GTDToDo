@@ -11,7 +11,8 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
-    public class PersistUpdateProjectService : IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome>
+    public class PersistUpdateProjectService : IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+        PersistUpdateProjectOutcome>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapFrom<UserProjectLabelDynamoDbTable, Project> _map;
@@ -27,7 +28,8 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<Option<PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome>> Run(PersistUpdateProjectServiceArgs arg)
+        public async Task<Option<PersistUpdateProjectResult, PersistUpdateProjectOutcome>> Run(
+            PersistUpdateProjectArgs arg)
         {
             var table = _map.MapFrom(arg.Project);
             using (var _dynamoDb = _dynamoDbFactory.Create())
@@ -36,18 +38,18 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
                 {
                     await _dynamoDb.SaveAsync(table);
 
-                    UserProjectLabelDynamoDbTable projectRetrieved =
-                        await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.Project,
+                    var projectRetrieved =
+                        await _dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID,
+                            UserProjectLabelTableData.Project,
                             CancellationToken.None);
 
                     var readOnlyProject = _mapTo.MapTo(projectRetrieved);
-                    return Option.Some<PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome>(
-                        new PersistUpdateProjectServiceResult(readOnlyProject));
-
+                    return Option.Some<PersistUpdateProjectResult, PersistUpdateProjectOutcome>(
+                        new PersistUpdateProjectResult(readOnlyProject));
                 }
                 catch (ConditionalCheckFailedException ex)
                 {
-                    return Option.None<PersistUpdateProjectServiceResult, PersistUpdateProjectOutcome>(
+                    return Option.None<PersistUpdateProjectResult, PersistUpdateProjectOutcome>(
                         PersistUpdateProjectOutcome.Conflict);
                 }
             }

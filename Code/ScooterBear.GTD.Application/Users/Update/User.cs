@@ -5,15 +5,12 @@ namespace ScooterBear.GTD.Application.Users.Update
 {
     public class User : IUser
     {
-        public string ID { get; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string Email { get; private set; }
-        public string BillingId { get; private set; }
-        public string AuthId { get; private set; }
-        public bool? IsAccountEnabled { get; private set; }
-        public int VersionNumber { get; private set; }
-        public DateTime DateCreated { get; }
+        public enum EnableUserOutcome
+        {
+            EmailIsNotVerified,
+            BillingIdIsNotDefined,
+            AuthIdIsNotDefined
+        }
 
         //I would rather this be internal so that external users are unable to create this class
         //they have to go through the UpdateUserService.
@@ -31,7 +28,7 @@ namespace ScooterBear.GTD.Application.Users.Update
                 throw new ArgumentException($"Missing required value {nameof(email)}");
             if (versionNumber < 0)
                 throw new ArgumentOutOfRangeException(nameof(versionNumber));
-            if( dateCreated == default(DateTime))
+            if (dateCreated == default)
                 throw new ArgumentException($"Date Created value {dateCreated} is not valid.");
 
             ID = id;
@@ -45,18 +42,28 @@ namespace ScooterBear.GTD.Application.Users.Update
             EnableAccount();
         }
 
+        public string ID { get; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Email { get; private set; }
+        public string BillingId { get; private set; }
+        public string AuthId { get; private set; }
+        public bool? IsAccountEnabled { get; private set; }
+        public int VersionNumber { get; private set; }
+        public DateTime DateCreated { get; }
+
         public void SetFirstName(string firstName)
         {
             if (string.IsNullOrEmpty(firstName))
                 throw new ArgumentException($"{nameof(firstName)} is required.");
-            this.FirstName = firstName;
+            FirstName = firstName;
         }
 
         public void SetLastName(string lastName)
         {
             if (string.IsNullOrEmpty(lastName))
                 throw new ArgumentException($"{nameof(lastName)} is required.");
-            this.LastName = lastName;
+            LastName = lastName;
         }
 
         public void SetEmail(string email)
@@ -64,67 +71,62 @@ namespace ScooterBear.GTD.Application.Users.Update
             if (string.IsNullOrEmpty(email))
                 throw new ArgumentException($"{nameof(email)} is required.");
 
-            if (email == this.Email)
+            if (email == Email)
                 return;
 
-            this.Email = email;
-            this.IsAccountEnabled = false;
+            Email = email;
+            IsAccountEnabled = false;
         }
 
         /// <summary>
-        /// A user will pay for this service, this ID is our way to access this users payment history and status.
+        ///     A user will pay for this service, this ID is our way to access this users payment history and status.
         /// </summary>
         public void SetBillingId(string billingId)
         {
             if (string.IsNullOrEmpty(billingId))
                 throw new ArgumentException($"{nameof(billingId)} is required.");
-            if (this.BillingId == billingId)
+            if (BillingId == billingId)
                 return;
-            this.BillingId = billingId;
+            BillingId = billingId;
             EnableAccount();
         }
 
         /// <summary>
-        /// Whenever a user is created, we use an external system for authentication, this string is what we need to load the current user.
+        ///     Whenever a user is created, we use an external system for authentication, this string is what we need to load the
+        ///     current user.
         /// </summary>
         /// <param name="authId"></param>
         public void SetAuthId(string authId)
         {
             if (string.IsNullOrEmpty(authId))
                 throw new ArgumentException($"{nameof(authId)} is required.");
-            if (this.AuthId == authId)
+            if (AuthId == authId)
                 return;
-            this.AuthId = authId;
+            AuthId = authId;
             EnableAccount();
         }
 
         public void SetVersionNumber(int versionNumber)
         {
-            if( versionNumber < 0)
+            if (versionNumber < 0)
                 throw new ArgumentOutOfRangeException(nameof(versionNumber));
-            this.VersionNumber = versionNumber;
-        }
-
-        public enum EnableUserOutcome
-        {
-            EmailIsNotVerified,
-            BillingIdIsNotDefined,
-            AuthIdIsNotDefined,
+            VersionNumber = versionNumber;
         }
 
         /// <summary>
-        /// An account is Enabled once we have verified an email, have their billing information on file, and their authentication is set up.
+        ///     An account is Enabled once we have verified an email, have their billing information on file, and their
+        ///     authentication is set up.
         /// </summary>
         /// <returns>EnableUserOutcome</returns>
         public Option<bool, EnableUserOutcome> EnableAccount()
         {
-            if (string.IsNullOrEmpty(this.BillingId))
+            if (string.IsNullOrEmpty(BillingId))
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.BillingIdIsNotDefined);
 
-            if (string.IsNullOrEmpty(this.AuthId))
+            if (string.IsNullOrEmpty(AuthId))
                 return Option.None<bool, EnableUserOutcome>(EnableUserOutcome.AuthIdIsNotDefined);
 
-            this.IsAccountEnabled = true;
+            IsAccountEnabled = true;
             return Option.Some<bool, EnableUserOutcome>(true);
         }
     }

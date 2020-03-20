@@ -24,6 +24,8 @@ namespace ScooterBear.GTD
 
         public IConfiguration Configuration { get; }
 
+        public ILifetimeScope AutofacContainer { get; private set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -37,12 +39,12 @@ namespace ScooterBear.GTD
                     options.Authority = "http://localhost:5000";
                     options.RequireHttpsMetadata = false;
                     options.Audience = "api1";
-                    options.TokenValidationParameters = new TokenValidationParameters()
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidIssuer = "http://localhost:5000",
                         ValidateIssuer = true,
                         ValidAudience = "api1",
-                        ValidateAudience = true,
+                        ValidateAudience = true
                         //ValidateIssuerSigningKey = true  //<-- Turn this on before going to production!!!!
                     };
                 });
@@ -84,29 +86,21 @@ namespace ScooterBear.GTD
             builder.Register(c => c.Resolve<ILoggerFactory>().CreateLogger("")).As<ILogger>();
         }
 
-        public ILifetimeScope AutofacContainer { get; private set; }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // If, for some reason, you need a reference to the built container, you
             // can use the convenience extension method GetAutofacRoot.
-            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+            AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseRouting();
             app.UseCors("default");
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

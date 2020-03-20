@@ -6,9 +6,9 @@ using ScooterBear.GTD.Patterns.CQRS;
 namespace ScooterBear.GTD.MailMerge.NewUserEmail
 {
     public class
-        SendNewUserEmailMergeService : IService<SendNewUserEmailMergeServiceArg, SendNewUserEmailMergeServiceResult>
+        SendNewUserEmailMergeService : IService<SendNewUserEmailArg, SendNewUserEmailResult>
     {
-        public async Task<SendNewUserEmailMergeServiceResult> Run(SendNewUserEmailMergeServiceArg arg)
+        public async Task<SendNewUserEmailResult> Run(SendNewUserEmailArg arg)
         {
             var user = arg.User;
 
@@ -24,7 +24,8 @@ namespace ScooterBear.GTD.MailMerge.NewUserEmail
             var bodyTextCompiled = Handlebars.Compile(bodytemplateText);
             var bodyHtmlCompiled = Handlebars.Compile(bodyTemplateHtml);
 
-            var data = new  { 
+            var data = new
+            {
                 user.FirstName,
                 user.LastName,
                 user.Email,
@@ -35,7 +36,7 @@ namespace ScooterBear.GTD.MailMerge.NewUserEmail
             var textResult = bodyTextCompiled(data);
             var htmlResult = bodyHtmlCompiled(data);
 
-            return new SendNewUserEmailMergeServiceResult(subjectResult, textResult, htmlResult, data);
+            return new SendNewUserEmailResult(subjectResult, textResult, htmlResult, data);
         }
     }
 }

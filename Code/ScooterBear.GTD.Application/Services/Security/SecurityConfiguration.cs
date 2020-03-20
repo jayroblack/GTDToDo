@@ -9,11 +9,11 @@ namespace ScooterBear.GTD.Application.Services.Security
 
     public class SecurityConfiguration
     {
-        public string EmailEncryption { get; }
-
         public SecurityConfiguration(string emailEncryption)
         {
             EmailEncryption = emailEncryption ?? throw new ArgumentNullException(nameof(emailEncryption));
         }
+
+        public string EmailEncryption { get; }
     }
 }

@@ -8,7 +8,7 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
-    public class PersistNewProjectService : IService<PersistNewProjectServiceArg, PersistNewProjectServiceResult>
+    public class PersistNewProjectService : IService<PersistNewProjectArg, PersistNewProjectResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> _mapTo;
@@ -20,9 +20,9 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<PersistNewProjectServiceResult> Run(PersistNewProjectServiceArg arg)
+        public async Task<PersistNewProjectResult> Run(PersistNewProjectArg arg)
         {
-            var table = new UserProjectLabelDynamoDbTable()
+            var table = new UserProjectLabelDynamoDbTable
             {
                 ID = arg.Id,
                 Data = UserProjectLabelTableData.Project,
@@ -36,15 +36,15 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 
             using (var dynamoDb = _dynamoDbFactory.Create())
             {
-                
                 await dynamoDb.SaveAsync(table, arg.ConsistentRead);
 
                 var projectRetrieved =
-                    await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.Project, CancellationToken.None);
+                    await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.Project,
+                        CancellationToken.None);
 
                 var readonlyProject = _mapTo.MapTo(projectRetrieved);
 
-                return new PersistNewProjectServiceResult(readonlyProject);
+                return new PersistNewProjectResult(readonlyProject);
             }
         }
     }

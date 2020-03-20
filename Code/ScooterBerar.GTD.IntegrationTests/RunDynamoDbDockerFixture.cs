@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Text;
 using Autofac;
-using Autofac.Builder;
 using Microsoft.Extensions.Logging;
 using ScooterBear.GTD.Application;
 using ScooterBear.GTD.Application.UserProfile;
@@ -19,24 +18,27 @@ namespace ScooterBear.GTD.IntegrationTests
     [CollectionDefinition("DynamoDbDockerTests")]
     public class RunDynamoDbDockerCollection : ICollectionFixture<RunDynamoDbDockerFixture>
     {
-
     }
 
     public class RunDynamoDbDockerFixture : IDisposable
     {
-        public IContainer Container { get; }
         public RunDynamoDbDockerFixture()
         {
             //Bootstrap Autofac
-            this.Container = SetupAutofac().Build(ContainerBuildOptions.None);
+            Container = SetupAutofac().Build();
 
             //Bootstrap Docker
-            RunCommandLine("docker", "build -t jayroblack/dynamodb-local:1.1 -f ../../../../DynamoDbDocker/DockerFile ../../../../DynamoDbDocker");
+            RunCommandLine("docker",
+                "build -t jayroblack/dynamodb-local:1.1 -f ../../../../DynamoDbDocker/DockerFile ../../../../DynamoDbDocker");
             RunCommandLine("docker", "run -d --rm --name integration-test -p 8000:8000 jayroblack/dynamodb-local:1.1");
-            
-            if( !WaitForContainerToBeOnline())
+
+            if (!WaitForContainerToBeOnline())
                 Assert.False(true, "Failed to start up and query DynamoDb Local.");
         }
+
+        public IContainer Container { get; }
+
+        public FakedProfileFactory ProfileFactory { get; private set; }
 
         public void Dispose()
         {
@@ -84,7 +86,7 @@ namespace ScooterBear.GTD.IntegrationTests
                 {
                     FileName = "aws",
                     Arguments =
-                        $"dynamodb list-tables --endpoint-url http://localhost:8000"
+                        "dynamodb list-tables --endpoint-url http://localhost:8000"
                 };
 
                 var process = Process.Start(processStartInfo);
@@ -100,7 +102,7 @@ namespace ScooterBear.GTD.IntegrationTests
 
         public ContainerBuilder SetupAutofac()
         {
-            var builder = new Autofac.ContainerBuilder();
+            var builder = new ContainerBuilder();
             builder.RegisterModule<ApplicationAutofacModule>();
             builder.RegisterModule<DynamoDbAutofacModule>();
             builder.RegisterModule<PatternsAutofacModule>();
@@ -125,17 +127,15 @@ namespace ScooterBear.GTD.IntegrationTests
             builder.RegisterType<MailTrap>().As<IMailTrap>().SingleInstance();
             builder.RegisterType<DynamoDBIntegrationFactory>().As<IDynamoDBFactory>();
 
-            this.ProfileFactory = new FakedProfileFactory();
-            builder.RegisterInstance(this.ProfileFactory).As<IProfileFactory>().SingleInstance();
+            ProfileFactory = new FakedProfileFactory();
+            builder.RegisterInstance(ProfileFactory).As<IProfileFactory>().SingleInstance();
 
             return builder;
         }
 
-        public FakedProfileFactory ProfileFactory { get; private set; }
-
         public IUser GenerateUser()
         {
-            var id = this.Container.Resolve<ICreateIdsStrategy>().NewId();
+            var id = Container.Resolve<ICreateIdsStrategy>().NewId();
             var name = "James";
             var last = "Rhodes";
             var email = $"jayroblack+{id}@here.com";

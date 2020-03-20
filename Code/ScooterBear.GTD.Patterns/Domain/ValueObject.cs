@@ -17,8 +17,7 @@ namespace ScooterBear.GTD.Patterns.Domain
             if (other == null)
                 return false;
 
-            return GetAttributesToIncludeInEqualityCheck().
-                SequenceEqual(other.GetAttributesToIncludeInEqualityCheck());
+            return GetAttributesToIncludeInEqualityCheck().SequenceEqual(other.GetAttributesToIncludeInEqualityCheck());
         }
 
         public static bool operator ==(ValueObject<T> left, ValueObject<T> right)
@@ -33,8 +32,8 @@ namespace ScooterBear.GTD.Patterns.Domain
 
         public override int GetHashCode()
         {
-            int hash = 17;
-            foreach (var obj in this.GetAttributesToIncludeInEqualityCheck())
+            var hash = 17;
+            foreach (var obj in GetAttributesToIncludeInEqualityCheck())
                 hash = hash * 31 + (obj == null ? 0 : obj.GetHashCode());
             return hash;
         }

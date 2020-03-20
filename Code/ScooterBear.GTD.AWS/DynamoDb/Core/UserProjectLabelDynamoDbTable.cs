@@ -23,8 +23,10 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
         public string AuthId { get; set; }
         public bool IsAccountEnabled { get; set; }
         public string Name { get; set; }
+
         [DynamoDBGlobalSecondaryIndexHashKey("ProjectLabelByUserId")]
         public string UserId { get; set; }
+
         public DateTime DateCreated { get; set; }
         public int Count { get; set; }
         public bool IsDeleted { get; set; }

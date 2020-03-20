@@ -13,7 +13,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
     {
         DynamoDb Create();
     }
-    
+
     public class DynamoDBFactory : IDynamoDBFactory
     {
         private readonly ILogger<DynamoDb> _logger;
@@ -25,8 +25,8 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
 
         public DynamoDb Create()
         {
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-            DynamoDBContext context = new DynamoDBContext(client);
+            var client = new AmazonDynamoDBClient();
+            var context = new DynamoDBContext(client);
             return new DynamoDb(client, context, _logger);
         }
     }
@@ -37,7 +37,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
         private readonly DynamoDBContext _context;
         private readonly ILogger<DynamoDb> _logger;
 
-        public DynamoDb(AmazonDynamoDBClient client, 
+        public DynamoDb(AmazonDynamoDBClient client,
             DynamoDBContext context, ILogger<DynamoDb> logger)
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
@@ -45,7 +45,14 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task SaveAsync<T>(T value, bool consistentRead = false, CancellationToken cancellationToken = default(CancellationToken))
+        public void Dispose()
+        {
+            _context.Dispose();
+            _client.Dispose();
+        }
+
+        public async Task SaveAsync<T>(T value, bool consistentRead = false,
+            CancellationToken cancellationToken = default)
             where T : IDynamoDbTable
         {
             try
@@ -53,19 +60,22 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
                 //TODO:  Come back we should have an exponential back off and retry
                 //TODO:  Fall and surface back to the user!!!
                 //RESEARCH:  Does the .Net Framework use Polly or do I have to implement it?
-                await _context.SaveAsync(value, new DynamoDBOperationConfig(){ConsistentRead = consistentRead }, cancellationToken);
+                await _context.SaveAsync(value, new DynamoDBOperationConfig {ConsistentRead = consistentRead},
+                    cancellationToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
                 throw;
-            };
+            }
+
+            ;
         }
 
         public async Task<T> LoadAsync<T>(
             object hashKey,
             object rangeKey,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
             where T : IDynamoDbTable
         {
             try
@@ -79,11 +89,14 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
             {
                 _logger.LogError(new EventId(301), ex, "Error saving to Dynamo.");
                 throw;
-            };
+            }
+
+            ;
         }
 
         public AsyncSearch<T> QueryAsync<T>(
-            object hashKey, QueryOperator op, IEnumerable<object> values, DynamoDBOperationConfig operationConfig = null)
+            object hashKey, QueryOperator op, IEnumerable<object> values,
+            DynamoDBOperationConfig operationConfig = null)
         {
             return _context.QueryAsync<T>(hashKey, op, values, operationConfig);
         }
@@ -92,11 +105,6 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Core
             object hashKey, DynamoDBOperationConfig operationConfig = null)
         {
             return _context.QueryAsync<T>(hashKey, operationConfig);
-        }
-        public void Dispose()
-        {
-            _context.Dispose();
-            _client.Dispose();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace ScooterBear.GTD.Patterns
+﻿namespace ScooterBear.GTD.Patterns
 {
     public interface ICreateIdsStrategy
     {

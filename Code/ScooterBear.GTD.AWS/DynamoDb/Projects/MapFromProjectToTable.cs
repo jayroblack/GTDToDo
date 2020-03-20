@@ -4,12 +4,11 @@ using ScooterBear.GTD.Patterns;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
-    
     public class MapFromProjectToTable : IMapFrom<UserProjectLabelDynamoDbTable, Project>
     {
         public UserProjectLabelDynamoDbTable MapFrom(Project input)
         {
-            var table = new UserProjectLabelDynamoDbTable()
+            var table = new UserProjectLabelDynamoDbTable
             {
                 ID = input.Id,
                 Name = input.Name,
@@ -19,7 +18,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
                 DateCreated = input.DateCreated,
                 IsDeleted = input.IsDeleted,
                 CountOverDue = input.CountOverDue,
-                VersionNumber = input.VersionNumber,
+                VersionNumber = input.VersionNumber
             };
 
             return table;

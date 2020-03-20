@@ -5,16 +5,8 @@ namespace ScooterBear.GTD.Application.Services.Email
 {
     public class SendEmailCommand : ICommand
     {
-        public string FromEmail { get; }
-        public string ToEmail { get; }
-        public string Subject { get; }
-        public string TextBody { get; }
-        public string HtmlBody { get; }
-        public string ConfigSetName { get; }
-        public object Data { get; }
-        public EmailType EmailType { get; }
-
-        public SendEmailCommand(string fromEmail, string toEmail, string subject, string textBody, string htmlBody, string configSetName, object data, EmailType emailType)
+        public SendEmailCommand(string fromEmail, string toEmail, string subject, string textBody, string htmlBody,
+            string configSetName, object data, EmailType emailType)
         {
             if (string.IsNullOrEmpty(fromEmail))
                 throw new ArgumentException($"{nameof(fromEmail)} is required.");
@@ -36,6 +28,15 @@ namespace ScooterBear.GTD.Application.Services.Email
             Data = data ?? throw new ArgumentNullException(nameof(data));
             EmailType = emailType;
         }
+
+        public string FromEmail { get; }
+        public string ToEmail { get; }
+        public string Subject { get; }
+        public string TextBody { get; }
+        public string HtmlBody { get; }
+        public string ConfigSetName { get; }
+        public object Data { get; }
+        public EmailType EmailType { get; }
     }
 
     public enum EmailType

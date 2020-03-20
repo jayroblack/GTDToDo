@@ -7,32 +7,34 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Users
 {
-    public class GetOrCreateUserService : IServiceOpt<GetOrCreateUserServiceArgs, GetOrCreateUserServiceResult>
+    public class GetOrCreateUserService : IServiceOpt<GetOrCreateUserArg, GetOrCreateUserResult>
     {
-        private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
-        private readonly IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome> _createUserService;
+        private readonly IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>
+            _createUserService;
 
-        public GetOrCreateUserService(IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser,
-            IServiceOptOutcomes<CreateUserServiceArg,
-                CreateUserServiceResult, CreateUserServiceOutcome> createUserService)
+        private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
+
+        public GetOrCreateUserService(IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
+            IServiceOptOutcomes<CreateUserArg,
+                CreateUserResult, CreateUserServiceOutcome> createUserService)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));
             _createUserService = createUserService ?? throw new ArgumentNullException(nameof(createUserService));
         }
 
-        public async Task<Option<GetOrCreateUserServiceResult>> Run(GetOrCreateUserServiceArgs arg)
+        public async Task<Option<GetOrCreateUserResult>> Run(GetOrCreateUserArg arg)
         {
-            var resultOption = await _getUser.Run(new GetUserQueryArgs(arg.Id));
+            var resultOption = await _getUser.Run(new GetUserArg(arg.Id));
 
-            return await resultOption.MatchAsync(async some => Option.Some(new GetOrCreateUserServiceResult(some.User)),
+            return await resultOption.MatchAsync(async some => Option.Some(new GetOrCreateUserResult(some.User)),
                 async () =>
                 {
                     var createOptionResult =
-                        await _createUserService.Run(new CreateUserServiceArg(arg.Id, arg.FirstName, arg.LastName, arg.Email));
+                        await _createUserService.Run(new CreateUserArg(arg.Id, arg.FirstName, arg.LastName, arg.Email));
 
-                    return createOptionResult.Match<Option<GetOrCreateUserServiceResult>>(
-                        innerSome => Option.Some(new GetOrCreateUserServiceResult(innerSome.User)),
-                        outcome => Option.None<GetOrCreateUserServiceResult>());
+                    return createOptionResult.Match(
+                        innerSome => Option.Some(new GetOrCreateUserResult(innerSome.User)),
+                        outcome => Option.None<GetOrCreateUserResult>());
                 });
         }
     }

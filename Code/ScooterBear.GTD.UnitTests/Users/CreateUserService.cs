@@ -16,78 +16,77 @@ namespace ScooterBear.GTD.UnitTests.Users
 {
     public class AsACreateUserServiceI : IClassFixture<CreateUserFixture>
     {
-        public CreateUserFixture CreateUserFixture { get; }
-
         public AsACreateUserServiceI(CreateUserFixture createUserFixture)
         {
             CreateUserFixture = createUserFixture ?? throw new ArgumentNullException(nameof(createUserFixture));
         }
 
+        public CreateUserFixture CreateUserFixture { get; }
+
         [Fact]
         public async void ShouldReturnUserExistsIfUserFound()
         {
-            this.CreateUserFixture.GetUserService.Setup(x => 
-                    x.Run(It.IsAny<GetUserQueryArgs>()))
-                    .Returns(Task.FromResult(Option.Some(new GetUserQueryResult(this.CreateUserFixture.User))));
+            CreateUserFixture.GetUserService.Setup(x =>
+                    x.Run(It.IsAny<GetUserArg>()))
+                .Returns(Task.FromResult(Option.Some(new GetUserQueryResult(CreateUserFixture.User))));
 
             var result = await
-                this.CreateUserFixture.CreateUserService.Run(new CreateUserServiceArg("Id", "FirstName", "LastName",
+                CreateUserFixture.CreateUserService.Run(new CreateUserArg("Id", "FirstName", "LastName",
                     "Email"));
 
             result.HasValue.Should().BeFalse("A user exists");
-            result.MatchNone((outcome => outcome.Should().Be(CreateUserServiceOutcome.UserExists)));
-            result.MatchSome(some=> Assert.False(true));
+            result.MatchNone(outcome => outcome.Should().Be(CreateUserServiceOutcome.UserExists));
+            result.MatchSome(some => Assert.False(true));
         }
 
         [Fact]
         public async void ShouldSaveUserIfNotFoundAndReturnNewUser()
         {
-            this.CreateUserFixture.GetUserService.Setup(x => 
-                    x.Run(It.IsAny<GetUserQueryArgs>()))
-                    .Returns(Task.FromResult(Option.None<GetUserQueryResult>()));
+            CreateUserFixture.GetUserService.Setup(x =>
+                    x.Run(It.IsAny<GetUserArg>()))
+                .Returns(Task.FromResult(Option.None<GetUserQueryResult>()));
 
-            this.CreateUserFixture.PersistNewUserService.Setup(x =>
-                    x.Run(It.IsAny<PersistNewUserServiceArgs>()))
-                .Returns(Task.FromResult(new PersistNewUserServiceResult(this.CreateUserFixture.User)));
+            CreateUserFixture.PersistNewUserService.Setup(x =>
+                    x.Run(It.IsAny<PersistNewUserArgs>()))
+                .Returns(Task.FromResult(new PersistNewUserResult(CreateUserFixture.User)));
 
-            this.CreateUserFixture.IKnowTheDate.Setup(x => x.UtcNow()).Returns(DateTime.UtcNow);
+            CreateUserFixture.IKnowTheDate.Setup(x => x.UtcNow()).Returns(DateTime.UtcNow);
 
             var result = await
-                this.CreateUserFixture.CreateUserService.Run(new CreateUserServiceArg("Id", "FirstName", "LastName",
+                CreateUserFixture.CreateUserService.Run(new CreateUserArg("Id", "FirstName", "LastName",
                     "Email"));
 
             result.HasValue.Should().BeTrue("The persist operation succeeded and we fetched the fresh version.");
-            result.MatchSome(some=> Assert.True(true));
+            result.MatchSome(some => Assert.True(true));
             result.MatchNone(outcome => Assert.True(false));
         }
     }
 
     public class CreateUserFixture : IDisposable
     {
-        public Mock<IKnowTheDate> IKnowTheDate;
         public Mock<ICreateIdsStrategy> CreateIdsStrategy;
-        public Mock<IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>> PersistNewUserService;
-        public Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>> GetUserService;
-        public Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>> NewUserCreated;
         public CreateUserService CreateUserService;
+        public Mock<IQueryHandler<GetUserArg, GetUserQueryResult>> GetUserService;
+        public Mock<IKnowTheDate> IKnowTheDate;
+        public Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>> NewUserCreated;
+        public Mock<IService<PersistNewUserArgs, PersistNewUserResult>> PersistNewUserService;
         public User User;
 
         public CreateUserFixture()
         {
-            this.IKnowTheDate = new Mock<IKnowTheDate>();
-            this.CreateIdsStrategy = new Mock<ICreateIdsStrategy>();
-            this.PersistNewUserService =
-                new Mock<IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>>();
-            this.GetUserService = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
-            this.NewUserCreated = new Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>>();
-            this.CreateUserService = new CreateUserService(IKnowTheDate.Object, CreateIdsStrategy.Object,
-                PersistNewUserService.Object, GetUserService.Object, this.NewUserCreated.Object);
-            this.User = new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", 0, DateTime.Now);
+            IKnowTheDate = new Mock<IKnowTheDate>();
+            CreateIdsStrategy = new Mock<ICreateIdsStrategy>();
+            PersistNewUserService =
+                new Mock<IService<PersistNewUserArgs, PersistNewUserResult>>();
+            GetUserService = new Mock<IQueryHandler<GetUserArg, GetUserQueryResult>>();
+            NewUserCreated = new Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>>();
+            CreateUserService = new CreateUserService(IKnowTheDate.Object, CreateIdsStrategy.Object,
+                PersistNewUserService.Object, GetUserService.Object, NewUserCreated.Object);
+            User = new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", 0, DateTime.Now);
         }
 
         public void Dispose()
         {
-
         }
     }
 }

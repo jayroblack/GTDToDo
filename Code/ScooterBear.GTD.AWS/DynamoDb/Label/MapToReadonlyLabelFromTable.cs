@@ -8,7 +8,8 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Label
     {
         public ReadonlyLabel MapTo(UserProjectLabelDynamoDbTable input)
         {
-            return new ReadonlyLabel(input.ID, input.UserId, input.Name, input.Count, input.IsDeleted, input.CountOverDue, input.VersionNumber, input.DateCreated);
+            return new ReadonlyLabel(input.ID, input.UserId, input.Name, input.Count, input.IsDeleted,
+                input.CountOverDue, input.VersionNumber, input.DateCreated);
         }
     }
 }

@@ -12,42 +12,42 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
     [Collection("DynamoDbDockerTests")]
     public class AsThePersistUpdateProjectServiceI
     {
-        private readonly RunDynamoDbDockerFixture _fixture;
-
         public AsThePersistUpdateProjectServiceI(RunDynamoDbDockerFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
+
+        private readonly RunDynamoDbDockerFixture _fixture;
 
         [Fact]
         public async void ShouldReturnConflictIfStaleRead()
         {
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            
+
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
+                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var projectId = Guid.NewGuid().ToString();
             var optionResult = await
-                createUserProject.Run(new CreateNewUserProjectServiceArg(projectId, "Project"));
+                createUserProject.Run(new CreateNewProjectArg(projectId, "Project"));
 
             var persistService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<PersistUpdateProjectServiceArgs, PersistUpdateProjectServiceResult,
+                .Resolve<IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
                     PersistUpdateProjectOutcome>>();
 
             optionResult.Match(async some =>
             {
                 var project = some.Project;
-                var fudgedVersionProject = new Project(project.Id, project.UserId, project.Name, project.Count, project.CountOverDue, DateTime.UtcNow, 100, project.IsDeleted);
+                var fudgedVersionProject = new Project(project.Id, project.UserId, project.Name, project.Count,
+                    project.CountOverDue, DateTime.UtcNow, 100, project.IsDeleted);
 
                 var persistOptionResult =
-                    await persistService.Run(new PersistUpdateProjectServiceArgs(fudgedVersionProject));
+                    await persistService.Run(new PersistUpdateProjectArgs(fudgedVersionProject));
 
                 persistOptionResult.Match(some => Assert.False(true, "Should Fail to persist."),
                     outcome => outcome.Should().Be(PersistUpdateProjectOutcome.Conflict));
-
             }, outcomes => Assert.True(false, "Failed to Create Project."));
         }
     }

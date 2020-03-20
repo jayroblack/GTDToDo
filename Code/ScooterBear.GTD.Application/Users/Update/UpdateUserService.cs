@@ -8,29 +8,30 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Users.Update
 {
-    public class UpdateUserService : IServiceOptOutcomes<UpdateUserServiceArgs,
-        UpdateUserServiceResult, UpdateUserService.UpdateUserOutcome>
+    public enum UpdateUserOutcome
     {
-        private readonly IProfileFactory _profileFactory;
+        DoesNotExist,
+        VersionConflict,
+        UnprocessableEntity,
+        NotAuthorized
+    }
+
+    public class UpdateUserService : IServiceOptOutcomes<UpdateUserArg,
+        UpdateUserResult, UpdateUserOutcome>
+    {
+        private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
         private readonly ILogger _logger;
-        private readonly IQueryHandler<GetUserQueryArgs, GetUserQueryResult> _getUser;
 
         private readonly
             IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> _persistUpdatedUser;
 
-        public enum UpdateUserOutcome
-        {
-            DoesNotExist,
-            VersionConflict,
-            UnprocessableEntity,
-            NotAuthorized
-        }
+        private readonly IProfileFactory _profileFactory;
 
         public UpdateUserService(
             IProfileFactory profileFactory,
             ILogger logger,
-            IQueryHandler<GetUserQueryArgs, GetUserQueryResult> getUser,
+            IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
             IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> persistUpdatedUser)
         {
@@ -40,11 +41,11 @@ namespace ScooterBear.GTD.Application.Users.Update
             _persistUpdatedUser = persistUpdatedUser ?? throw new ArgumentNullException(nameof(persistUpdatedUser));
         }
 
-        public async Task<Option<UpdateUserServiceResult, UpdateUserOutcome>> Run(UpdateUserServiceArgs arg)
+        public async Task<Option<UpdateUserResult, UpdateUserOutcome>> Run(UpdateUserArg arg)
         {
-            var userExistsOption = await _getUser.Run(new GetUserQueryArgs(arg.ID));
+            var userExistsOption = await _getUser.Run(new GetUserArg(arg.ID));
             if (!userExistsOption.HasValue)
-                return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
+                return Option.None<UpdateUserResult, UpdateUserOutcome>(UpdateUserOutcome
                     .DoesNotExist);
 
             User user = null;
@@ -57,8 +58,8 @@ namespace ScooterBear.GTD.Application.Users.Update
             });
 
             var profile = _profileFactory.GetCurrentProfile();
-            if( user.ID != profile.UserId)
-                return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
+            if (user.ID != profile.UserId)
+                return Option.None<UpdateUserResult, UpdateUserOutcome>(UpdateUserOutcome
                     .NotAuthorized);
 
             try
@@ -73,16 +74,16 @@ namespace ScooterBear.GTD.Application.Users.Update
             catch (ArgumentException e)
             {
                 _logger.Log(LogLevel.Error, e.Message);
-                return Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
+                return Option.None<UpdateUserResult, UpdateUserOutcome>(UpdateUserOutcome
                     .UnprocessableEntity);
             }
 
             var updatedExistUserOption = await _persistUpdatedUser.Run(new PersistUpdatedUserServiceArgs(user));
 
             return updatedExistUserOption.Match(
-                some => Option.Some<UpdateUserServiceResult, UpdateUserOutcome>(
-                        new UpdateUserServiceResult(some.UpdatedUser)),
-                none => Option.None<UpdateUserServiceResult, UpdateUserOutcome>(UpdateUserOutcome
+                some => Option.Some<UpdateUserResult, UpdateUserOutcome>(
+                    new UpdateUserResult(some.UpdatedUser)),
+                none => Option.None<UpdateUserResult, UpdateUserOutcome>(UpdateUserOutcome
                     .VersionConflict));
         }
     }

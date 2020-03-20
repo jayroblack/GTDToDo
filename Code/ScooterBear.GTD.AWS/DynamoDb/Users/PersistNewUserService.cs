@@ -9,12 +9,12 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Users
 {
-    public class PersistNewUserService : IService<PersistNewUserServiceArgs, PersistNewUserServiceResult>
+    public class PersistNewUserService : IService<PersistNewUserArgs, PersistNewUserResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapFrom<UserProjectLabelDynamoDbTable, NewUser> _mapFrom;
         private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadonlyUser> _mapTo;
-        
+
         public PersistNewUserService(IDynamoDBFactory dynamoDbFactory,
             IMapFrom<UserProjectLabelDynamoDbTable, NewUser> mapFrom,
             IMapTo<UserProjectLabelDynamoDbTable, ReadonlyUser> mapTo)
@@ -24,7 +24,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<PersistNewUserServiceResult> Run(PersistNewUserServiceArgs arg)
+        public async Task<PersistNewUserResult> Run(PersistNewUserArgs arg)
         {
             var table = _mapFrom.MapFrom(arg.NewUser);
 
@@ -32,10 +32,11 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
             {
                 await dynamoDb.SaveAsync(table, arg.ConsistentRead);
                 var userRetrieved =
-                    await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.User, CancellationToken.None);
+                    await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.User,
+                        CancellationToken.None);
 
                 var readonlyUser = _mapTo.MapTo(userRetrieved);
-                return new PersistNewUserServiceResult(readonlyUser);
+                return new PersistNewUserResult(readonlyUser);
             }
         }
     }

@@ -8,7 +8,8 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
         public ReadonlyUser MapTo(UserProjectLabelDynamoDbTable input)
         {
             return new ReadonlyUser(input.ID, input.FirstName, input.LastName, input.Email,
-                input.BillingId, input.AuthId, input.IsAccountEnabled, input.VersionNumber.GetValueOrDefault(), input.DateCreated);
+                input.BillingId, input.AuthId, input.IsAccountEnabled, input.VersionNumber.GetValueOrDefault(),
+                input.DateCreated);
         }
     }
 }

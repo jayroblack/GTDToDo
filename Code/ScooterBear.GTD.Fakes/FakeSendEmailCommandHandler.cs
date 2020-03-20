@@ -13,6 +13,7 @@ namespace ScooterBear.GTD.Fakes
         {
             _mailTrap = mailTrap ?? throw new ArgumentNullException(nameof(mailTrap));
         }
+
         public async Task Run(SendEmailCommand command)
         {
             _mailTrap.Add(command);

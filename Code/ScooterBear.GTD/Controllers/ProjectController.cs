@@ -14,30 +14,41 @@ namespace ScooterBear.GTD.Controllers
     [Authorize]
     public class ProjectController : Controller
     {
-        private readonly IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> _getProjects;
-        private readonly IProfileFactory _profileFactory;
         private readonly ICreateIdsStrategy _createIdsStrategy;
-        private readonly IQueryHandler<ProjectQuery, ProjectQueryResult> _projectQuery;
-        private readonly IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> _createNewProjectService;
-        private readonly IServiceOptOutcomes<UpdateUserProjectServiceArg, UpdateUserProjectServiceResult, UpdateProjectOutcome> _updatProjectService;
-        private readonly IServiceOptOutcomes<DeleteUserProjectServiceArgs, DeleteUserProjectServiceResult, DeleteUserProjectOutcome> _deleteProjectService;
+
+        private readonly IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
+            _createNewProjectService;
+
+        private readonly IServiceOptOutcomes<DeleteProjectArgs, DeleteProjectResult, DeleteUserProjectOutcome>
+            _deleteProjectService;
+
+        private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
+        private readonly IProfileFactory _profileFactory;
+        private readonly IQueryHandler<GetProject, GetProjectResult> _projectQuery;
+
+        private readonly IServiceOptOutcomes<UpdateProjectArg, UpdateProjectResult, UpdateProjectOutcome>
+            _updatProjectService;
 
         public ProjectController(IProfileFactory profileFactory,
             ICreateIdsStrategy createIdsStrategy,
-            IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult> getProjects,
-            IQueryHandler<ProjectQuery, ProjectQueryResult> projectQuery,
-            IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> createNewProjectService,
-            IServiceOptOutcomes<UpdateUserProjectServiceArg,
-                UpdateUserProjectServiceResult, UpdateProjectOutcome> updateProjectService,
-            IServiceOptOutcomes<DeleteUserProjectServiceArgs, DeleteUserProjectServiceResult, DeleteUserProjectOutcome> deleteProjectService)
+            IQueryHandler<GetProjects, GetProjectsResult> getProjects,
+            IQueryHandler<GetProject, GetProjectResult> projectQuery,
+            IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
+                createNewProjectService,
+            IServiceOptOutcomes<UpdateProjectArg,
+                UpdateProjectResult, UpdateProjectOutcome> updateProjectService,
+            IServiceOptOutcomes<DeleteProjectArgs, DeleteProjectResult, DeleteUserProjectOutcome> deleteProjectService)
         {
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
             _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));
             _projectQuery = projectQuery ?? throw new ArgumentNullException(nameof(projectQuery));
-            _createNewProjectService = createNewProjectService ?? throw new ArgumentNullException(nameof(createNewProjectService));
-            _updatProjectService = updateProjectService ?? throw new ArgumentNullException(nameof(updateProjectService));
-            _deleteProjectService = deleteProjectService ?? throw new ArgumentNullException(nameof(deleteProjectService));
+            _createNewProjectService = createNewProjectService ??
+                                       throw new ArgumentNullException(nameof(createNewProjectService));
+            _updatProjectService =
+                updateProjectService ?? throw new ArgumentNullException(nameof(updateProjectService));
+            _deleteProjectService =
+                deleteProjectService ?? throw new ArgumentNullException(nameof(deleteProjectService));
         }
 
         [HttpGet]
@@ -45,38 +56,33 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Get()
         {
             var profile = _profileFactory.GetCurrentProfile();
-            var projectResultOption = await _getProjects.Run(new GetUserProjectsQuery(profile.UserId));
-            return projectResultOption.Match(some => Json(some.UserProjects),
+            var projectResultOption = await _getProjects.Run(new GetProjects(profile.UserId));
+            return projectResultOption.Match(some => Json(some),
                 () => Json(new List<IProject>()));
         }
 
         [HttpGet]
         [Route("/project/{projectId}")]
-        public async Task<IActionResult> Get([FromRoute]string projectId)
+        public async Task<IActionResult> Get([FromRoute] string projectId)
         {
             var resultOption =
-                await _projectQuery.Run(new ProjectQuery(projectId));
+                await _projectQuery.Run(new GetProject(projectId));
 
-            return resultOption.Match<IActionResult>(some => Json(some.UserProject), 
+            return resultOption.Match<IActionResult>(some => Json(some.UserProject),
                 NotFound);
-        }
-
-        public class NewProjectValues
-        {
-            [JsonProperty("projectName")]
-            public string NewProjectName { get; set; }  
         }
 
         [HttpPost]
         [Route("/project")]
-        public async Task<IActionResult> Post([FromBody]NewProjectValues data)
+        public async Task<IActionResult> Post([FromBody] NewProjectValues data)
         {
             var id = _createIdsStrategy.NewId();
             var profile = _profileFactory.GetCurrentProfile();
-            var optionResult = 
-                await _createNewProjectService.Run(new CreateNewUserProjectServiceArg(id, data.NewProjectName));
+            var optionResult =
+                await _createNewProjectService.Run(new CreateNewProjectArg(id, data.NewProjectName));
 
-            return optionResult.Match<IActionResult>(some => Json(some.Project), outcomes => UnprocessableEntity(outcomes.ToString()));
+            return optionResult.Match<IActionResult>(some => Json(some.Project),
+                outcomes => UnprocessableEntity(outcomes.ToString()));
         }
 
         [HttpPut]
@@ -84,7 +90,7 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Put([FromRoute] string projectId, [FromBody] MutableProject projectItem)
         {
             var optionResult = await
-                _updatProjectService.Run(new UpdateUserProjectServiceArg(projectId, projectItem.Name, projectItem.Count,
+                _updatProjectService.Run(new UpdateProjectArg(projectId, projectItem.Name, projectItem.Count,
                     projectItem.IsDeleted, projectItem.CountOverdue, projectItem.VersionNumber));
 
             return optionResult.Match<IActionResult>(
@@ -106,10 +112,10 @@ namespace ScooterBear.GTD.Controllers
 
         [HttpDelete]
         [Route("/project/{projectId}")]
-        public async Task<IActionResult> Delete([FromRoute]string projectId)
+        public async Task<IActionResult> Delete([FromRoute] string projectId)
         {
             var optionResult = await
-                _deleteProjectService.Run(new DeleteUserProjectServiceArgs(projectId));
+                _deleteProjectService.Run(new DeleteProjectArgs(projectId));
 
             return optionResult.Match<IActionResult>(
                 some => Ok(),
@@ -127,19 +133,19 @@ namespace ScooterBear.GTD.Controllers
                     return Conflict(outcome);
                 });
         }
+
+        public class NewProjectValues
+        {
+            [JsonProperty("projectName")] public string NewProjectName { get; set; }
+        }
     }
 
     public class MutableProject
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-        [JsonProperty("count")]
-        public int Count { get; set; }
-        [JsonProperty("countOverdue")]
-        public int CountOverdue { get; set; }
-        [JsonProperty("isDeleted")]
-        public bool IsDeleted { get; set; }
-        [JsonProperty("versionNumber")]
-        public int VersionNumber { get; set; }
+        [JsonProperty("name")] public string Name { get; set; }
+        [JsonProperty("count")] public int Count { get; set; }
+        [JsonProperty("countOverdue")] public int CountOverdue { get; set; }
+        [JsonProperty("isDeleted")] public bool IsDeleted { get; set; }
+        [JsonProperty("versionNumber")] public int VersionNumber { get; set; }
     }
 }

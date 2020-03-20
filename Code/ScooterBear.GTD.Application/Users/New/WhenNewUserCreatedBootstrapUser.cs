@@ -11,18 +11,22 @@ namespace ScooterBear.GTD.Application.Users.New
     public class WhenNewUserCreatedBootstrapUser : IDomainEventHandlerAsync<NewUserCreatedEvent>
     {
         private readonly ICreateIdsStrategy _createIdsStrategy;
-        private readonly IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> _createInboxProject;
+
+        private readonly IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
+            _createInboxProject;
 
         public WhenNewUserCreatedBootstrapUser(
             ICreateIdsStrategy createIdsStrategy,
-            IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult, CreateUserProjectOutcomes> createInboxProject)
+            IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
+                createInboxProject)
         {
             _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));
             _createInboxProject = createInboxProject ?? throw new ArgumentNullException(nameof(createInboxProject));
         }
+
         public async Task HandleAsync(NewUserCreatedEvent domainEvent, CancellationToken cancellationToken)
         {
-            var createNewProjectService = new CreateNewUserProjectServiceArg(_createIdsStrategy.NewId(), "Inbox", true);
+            var createNewProjectService = new CreateNewProjectArg(_createIdsStrategy.NewId(), "Inbox", true);
             await _createInboxProject.Run(createNewProjectService);
         }
     }

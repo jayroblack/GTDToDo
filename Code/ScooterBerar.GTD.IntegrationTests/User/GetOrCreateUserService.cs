@@ -12,12 +12,12 @@ namespace ScooterBear.GTD.IntegrationTests.User
     [Collection("DynamoDbDockerTests")]
     public class AsAGetOrCreateUserServiceI
     {
-        private readonly RunDynamoDbDockerFixture _fixture;
-
         public AsAGetOrCreateUserServiceI(RunDynamoDbDockerFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
+
+        private readonly RunDynamoDbDockerFixture _fixture;
 
         [Fact]
         public async void ShouldCreateUserIfDoesNotExist()
@@ -28,28 +28,28 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var email = $"jayroblack+{id}@here.com";
 
 
-            var getUserQuery = _fixture.Container.Resolve<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
+            var getUserQuery = _fixture.Container.Resolve<IQueryHandler<GetUserArg, GetUserQueryResult>>();
 
-            var queryResult = await getUserQuery.Run(new GetUserQueryArgs(id));
+            var queryResult = await getUserQuery.Run(new GetUserArg(id));
             queryResult.Match(some => Assert.False(true), () => Assert.True(true));
 
             var getOrCreateUserService = _fixture.Container
-                .Resolve<IServiceOpt<GetOrCreateUserServiceArgs, GetOrCreateUserServiceResult>>();
+                .Resolve<IServiceOpt<GetOrCreateUserArg, GetOrCreateUserResult>>();
 
-            var resultOption = 
-                await getOrCreateUserService.Run(new GetOrCreateUserServiceArgs(id, name, last, email));
+            var resultOption =
+                await getOrCreateUserService.Run(new GetOrCreateUserArg(id, name, last, email));
 
             resultOption.Match(some =>
-            {
-                var user = some.User;
-                user.ID.Should().Be(id);
-                user.FirstName.Should().Be(name);
-                user.LastName.Should().Be(last);
-                user.Email.Should().Be(email);
-            }, 
+                {
+                    var user = some.User;
+                    user.ID.Should().Be(id);
+                    user.FirstName.Should().Be(name);
+                    user.LastName.Should().Be(last);
+                    user.Email.Should().Be(email);
+                },
                 () => Assert.False(true));
 
-            queryResult = await getUserQuery.Run(new GetUserQueryArgs(id));
+            queryResult = await getUserQuery.Run(new GetUserArg(id));
             queryResult.Match(some => Assert.True(true), () => Assert.False(true));
         }
 
@@ -61,17 +61,17 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var last = "Blah";
             var email = $"jayroblack+{id}@here.com";
 
-            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserServiceArg,
-                CreateUserServiceResult, CreateUserServiceOutcome>>();
+            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserArg,
+                CreateUserResult, CreateUserServiceOutcome>>();
 
-            var resultOption = await createUser.Run(new CreateUserServiceArg(id, name, last, email));
+            var resultOption = await createUser.Run(new CreateUserArg(id, name, last, email));
             resultOption.HasValue.Should().BeTrue();
 
             var getOrCreateUserService = _fixture.Container
-                .Resolve<IServiceOpt<GetOrCreateUserServiceArgs, GetOrCreateUserServiceResult>>();
+                .Resolve<IServiceOpt<GetOrCreateUserArg, GetOrCreateUserResult>>();
 
             var getOrCreateResultOption =
-                await getOrCreateUserService.Run(new GetOrCreateUserServiceArgs(id, name, last, email));
+                await getOrCreateUserService.Run(new GetOrCreateUserArg(id, name, last, email));
 
             getOrCreateResultOption.Match(some =>
                 {
@@ -82,7 +82,6 @@ namespace ScooterBear.GTD.IntegrationTests.User
                     user.Email.Should().Be(email);
                 },
                 () => Assert.False(true));
-
         }
     }
 }

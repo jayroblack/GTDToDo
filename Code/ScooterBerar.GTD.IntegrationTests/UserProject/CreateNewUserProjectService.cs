@@ -13,11 +13,59 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
     [Collection("DynamoDbDockerTests")]
     public class AsTheCreateNewUserProjectServiceI
     {
-        private readonly RunDynamoDbDockerFixture _fixture;
-
         public AsTheCreateNewUserProjectServiceI(RunDynamoDbDockerFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
+        }
+
+        private readonly RunDynamoDbDockerFixture _fixture;
+
+        [Fact]
+        public async void ShouldNotAllowANewProjectToBeCreatedWithAnExistingId()
+        {
+            var userId = Guid.NewGuid().ToString();
+            var createUserProject = _fixture.Container
+                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                    CreateUserProjectOutcomes>>();
+
+            var id = Guid.NewGuid().ToString();
+            var firstItem = new ProjectItem(id, "Project 1");
+            var secondItem = new ProjectItem(id, "Project 2");
+
+            var firstCreateOption = await
+                createUserProject.Run(new CreateNewProjectArg(firstItem.Id, firstItem.Name));
+
+            firstCreateOption.HasValue.Should().BeTrue();
+
+            var secondCreateOption =
+                await createUserProject.Run(new CreateNewProjectArg(secondItem.Id, secondItem.Name));
+
+            secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
+                outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectIdAlreadyExists));
+        }
+
+        [Fact]
+        public async void ShouldNotAllowProjectsWithMultipleNamesForSameUserId()
+        {
+            var userId = Guid.NewGuid().ToString();
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
+            var createUserProject = _fixture.Container
+                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                    CreateUserProjectOutcomes>>();
+
+            var firstItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
+            var secondItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
+
+            var firstCreateOption = await
+                createUserProject.Run(new CreateNewProjectArg(firstItem.Id, firstItem.Name));
+
+            firstCreateOption.HasValue.Should().BeTrue();
+
+            var secondCreateOption =
+                await createUserProject.Run(new CreateNewProjectArg(secondItem.Id, secondItem.Name));
+
+            secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
+                outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectNameAlreadyExists));
         }
 
         [Fact]
@@ -26,13 +74,13 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
+                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
-            var queryProject = _fixture.Container.Resolve<IQueryHandler<ProjectQuery, ProjectQueryResult>>();
+            var queryProject = _fixture.Container.Resolve<IQueryHandler<GetProject, GetProjectResult>>();
 
-            var userProjects  =
-                _fixture.Container.Resolve<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>>();
+            var userProjects =
+                _fixture.Container.Resolve<IQueryHandler<GetProjects, GetProjectsResult>>();
 
             var listOfProjectsToCreate = new List<ProjectItem>();
             listOfProjectsToCreate.Add(new ProjectItem(Guid.NewGuid().ToString(), "Project 1"));
@@ -42,7 +90,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             foreach (var item in listOfProjectsToCreate)
             {
                 var optionResult = await
-                    createUserProject.Run(new CreateNewUserProjectServiceArg(item.Id, item.Name));
+                    createUserProject.Run(new CreateNewProjectArg(item.Id, item.Name));
 
                 optionResult.HasValue.Should().BeTrue("Failed To Create Project");
             }
@@ -50,63 +98,15 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             foreach (var item in listOfProjectsToCreate)
             {
                 var optionQuery = await
-                    queryProject.Run(new ProjectQuery(item.Id));
+                    queryProject.Run(new GetProject(item.Id));
 
                 optionQuery.HasValue.Should().BeTrue();
             }
 
-            var userProjectsOption = await userProjects.Run(new GetUserProjectsQuery(userId));
+            var userProjectsOption = await userProjects.Run(new GetProjects(userId));
             userProjectsOption.HasValue.Should().BeTrue();
 
-            userProjectsOption.MatchSome(x => x.UserProjects.Projects.Count().Should().Be(3));
-        }
-
-        [Fact]
-        public async void ShouldNotAllowProjectsWithMultipleNamesForSameUserId()
-        {
-            var userId = Guid.NewGuid().ToString();
-            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
-                    CreateUserProjectOutcomes>>();
-
-            var firstItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
-            var secondItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
-
-            var firstCreateOption = await 
-                createUserProject.Run(new CreateNewUserProjectServiceArg(firstItem.Id, firstItem.Name));
-
-            firstCreateOption.HasValue.Should().BeTrue();
-
-            var secondCreateOption =
-                await createUserProject.Run(new CreateNewUserProjectServiceArg(secondItem.Id, secondItem.Name));
-
-            secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
-                outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectNameAlreadyExists));
-        }
-
-        [Fact]
-        public async void ShouldNotAllowANewProjectToBeCreatedWithAnExistingId()
-        {
-            var userId = Guid.NewGuid().ToString();
-            var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
-                    CreateUserProjectOutcomes>>();
-
-            var id = Guid.NewGuid().ToString();
-            var firstItem = new ProjectItem(id, "Project 1");
-            var secondItem = new ProjectItem(id, "Project 2");
-
-            var firstCreateOption = await
-                createUserProject.Run(new CreateNewUserProjectServiceArg(firstItem.Id, firstItem.Name));
-
-            firstCreateOption.HasValue.Should().BeTrue();
-
-            var secondCreateOption =
-                await createUserProject.Run(new CreateNewUserProjectServiceArg(secondItem.Id, secondItem.Name));
-
-            secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
-                outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectIdAlreadyExists));
+            userProjectsOption.MatchSome(x => x.Projects.Count().Should().Be(3));
         }
     }
 }

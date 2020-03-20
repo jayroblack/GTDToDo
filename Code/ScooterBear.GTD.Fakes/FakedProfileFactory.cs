@@ -7,14 +7,14 @@ namespace ScooterBear.GTD.Fakes
     {
         public Profile Profile { get; private set; }
 
-        public void SetUserProfile(Profile profile)
-        {
-            this.Profile = profile ?? throw new ArgumentNullException(nameof(profile));
-        }
-
         public Profile GetCurrentProfile()
         {
-            return this.Profile;
+            return Profile;
+        }
+
+        public void SetUserProfile(Profile profile)
+        {
+            Profile = profile ?? throw new ArgumentNullException(nameof(profile));
         }
     }
 }

@@ -21,7 +21,7 @@ namespace ScooterBear.GTD.UnitTests.Users
         [Fact]
         public void ShouldThrowWhenDateIsNotSet()
         {
-            Action toRun = () => new NewUser("Id", "FirstName", "LastName", "Email", default(DateTime));
+            Action toRun = () => new NewUser("Id", "FirstName", "LastName", "Email", default);
             toRun.Should().Throw<ArgumentException>();
         }
     }

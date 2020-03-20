@@ -29,7 +29,6 @@ namespace ScooterBear.GTD.Patterns.Domain
         public async Task HandleEventsAsync(TDomainEvent domainEvent, CancellationToken cancellationToken)
         {
             foreach (var myEvent in _eventHandlers)
-            {
                 try
                 {
                     await myEvent.HandleAsync(domainEvent, cancellationToken);
@@ -37,9 +36,8 @@ namespace ScooterBear.GTD.Patterns.Domain
                 catch (Exception ex)
                 {
                     _logger.Log(LogLevel.Error, new EventId(1234, "Error Handling Events"), domainEvent, ex,
-                        (handler, exception) => $"Error executing {myEvent.GetType().ToString()} {ex.Message}");
+                        (handler, exception) => $"Error executing {myEvent.GetType()} {ex.Message}");
                 }
-            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace ScooterBear.GTD.Fakes
 
     public class MailTrap : IMailTrap
     {
-        private Dictionary<string, List<SendEmailCommand>> _sentEmails;
+        private readonly Dictionary<string, List<SendEmailCommand>> _sentEmails;
 
         public MailTrap()
         {

@@ -1,13 +1,13 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.Json;
 using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace ScooterBear.GTD
 {
@@ -22,7 +22,9 @@ namespace ScooterBear.GTD
             else
             {
                 var lambdaEntry = new LambdaEntryPoint();
-                var functionHandler = (Func<APIGatewayProxyRequest, ILambdaContext, Task<APIGatewayProxyResponse>>)(lambdaEntry.FunctionHandlerAsync);
+                var functionHandler =
+                    (Func<APIGatewayProxyRequest, ILambdaContext, Task<APIGatewayProxyResponse>>) lambdaEntry
+                        .FunctionHandlerAsync;
                 using (var handlerWrapper = HandlerWrapper.GetHandlerWrapper(functionHandler, new JsonSerializer()))
                 using (var bootstrap = new LambdaBootstrap(handlerWrapper))
                 {
@@ -31,8 +33,9 @@ namespace ScooterBear.GTD
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -41,5 +44,6 @@ namespace ScooterBear.GTD
                         .UseIISIntegration()
                         .UseStartup<Startup>();
                 });
+        }
     }
 }

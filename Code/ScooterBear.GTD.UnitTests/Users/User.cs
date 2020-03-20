@@ -30,22 +30,6 @@ namespace ScooterBear.GTD.UnitTests.Users
             toRun.Should().NotThrow<ArgumentException>();
         }
 
-        [Fact]
-        public void ShouldThrowWhenVersionIsLessThan0()
-        {
-            Action toRun = () =>
-                new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", -1, DateTime.Now);
-            toRun.Should().Throw<ArgumentException>();
-        }
-
-        [Fact]
-        public void ShouldThrowIfDateHasNotBeenSet()
-        {
-            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", 0,
-                DateTime.MinValue);
-            toRun.Should().Throw<ArgumentException>();
-        }
-
         [Theory]
         [InlineData(false, true, false)]
         [InlineData(true, false, false)]
@@ -60,6 +44,22 @@ namespace ScooterBear.GTD.UnitTests.Users
                 DateTime.Now);
 
             user.IsAccountEnabled.GetValueOrDefault().Should().Be(userEnabled);
+        }
+
+        [Fact]
+        public void ShouldThrowIfDateHasNotBeenSet()
+        {
+            Action toRun = () => new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", 0,
+                DateTime.MinValue);
+            toRun.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void ShouldThrowWhenVersionIsLessThan0()
+        {
+            Action toRun = () =>
+                new User("Id", "FirstName", "LastName", "Email", "BillingId", "AuthId", -1, DateTime.Now);
+            toRun.Should().Throw<ArgumentException>();
         }
     }
 }

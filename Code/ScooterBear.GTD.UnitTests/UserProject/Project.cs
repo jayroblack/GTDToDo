@@ -17,20 +17,16 @@ namespace ScooterBear.GTD.UnitTests.UserProject
         [InlineData("ProjectId", "Name", "UserId", -1, false, 0, false)]
         [InlineData("ProjectId", "Name", "UserId", 0, false, -1, false)]
         [InlineData("ProjectId", "Name", "UserId", 0, false, 1, true)]
-        public void ShouldNotAllowInvalidToExist(string projectId, string projectName, string userId, 
+        public void ShouldNotAllowInvalidToExist(string projectId, string projectName, string userId,
             int count, bool isDeleted, int countOverdue, bool shouldPass)
         {
-            var action = new Action(()=> new Project(projectId, projectName,
-                    userId, count, countOverdue, DateTime.UtcNow, 0, isDeleted));
+            var action = new Action(() => new Project(projectId, projectName,
+                userId, count, countOverdue, DateTime.UtcNow, 0, isDeleted));
 
             if (shouldPass)
-            {
                 action();
-            }
             else
-            {
                 action.Should().Throw<ArgumentException>();
-            }
         }
     }
 }

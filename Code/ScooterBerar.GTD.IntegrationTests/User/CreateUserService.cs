@@ -14,11 +14,44 @@ namespace ScooterBear.GTD.IntegrationTests.User
     [Collection("DynamoDbDockerTests")]
     public class AsACreateUserServiceI
     {
-        private readonly RunDynamoDbDockerFixture _fixture;
-
         public AsACreateUserServiceI(RunDynamoDbDockerFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
+        }
+
+        private readonly RunDynamoDbDockerFixture _fixture;
+
+        [Fact]
+        public async void ShouldCreateDefaultProjectInbox()
+        {
+            var userId = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
+            var name = "James3";
+            var last = "Blah3";
+            var email = $"jayroblack+{userId}@here.com";
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
+            var createUserService = _fixture.Container
+                .Resolve<IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
+
+            var optionResult =
+                await createUserService.Run(new CreateUserArg(userId, name, last, email));
+
+            optionResult.HasValue.Should().BeTrue();
+
+            var getProjectsQuery =
+                _fixture.Container.Resolve<IQueryHandler<GetProjects, GetProjectsResult>>();
+
+            var result = await getProjectsQuery.Run(new GetProjects(userId));
+
+            result.HasValue.Should().BeTrue();
+            result.MatchSome(some =>
+            {
+                some.Should().NotBeNull();
+                some.Projects.Should().NotBeNull();
+                some.Projects.Count().Should().Be(1);
+
+                var defaultProject = some.Projects.First();
+                defaultProject.Name.Should().Be("Inbox");
+            });
         }
 
         [Fact]
@@ -31,10 +64,10 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var email = $"jayroblack+{id}@here.com";
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome>>();
+                .Resolve<IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
 
             var optionResult =
-                await createUserService.Run(new CreateUserServiceArg(id, name, last, email));
+                await createUserService.Run(new CreateUserArg(id, name, last, email));
 
             optionResult.Match(result =>
                 {
@@ -49,43 +82,10 @@ namespace ScooterBear.GTD.IntegrationTests.User
             );
 
             optionResult =
-                await createUserService.Run(new CreateUserServiceArg(id, name, last, email));
+                await createUserService.Run(new CreateUserArg(id, name, last, email));
 
             optionResult.Match(result => Assert.False(true, "ShouldFail"),
                 outcome => outcome.Should().Be(CreateUserServiceOutcome.UserExists));
-        }
-
-        [Fact]
-        public async void ShouldCreateDefaultProjectInbox()
-        {
-            var userId = _fixture.Container.Resolve<ICreateIdsStrategy>().NewId();
-            var name = "James3";
-            var last = "Blah3";
-            var email = $"jayroblack+{userId}@here.com";
-            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var createUserService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateUserServiceArg, CreateUserServiceResult, CreateUserServiceOutcome>>();
-
-            var optionResult =
-                await createUserService.Run(new CreateUserServiceArg(userId, name, last, email));
-
-            optionResult.HasValue.Should().BeTrue();
-
-            var getProjectsQuery =
-                _fixture.Container.Resolve<IQueryHandler<GetUserProjectsQuery, GetUserProjectsQueryResult>>();
-
-            var result = await getProjectsQuery.Run(new GetUserProjectsQuery(userId));
-
-            result.HasValue.Should().BeTrue();
-            result.MatchSome(some =>
-            {
-                some.UserProjects.Should().NotBeNull();
-                some.UserProjects.Projects.Should().NotBeNull();
-                some.UserProjects.Projects.Count().Should().Be(1);
-
-                var defaultProject = some.UserProjects.Projects.First();
-                defaultProject.Name.Should().Be("Inbox");
-            });
         }
     }
 }

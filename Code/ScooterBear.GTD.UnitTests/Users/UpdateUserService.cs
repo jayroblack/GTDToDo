@@ -16,45 +16,30 @@ namespace ScooterBear.GTD.UnitTests.Users
 {
     public class AsTheUpdateUserServiceI : IClassFixture<UpdateUserServiceFixture>
     {
-        public UpdateUserServiceFixture Fixture { get; }
-
         public AsTheUpdateUserServiceI(UpdateUserServiceFixture fixture)
         {
             Fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
         }
 
-        [Fact]
-        public async void ShouldReturnNotFoundIfUserDoesNotExist()
-        {
-            this.Fixture.GetUser.Setup(x =>
-                    x.Run(It.IsAny<GetUserQueryArgs>()))
-                .Returns(Task.FromResult(Option.None<GetUserQueryResult>()));
-
-            var result = await this.Fixture.UpdateUserService.Run(this.Fixture.UpdateUserServiceArgs);
-
-            result.HasValue.Should().BeFalse("No Result was returned.");
-            result.Match(
-                some => Assert.True(false),
-                outcome => outcome.Should().Be(UpdateUserService.UpdateUserOutcome.DoesNotExist));
-        }
+        public UpdateUserServiceFixture Fixture { get; }
 
         [Fact]
         public async void IfPersistCausesConflictReturnConflict()
         {
-            this.Fixture.GetUser.Setup(x =>
-                    x.Run(It.IsAny<GetUserQueryArgs>()))
-                .Returns(Task.FromResult(Option.Some<GetUserQueryResult>(new GetUserQueryResult(this.Fixture.User))));
+            Fixture.GetUser.Setup(x =>
+                    x.Run(It.IsAny<GetUserArg>()))
+                .Returns(Task.FromResult(Option.Some(new GetUserQueryResult(Fixture.User))));
 
             var optionNone =
                 Option.None<PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>(
                     PersistUpdatedUserOutcome.Conflict);
 
-            this.Fixture.PersistUpdatedUser
+            Fixture.PersistUpdatedUser
                 .Setup(x =>
                     x.Run(It.IsAny<PersistUpdatedUserServiceArgs>()))
                 .Returns(Task.FromResult(optionNone));
 
-            var result = await this.Fixture.UpdateUserService.Run(this.Fixture.UpdateUserServiceArgs);
+            var result = await Fixture.UpdateUserService.Run(Fixture.UpdateUserArg);
 
             result.HasValue.Should().BeFalse("Conflict");
             result.Match(some => Assert.True(false), outcome => Assert.True(true));
@@ -63,52 +48,70 @@ namespace ScooterBear.GTD.UnitTests.Users
         [Fact]
         public async void IfUserProfileDoesNotMatchDataReturnUnAuthorized()
         {
-            this.Fixture.GetUser.Setup(x =>
-                    x.Run(It.IsAny<GetUserQueryArgs>()))
-                .Returns(Task.FromResult(Option.Some<GetUserQueryResult>(new GetUserQueryResult(this.Fixture.User))));
+            Fixture.GetUser.Setup(x =>
+                    x.Run(It.IsAny<GetUserArg>()))
+                .Returns(Task.FromResult(Option.Some(new GetUserQueryResult(Fixture.User))));
 
             var optionSome =
                 Option.Some<PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>(
-                    new PersistUpdatedUserServiceResult(this.Fixture.User));
+                    new PersistUpdatedUserServiceResult(Fixture.User));
 
-            this.Fixture.ProfileFactory.SetUserProfile(new Application.UserProfile.Profile(Guid.NewGuid().ToString()));
-            this.Fixture.PersistUpdatedUser
+            Fixture.ProfileFactory.SetUserProfile(new Application.UserProfile.Profile(Guid.NewGuid().ToString()));
+            Fixture.PersistUpdatedUser
                 .Setup(x =>
                     x.Run(It.IsAny<PersistUpdatedUserServiceArgs>()))
                 .Returns(Task.FromResult(optionSome));
 
-            var result = await this.Fixture.UpdateUserService.Run(this.Fixture.UpdateUserServiceArgs);
+            var result = await Fixture.UpdateUserService.Run(Fixture.UpdateUserArg);
 
             result.Match(some => Assert.False(true, "Should return Unauthorized"),
-                outcome => outcome.Should().Be(UpdateUserService.UpdateUserOutcome.NotAuthorized));
+                outcome => outcome.Should().Be(UpdateUserOutcome.NotAuthorized));
+        }
+
+        [Fact]
+        public async void ShouldReturnNotFoundIfUserDoesNotExist()
+        {
+            Fixture.GetUser.Setup(x =>
+                    x.Run(It.IsAny<GetUserArg>()))
+                .Returns(Task.FromResult(Option.None<GetUserQueryResult>()));
+
+            var result = await Fixture.UpdateUserService.Run(Fixture.UpdateUserArg);
+
+            result.HasValue.Should().BeFalse("No Result was returned.");
+            result.Match(
+                some => Assert.True(false),
+                outcome => outcome.Should().Be(UpdateUserOutcome.DoesNotExist));
         }
     }
 
     public class UpdateUserServiceFixture : IDisposable
     {
-        public readonly Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>> GetUser;
-        public readonly FakedProfileFactory ProfileFactory;
+        public readonly Mock<IQueryHandler<GetUserArg, GetUserQueryResult>> GetUser;
+
+        public readonly Mock<ILogger<UpdateUserService>> Logger;
+
         public readonly Mock<IServiceOptOutcomes<PersistUpdatedUserServiceArgs,
             PersistUpdatedUserServiceResult,
             PersistUpdatedUserOutcome>> PersistUpdatedUser;
 
-        public readonly Mock<ILogger<UpdateUserService>> Logger;
+        public readonly FakedProfileFactory ProfileFactory;
+        public readonly UpdateUserArg UpdateUserArg;
         public readonly UpdateUserService UpdateUserService;
-        public readonly UpdateUserServiceArgs UpdateUserServiceArgs;
         public readonly User User;
 
         public UpdateUserServiceFixture()
         {
-            this.GetUser = new Mock<IQueryHandler<GetUserQueryArgs, GetUserQueryResult>>();
-            this.PersistUpdatedUser = new Mock<IServiceOptOutcomes<
+            GetUser = new Mock<IQueryHandler<GetUserArg, GetUserQueryResult>>();
+            PersistUpdatedUser = new Mock<IServiceOptOutcomes<
                 PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>>();
             var id = new GuidCreateIdStrategy().NewId();
-            this.ProfileFactory = new FakedProfileFactory();
+            ProfileFactory = new FakedProfileFactory();
             var profile = new Application.UserProfile.Profile(id);
-            this.ProfileFactory.SetUserProfile(profile);
-            this.Logger = new Mock<ILogger<UpdateUserService>>();
-            this.UpdateUserService = new UpdateUserService(this.ProfileFactory, this.Logger.Object, this.GetUser.Object, this.PersistUpdatedUser.Object);
-            
+            ProfileFactory.SetUserProfile(profile);
+            Logger = new Mock<ILogger<UpdateUserService>>();
+            UpdateUserService =
+                new UpdateUserService(ProfileFactory, Logger.Object, GetUser.Object, PersistUpdatedUser.Object);
+
             var firstName = "FirstName";
             var lastName = "LastName";
             var email = "Email";
@@ -116,15 +119,14 @@ namespace ScooterBear.GTD.UnitTests.Users
             var versionNumber = 4;
             var authId = "AuthId";
 
-            this.UpdateUserServiceArgs = new UpdateUserServiceArgs(id, firstName, lastName, email, 
+            UpdateUserArg = new UpdateUserArg(id, firstName, lastName, email,
                 billingId, authId, versionNumber);
-            
-            this.User = new User(id, firstName, lastName, email, billingId, authId, versionNumber, DateTime.Now);
+
+            User = new User(id, firstName, lastName, email, billingId, authId, versionNumber, DateTime.Now);
         }
 
         public void Dispose()
         {
-
         }
     }
 }

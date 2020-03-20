@@ -17,10 +17,10 @@ namespace ScooterBear.GTD.IntegrationTests
 
         public DynamoDb Create()
         {
-            AmazonDynamoDBConfig clientConfig = new AmazonDynamoDBConfig();
+            var clientConfig = new AmazonDynamoDBConfig();
             clientConfig.ServiceURL = "http://localhost:8000";
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient(clientConfig);
-            DynamoDBContext context = new DynamoDBContext(client);
+            var client = new AmazonDynamoDBClient(clientConfig);
+            var context = new DynamoDBContext(client);
             return new DynamoDb(client, context, _logger);
         }
     }

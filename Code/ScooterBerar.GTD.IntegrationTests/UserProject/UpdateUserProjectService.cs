@@ -12,11 +12,26 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
     [Collection("DynamoDbDockerTests")]
     public class AsTheUpdateUserProjectServiceI
     {
-        private readonly RunDynamoDbDockerFixture _fixture;
-
         public AsTheUpdateUserProjectServiceI(RunDynamoDbDockerFixture fixture)
         {
             _fixture = fixture ?? throw new ArgumentNullException(nameof(fixture));
+        }
+
+        private readonly RunDynamoDbDockerFixture _fixture;
+
+        [Fact]
+        public async void ShouldReturnNotFound()
+        {
+            var userId = Guid.NewGuid().ToString();
+            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
+            var service = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateProjectArg,
+                UpdateProjectResult, UpdateProjectOutcome>>();
+
+            var updateOptionResult = await
+                service.Run(new UpdateProjectArg(Guid.NewGuid().ToString(), "Project No Exist", 1, false, 1, 0));
+
+            updateOptionResult.Match(some => Assert.False(true, "Should not FIne"),
+                outcome => outcome.Should().Be(UpdateProjectOutcome.DoesNotExist));
         }
 
         [Fact]
@@ -24,11 +39,11 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         {
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var service = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserProjectServiceArg,
-                UpdateUserProjectServiceResult, UpdateProjectOutcome>>();
+            var service = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateProjectArg,
+                UpdateProjectResult, UpdateProjectOutcome>>();
 
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewUserProjectServiceArg, CreateNewUserProjectServiceResult,
+                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var listOfProjectsToCreate = new List<ProjectItem>();
@@ -39,15 +54,15 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             foreach (var item in listOfProjectsToCreate)
             {
                 var optionResult = await
-                    createUserProject.Run(new CreateNewUserProjectServiceArg(item.Id, item.Name));
+                    createUserProject.Run(new CreateNewProjectArg(item.Id, item.Name));
 
                 optionResult.HasValue.Should().BeTrue("Failed To Create Project");
             }
 
-            for(int i = 0; i < listOfProjectsToCreate.Count; i++)
+            for (var i = 0; i < listOfProjectsToCreate.Count; i++)
             {
                 var updateOptionResult = await
-                    service.Run(new UpdateUserProjectServiceArg(listOfProjectsToCreate[i].Id, $"Project {i + 4}", 1, false, 1, 0));
+                    service.Run(new UpdateProjectArg(listOfProjectsToCreate[i].Id, $"Project {i + 4}", 1, false, 1, 0));
 
                 updateOptionResult.Match(some =>
                 {
@@ -56,21 +71,6 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                     some.Project.UserId.Should().Be(userId);
                 }, outcome => Assert.True(false, $"Failed To Update Project: {outcome.ToString()}"));
             }
-        }
-
-        [Fact]
-        public async void ShouldReturnNotFound()
-        {
-            var userId = Guid.NewGuid().ToString();
-            _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var service = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserProjectServiceArg,
-                UpdateUserProjectServiceResult, UpdateProjectOutcome>>();
-
-            var updateOptionResult = await
-                service.Run(new UpdateUserProjectServiceArg(Guid.NewGuid().ToString(), $"Project No Exist", 1, false, 1,0));
-
-            updateOptionResult.Match(some => Assert.False(true, "Should not FIne"),
-                outcome => outcome.Should().Be(UpdateProjectOutcome.DoesNotExist));
         }
     }
 }

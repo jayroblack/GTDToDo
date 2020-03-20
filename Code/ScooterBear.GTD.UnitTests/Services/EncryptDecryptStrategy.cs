@@ -15,7 +15,7 @@ namespace ScooterBear.GTD.UnitTests.Services
 
             var toEncrypt = "This is my super secret content that nobody can ever know about you guys!!!!";
 
-            (string iv, string encrypted) = strategy.Encrypt(toEncrypt);
+            (var iv, var encrypted) = strategy.Encrypt(toEncrypt);
 
             var unEncrypted = strategy.Decrypt(iv, encrypted);
 

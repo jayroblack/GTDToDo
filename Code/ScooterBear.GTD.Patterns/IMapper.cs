@@ -10,5 +10,7 @@
         TFromType MapFrom(TToType input);
     }
 
-    public interface IMapper<TFromType, TToType> : IMapTo<TFromType, TToType>, IMapFrom<TFromType, TToType> { }
+    public interface IMapper<TFromType, TToType> : IMapTo<TFromType, TToType>, IMapFrom<TFromType, TToType>
+    {
+    }
 }
