@@ -61,7 +61,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var last = "Blah";
             var email = $"jayroblack+{id}@here.com";
 
-            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserArg,
+            var createUser = _fixture.Container.Resolve<IServiceOpt<CreateUserArg,
                 CreateUserResult, CreateUserServiceOutcome>>();
 
             var resultOption = await createUser.Run(new CreateUserArg(id, name, last, email));

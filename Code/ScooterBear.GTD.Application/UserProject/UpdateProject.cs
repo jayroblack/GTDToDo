@@ -18,7 +18,7 @@ namespace ScooterBear.GTD.Application.UserProject
         NameAlreadyExists
     }
 
-    public class UpdateProjectService : IServiceOptOutcomes<UpdateProjectArg,
+    public class UpdateProjectService : IServiceOpt<UpdateProjectArg,
         UpdateProjectResult, UpdateProjectOutcome>
     {
         private readonly IQueryHandler<GetProject, GetProjectResult> _getProjectQuery;
@@ -26,7 +26,7 @@ namespace ScooterBear.GTD.Application.UserProject
         private readonly ILogger _logger;
 
         private readonly
-            IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
+            IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
             _persistUpdateProject;
 
         private readonly IProfileFactory _profileFactory;
@@ -35,7 +35,7 @@ namespace ScooterBear.GTD.Application.UserProject
             IProfileFactory profileFactory,
             ILogger logger,
             IQueryHandler<GetProject, GetProjectResult> getProjectQuery,
-            IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
+            IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
                 persistUpdateProject,
             IQueryHandler<GetProjects, GetProjectsResult> getProjectsQuery)
         {
@@ -109,7 +109,7 @@ namespace ScooterBear.GTD.Application.UserProject
                     .UnprocessableEntity);
             }
 
-            var updatedProjectOption = await _persistUpdateProject.Run(new PersistUpdateProjectArgs(project));
+            var updatedProjectOption = await _persistUpdateProject.Run(new PersistUpdateProjectArg(project));
 
             return updatedProjectOption.Match(some =>
                 Option.Some<UpdateProjectResult, UpdateProjectOutcome>(

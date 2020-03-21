@@ -15,40 +15,28 @@ namespace ScooterBear.GTD.Controllers
     public class ProjectController : Controller
     {
         private readonly ICreateIdsStrategy _createIdsStrategy;
-
-        private readonly IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
-            _createNewProjectService;
-
-        private readonly IServiceOptOutcomes<DeleteProjectArgs, DeleteProjectResult, DeleteUserProjectOutcome>
-            _deleteProjectService;
-
+        private readonly IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes> _createNewProject;
+        private readonly IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteUserProjectOutcome> _deleteProject;
         private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
         private readonly IProfileFactory _profileFactory;
         private readonly IQueryHandler<GetProject, GetProjectResult> _projectQuery;
-
-        private readonly IServiceOptOutcomes<UpdateProjectArg, UpdateProjectResult, UpdateProjectOutcome>
-            _updatProjectService;
+        private readonly IServiceOpt<UpdateProjectArg, UpdateProjectResult, UpdateProjectOutcome> _updateProject;
 
         public ProjectController(IProfileFactory profileFactory,
             ICreateIdsStrategy createIdsStrategy,
             IQueryHandler<GetProjects, GetProjectsResult> getProjects,
             IQueryHandler<GetProject, GetProjectResult> projectQuery,
-            IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
-                createNewProjectService,
-            IServiceOptOutcomes<UpdateProjectArg,
-                UpdateProjectResult, UpdateProjectOutcome> updateProjectService,
-            IServiceOptOutcomes<DeleteProjectArgs, DeleteProjectResult, DeleteUserProjectOutcome> deleteProjectService)
+            IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes> createNewProject,
+            IServiceOpt<UpdateProjectArg, UpdateProjectResult, UpdateProjectOutcome> updateProject,
+            IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteUserProjectOutcome> deleteProject)
         {
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
             _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));
             _projectQuery = projectQuery ?? throw new ArgumentNullException(nameof(projectQuery));
-            _createNewProjectService = createNewProjectService ??
-                                       throw new ArgumentNullException(nameof(createNewProjectService));
-            _updatProjectService =
-                updateProjectService ?? throw new ArgumentNullException(nameof(updateProjectService));
-            _deleteProjectService =
-                deleteProjectService ?? throw new ArgumentNullException(nameof(deleteProjectService));
+            _createNewProject = createNewProject ?? throw new ArgumentNullException(nameof(createNewProject));
+            _updateProject = updateProject ?? throw new ArgumentNullException(nameof(updateProject));
+            _deleteProject = deleteProject ?? throw new ArgumentNullException(nameof(deleteProject));
         }
 
         [HttpGet]
@@ -79,7 +67,7 @@ namespace ScooterBear.GTD.Controllers
             var id = _createIdsStrategy.NewId();
             var profile = _profileFactory.GetCurrentProfile();
             var optionResult =
-                await _createNewProjectService.Run(new CreateNewProjectArg(id, data.NewProjectName));
+                await _createNewProject.Run(new CreateNewProjectArg(id, data.NewProjectName));
 
             return optionResult.Match<IActionResult>(some => Json(some.Project),
                 outcomes => UnprocessableEntity(outcomes.ToString()));
@@ -90,7 +78,7 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Put([FromRoute] string projectId, [FromBody] MutableProject projectItem)
         {
             var optionResult = await
-                _updatProjectService.Run(new UpdateProjectArg(projectId, projectItem.Name, projectItem.Count,
+                _updateProject.Run(new UpdateProjectArg(projectId, projectItem.Name, projectItem.Count,
                     projectItem.IsDeleted, projectItem.CountOverdue, projectItem.VersionNumber));
 
             return optionResult.Match<IActionResult>(
@@ -115,7 +103,7 @@ namespace ScooterBear.GTD.Controllers
         public async Task<IActionResult> Delete([FromRoute] string projectId)
         {
             var optionResult = await
-                _deleteProjectService.Run(new DeleteProjectArgs(projectId));
+                _deleteProject.Run(new DeleteProjectArg(projectId));
 
             return optionResult.Match<IActionResult>(
                 some => Ok(),

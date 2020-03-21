@@ -16,22 +16,22 @@ namespace ScooterBear.GTD.Application.UserProject
         ProjectIdAlreadyExists
     }
 
-    public class CreateNewProject : IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+    public class CreateNewProject : IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
         CreateUserProjectOutcomes>
     {
         private readonly IKnowTheDate _iKnowTheDate;
-        private readonly IService<PersistNewProjectArg, PersistNewProjectResult> _persistService;
+        private readonly IService<PersistNewProjectArg, PersistNewProjectResult> _persistProject;
         private readonly IProfileFactory _profileFactory;
-        private readonly IQueryHandler<GetProjects, GetProjectsResult> _query;
+        private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
 
         public CreateNewProject(
-            IQueryHandler<GetProjects, GetProjectsResult> query,
-            IService<PersistNewProjectArg, PersistNewProjectResult> persistService,
+            IQueryHandler<GetProjects, GetProjectsResult> getProjects,
+            IService<PersistNewProjectArg, PersistNewProjectResult> persistProject,
             IKnowTheDate iKnowTheDate,
             IProfileFactory profileFactory)
         {
-            _query = query ?? throw new ArgumentNullException(nameof(query));
-            _persistService = persistService ?? throw new ArgumentNullException(nameof(persistService));
+            _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
+            _persistProject = persistProject ?? throw new ArgumentNullException(nameof(persistProject));
             _iKnowTheDate = iKnowTheDate ?? throw new ArgumentNullException(nameof(iKnowTheDate));
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
         }
@@ -40,7 +40,7 @@ namespace ScooterBear.GTD.Application.UserProject
         {
             var userId = _profileFactory.GetCurrentProfile().UserId;
 
-            var userProjects = await _query.Run(new GetProjects(userId));
+            var userProjects = await _getProjects.Run(new GetProjects(userId));
 
             var dateTimeCreated = _iKnowTheDate.UtcNow();
 
@@ -58,7 +58,7 @@ namespace ScooterBear.GTD.Application.UserProject
                                 CreateUserProjectOutcomes.ProjectIdAlreadyExists);
 
                         var persistResult = await
-                            _persistService.Run(new PersistNewProjectArg(arg.Id, userId, arg.NewProjectName,
+                            _persistProject.Run(new PersistNewProjectArg(arg.Id, userId, arg.NewProjectName,
                                 dateTimeCreated));
 
                         return Option.Some<CreateNewProjectResult, CreateUserProjectOutcomes>(
@@ -67,7 +67,7 @@ namespace ScooterBear.GTD.Application.UserProject
                     async () =>
                     {
                         var persistResult = await
-                            _persistService.Run(new PersistNewProjectArg(arg.Id, userId, arg.NewProjectName,
+                            _persistProject.Run(new PersistNewProjectArg(arg.Id, userId, arg.NewProjectName,
                                 dateTimeCreated, arg.ConsistentRead));
 
                         return Option.Some<CreateNewProjectResult, CreateUserProjectOutcomes>(

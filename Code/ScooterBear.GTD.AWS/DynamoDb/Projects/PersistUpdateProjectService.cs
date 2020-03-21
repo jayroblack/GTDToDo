@@ -11,7 +11,7 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Projects
 {
-    public class PersistUpdateProjectService : IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+    public class PersistUpdateProjectService : IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
         PersistUpdateProjectOutcome>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
@@ -29,7 +29,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
         }
 
         public async Task<Option<PersistUpdateProjectResult, PersistUpdateProjectOutcome>> Run(
-            PersistUpdateProjectArgs arg)
+            PersistUpdateProjectArg arg)
         {
             var table = _map.MapFrom(arg.Project);
             using (var _dynamoDb = _dynamoDbFactory.Create())

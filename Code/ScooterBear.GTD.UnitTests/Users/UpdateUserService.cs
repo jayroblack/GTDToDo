@@ -36,7 +36,7 @@ namespace ScooterBear.GTD.UnitTests.Users
 
             Fixture.PersistUpdatedUser
                 .Setup(x =>
-                    x.Run(It.IsAny<PersistUpdatedUserServiceArgs>()))
+                    x.Run(It.IsAny<PersistUpdatedUserServiceArg>()))
                 .Returns(Task.FromResult(optionNone));
 
             var result = await Fixture.UpdateUserService.Run(Fixture.UpdateUserArg);
@@ -59,7 +59,7 @@ namespace ScooterBear.GTD.UnitTests.Users
             Fixture.ProfileFactory.SetUserProfile(new Application.UserProfile.Profile(Guid.NewGuid().ToString()));
             Fixture.PersistUpdatedUser
                 .Setup(x =>
-                    x.Run(It.IsAny<PersistUpdatedUserServiceArgs>()))
+                    x.Run(It.IsAny<PersistUpdatedUserServiceArg>()))
                 .Returns(Task.FromResult(optionSome));
 
             var result = await Fixture.UpdateUserService.Run(Fixture.UpdateUserArg);
@@ -90,7 +90,7 @@ namespace ScooterBear.GTD.UnitTests.Users
 
         public readonly Mock<ILogger<UpdateUserService>> Logger;
 
-        public readonly Mock<IServiceOptOutcomes<PersistUpdatedUserServiceArgs,
+        public readonly Mock<IServiceOpt<PersistUpdatedUserServiceArg,
             PersistUpdatedUserServiceResult,
             PersistUpdatedUserOutcome>> PersistUpdatedUser;
 
@@ -102,8 +102,8 @@ namespace ScooterBear.GTD.UnitTests.Users
         public UpdateUserServiceFixture()
         {
             GetUser = new Mock<IQueryHandler<GetUserArg, GetUserQueryResult>>();
-            PersistUpdatedUser = new Mock<IServiceOptOutcomes<
-                PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>>();
+            PersistUpdatedUser = new Mock<IServiceOpt<
+                PersistUpdatedUserServiceArg, PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>>();
             var id = new GuidCreateIdStrategy().NewId();
             ProfileFactory = new FakedProfileFactory();
             var profile = new Application.UserProfile.Profile(id);

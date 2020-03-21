@@ -39,7 +39,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 Option.None<PersistUpdateProjectResult, PersistUpdateProjectOutcome>(PersistUpdateProjectOutcome
                     .Conflict);
 
-            _fixture.MockedPersistProject.Setup(x => x.Run(It.IsAny<PersistUpdateProjectArgs>()))
+            _fixture.MockedPersistProject.Setup(x => x.Run(It.IsAny<PersistUpdateProjectArg>()))
                 .Returns(Task.FromResult(persistOption));
 
             var testOptionResult = await
@@ -101,7 +101,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             MockedLogger = new Mock<ILogger>();
             MockedGetProject = new Mock<IQueryHandler<GetProject, GetProjectResult>>();
             MockedPersistProject =
-                new Mock<IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+                new Mock<IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
                     PersistUpdateProjectOutcome>>();
             UpdateProjectArg = new UpdateProjectArg("ProjectId", "Name", 1, false, 3, 0);
             MockedGetUserProjects = new Mock<IQueryHandler<GetProjects, GetProjectsResult>>();
@@ -109,7 +109,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 MockedGetProject.Object, MockedPersistProject.Object, MockedGetUserProjects.Object);
         }
 
-        public Mock<IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+        public Mock<IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
             PersistUpdateProjectOutcome>> MockedPersistProject { get; }
 
         public UpdateProjectService UpdateProjectService { get; }

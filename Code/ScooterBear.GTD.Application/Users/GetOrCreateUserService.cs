@@ -9,13 +9,13 @@ namespace ScooterBear.GTD.Application.Users
 {
     public class GetOrCreateUserService : IServiceOpt<GetOrCreateUserArg, GetOrCreateUserResult>
     {
-        private readonly IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>
+        private readonly IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>
             _createUserService;
 
         private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
 
         public GetOrCreateUserService(IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
-            IServiceOptOutcomes<CreateUserArg,
+            IServiceOpt<CreateUserArg,
                 CreateUserResult, CreateUserServiceOutcome> createUserService)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));

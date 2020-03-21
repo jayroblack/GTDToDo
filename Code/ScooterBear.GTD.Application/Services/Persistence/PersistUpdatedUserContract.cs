@@ -15,9 +15,9 @@ namespace ScooterBear.GTD.Application.Services.Persistence
         public IUser UpdatedUser { get; }
     }
 
-    public class PersistUpdatedUserServiceArgs : IServiceArgs<PersistUpdatedUserServiceResult>
+    public class PersistUpdatedUserServiceArg : IServiceArgs<PersistUpdatedUserServiceResult>
     {
-        public PersistUpdatedUserServiceArgs(User user)
+        public PersistUpdatedUserServiceArg(User user)
         {
             User = user ?? throw new ArgumentNullException(nameof(user));
         }

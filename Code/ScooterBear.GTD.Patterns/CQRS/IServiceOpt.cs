@@ -7,4 +7,11 @@ namespace ScooterBear.GTD.Patterns.CQRS
     {
         Task<Option<TResult>> Run(TArg arg);
     }
+
+    public interface IServiceOpt<TArg, TResult, TAltrnateOutcome>
+        where TArg : IServiceArgs<TResult>
+        where TResult : IServiceResult
+    {
+        Task<Option<TResult, TAltrnateOutcome>> Run(TArg arg);
+    }
 }

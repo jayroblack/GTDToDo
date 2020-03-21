@@ -16,14 +16,14 @@ namespace ScooterBear.GTD.Application.Users.Update
         NotAuthorized
     }
 
-    public class UpdateUserService : IServiceOptOutcomes<UpdateUserArg,
+    public class UpdateUserService : IServiceOpt<UpdateUserArg,
         UpdateUserResult, UpdateUserOutcome>
     {
         private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
         private readonly ILogger _logger;
 
         private readonly
-            IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+            IServiceOpt<PersistUpdatedUserServiceArg, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> _persistUpdatedUser;
 
         private readonly IProfileFactory _profileFactory;
@@ -32,7 +32,7 @@ namespace ScooterBear.GTD.Application.Users.Update
             IProfileFactory profileFactory,
             ILogger logger,
             IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
-            IServiceOptOutcomes<PersistUpdatedUserServiceArgs, PersistUpdatedUserServiceResult,
+            IServiceOpt<PersistUpdatedUserServiceArg, PersistUpdatedUserServiceResult,
                 PersistUpdatedUserOutcome> persistUpdatedUser)
         {
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
@@ -78,7 +78,7 @@ namespace ScooterBear.GTD.Application.Users.Update
                     .UnprocessableEntity);
             }
 
-            var updatedExistUserOption = await _persistUpdatedUser.Run(new PersistUpdatedUserServiceArgs(user));
+            var updatedExistUserOption = await _persistUpdatedUser.Run(new PersistUpdatedUserServiceArg(user));
 
             return updatedExistUserOption.Match(
                 some => Option.Some<UpdateUserResult, UpdateUserOutcome>(

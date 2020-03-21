@@ -15,17 +15,17 @@ namespace ScooterBear.GTD.Application.Users.New
         UserExists
     }
 
-    public class CreateUserService : IServiceOptOutcomes<CreateUserArg,
+    public class CreateUserService : IServiceOpt<CreateUserArg,
         CreateUserResult, CreateUserServiceOutcome>
     {
         private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
         private readonly IKnowTheDate _iKnowTheDate;
         private readonly IDomainEventHandlerStrategyAsync<NewUserCreatedEvent> _newUserCreated;
-        private readonly IService<PersistNewUserArgs, PersistNewUserResult> _persistNewUserService;
+        private readonly IService<PersistNewUserArg, PersistNewUserResult> _persistNewUserService;
 
         public CreateUserService(IKnowTheDate iKnowTheDate,
             ICreateIdsStrategy createIdsStrategy,
-            IService<PersistNewUserArgs, PersistNewUserResult> persistNewUserService,
+            IService<PersistNewUserArg, PersistNewUserResult> persistNewUserService,
             IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
             IDomainEventHandlerStrategyAsync<NewUserCreatedEvent> newUserCreated)
         {
@@ -52,7 +52,7 @@ namespace ScooterBear.GTD.Application.Users.New
                             _iKnowTheDate.UtcNow());
 
                         var result = await
-                            _persistNewUserService.Run(new PersistNewUserArgs(newUser, true));
+                            _persistNewUserService.Run(new PersistNewUserArg(newUser, true));
 
                         await _newUserCreated.HandleEventsAsync(new NewUserCreatedEvent(result.ReadonlyUser),
                             CancellationToken.None);

@@ -9,7 +9,7 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Users
 {
-    public class PersistNewUserService : IService<PersistNewUserArgs, PersistNewUserResult>
+    public class PersistNewUserService : IService<PersistNewUserArg, PersistNewUserResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapFrom<UserProjectLabelDynamoDbTable, NewUser> _mapFrom;
@@ -24,7 +24,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<PersistNewUserResult> Run(PersistNewUserArgs arg)
+        public async Task<PersistNewUserResult> Run(PersistNewUserArg arg)
         {
             var table = _mapFrom.MapFrom(arg.NewUser);
 

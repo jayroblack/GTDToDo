@@ -31,12 +31,12 @@ namespace ScooterBear.GTD.Application.UserProject
             SetCount(count);
             SetCountOverDue(countOverDue);
             SetVersionNumber(versionNumber);
+            SetIsDeleted(isDeleted);
 
             if (dateCreated == DateTime.MaxValue || dateCreated == DateTime.MinValue)
                 throw new ArgumentException("DateCreated for Project must be valid.", nameof(dateCreated));
 
             DateCreated = dateCreated;
-            IsDeleted = isDeleted;
         }
 
         public string Id { get; }

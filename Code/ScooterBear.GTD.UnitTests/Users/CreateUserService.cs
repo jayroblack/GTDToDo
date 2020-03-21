@@ -47,7 +47,7 @@ namespace ScooterBear.GTD.UnitTests.Users
                 .Returns(Task.FromResult(Option.None<GetUserQueryResult>()));
 
             CreateUserFixture.PersistNewUserService.Setup(x =>
-                    x.Run(It.IsAny<PersistNewUserArgs>()))
+                    x.Run(It.IsAny<PersistNewUserArg>()))
                 .Returns(Task.FromResult(new PersistNewUserResult(CreateUserFixture.User)));
 
             CreateUserFixture.IKnowTheDate.Setup(x => x.UtcNow()).Returns(DateTime.UtcNow);
@@ -69,7 +69,7 @@ namespace ScooterBear.GTD.UnitTests.Users
         public Mock<IQueryHandler<GetUserArg, GetUserQueryResult>> GetUserService;
         public Mock<IKnowTheDate> IKnowTheDate;
         public Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>> NewUserCreated;
-        public Mock<IService<PersistNewUserArgs, PersistNewUserResult>> PersistNewUserService;
+        public Mock<IService<PersistNewUserArg, PersistNewUserResult>> PersistNewUserService;
         public User User;
 
         public CreateUserFixture()
@@ -77,7 +77,7 @@ namespace ScooterBear.GTD.UnitTests.Users
             IKnowTheDate = new Mock<IKnowTheDate>();
             CreateIdsStrategy = new Mock<ICreateIdsStrategy>();
             PersistNewUserService =
-                new Mock<IService<PersistNewUserArgs, PersistNewUserResult>>();
+                new Mock<IService<PersistNewUserArg, PersistNewUserResult>>();
             GetUserService = new Mock<IQueryHandler<GetUserArg, GetUserQueryResult>>();
             NewUserCreated = new Mock<IDomainEventHandlerStrategyAsync<NewUserCreatedEvent>>();
             CreateUserService = new CreateUserService(IKnowTheDate.Object, CreateIdsStrategy.Object,

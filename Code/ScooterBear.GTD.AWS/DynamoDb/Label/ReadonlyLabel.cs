@@ -6,7 +6,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Label
     public class ReadonlyLabel : ILabel
     {
         public ReadonlyLabel(string id, string userId, string name, int count, bool isDeleted, int countOverDue,
-            int? versionNumber, DateTime dateCreated)
+            int versionNumber, DateTime dateCreated)
         {
             Id = id;
             UserId = userId;
@@ -24,7 +24,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Label
         public int Count { get; }
         public bool IsDeleted { get; }
         public int CountOverDue { get; }
-        public int? VersionNumber { get; }
+        public int VersionNumber { get; }
         public DateTime DateCreated { get; }
     }
 }

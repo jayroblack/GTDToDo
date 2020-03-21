@@ -5,9 +5,9 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Services.Persistence
 {
-    public class PersistNewUserArgs : IServiceArgs<PersistNewUserResult>
+    public class PersistNewUserArg : IServiceArgs<PersistNewUserResult>
     {
-        public PersistNewUserArgs(NewUser newUser, bool consistentRead = false)
+        public PersistNewUserArg(NewUser newUser, bool consistentRead = false)
         {
             NewUser = newUser ?? throw new ArgumentNullException(nameof(newUser));
             ConsistentRead = consistentRead;

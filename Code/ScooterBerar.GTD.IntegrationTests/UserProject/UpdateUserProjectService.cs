@@ -24,7 +24,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         {
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var service = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateProjectArg,
+            var service = _fixture.Container.Resolve<IServiceOpt<UpdateProjectArg,
                 UpdateProjectResult, UpdateProjectOutcome>>();
 
             var updateOptionResult = await
@@ -39,11 +39,11 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         {
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var service = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateProjectArg,
+            var service = _fixture.Container.Resolve<IServiceOpt<UpdateProjectArg,
                 UpdateProjectResult, UpdateProjectOutcome>>();
 
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var listOfProjectsToCreate = new List<ProjectItem>();

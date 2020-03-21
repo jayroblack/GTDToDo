@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Optional;
 using ScooterBear.GTD.Application.Services.Persistence;
@@ -27,7 +26,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             _fixture.ProjectQueryMock.Setup(x => x.Run(It.IsAny<GetProject>()))
                 .Returns(Task.FromResult(Option.None<GetProjectResult>()));
 
-            var optionResult = await _fixture.DeleteUserService.Run(new DeleteProjectArgs("asdf"));
+            var optionResult = await _fixture.DeleteUserService.Run(new DeleteProjectArg("asdf"));
 
             optionResult.Match(some => Assert.False(true, "Should be Null"),
                 outcome => outcome.Should().Be(DeleteUserProjectOutcome.NotFound));
@@ -47,7 +46,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(Option.Some(new GetProjectResult(project))));
 
             var optionResult = await
-                _fixture.DeleteUserService.Run(new DeleteProjectArgs(projectId));
+                _fixture.DeleteUserService.Run(new DeleteProjectArg(projectId));
 
             optionResult.Match(some => Assert.False(true, "Should be Null"),
                 outcome => outcome.Should().Be(DeleteUserProjectOutcome.NotAuthorized));
@@ -59,20 +58,18 @@ namespace ScooterBear.GTD.UnitTests.UserProject
         public DeleteUserFixture()
         {
             ProfileFactoryMock = new Mock<IProfileFactory>();
-            LoggerMock = new Mock<ILogger>();
             ProjectQueryMock = new Mock<IQueryHandler<GetProject, GetProjectResult>>();
             PersistProjectMock =
-                new Mock<IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+                new Mock<IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
                     PersistUpdateProjectOutcome>>();
-            DeleteUserService = new DeleteProject(ProfileFactoryMock.Object, LoggerMock.Object, ProjectQueryMock.Object,
+            DeleteUserService = new DeleteProject(ProfileFactoryMock.Object, ProjectQueryMock.Object,
                 PersistProjectMock.Object);
         }
 
-        public Mock<IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+        public Mock<IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
             PersistUpdateProjectOutcome>> PersistProjectMock { get; }
 
         public Mock<IQueryHandler<GetProject, GetProjectResult>> ProjectQueryMock { get; }
-        public Mock<ILogger> LoggerMock { get; }
         public Mock<IProfileFactory> ProfileFactoryMock { get; }
         public DeleteProject DeleteUserService { get; }
 

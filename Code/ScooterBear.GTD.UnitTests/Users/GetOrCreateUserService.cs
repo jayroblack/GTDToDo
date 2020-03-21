@@ -68,7 +68,7 @@ namespace ScooterBear.GTD.UnitTests.Users
 
     public class GetOrCreateUserFixture : IDisposable
     {
-        public Mock<IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>
+        public Mock<IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>
             CreateUserServiceMock;
 
         public GetOrCreateUserService GetOrCreateUserService;
@@ -80,7 +80,7 @@ namespace ScooterBear.GTD.UnitTests.Users
         {
             GetUserMock = new Mock<IQueryHandler<GetUserArg, GetUserQueryResult>>();
             CreateUserServiceMock =
-                new Mock<IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
+                new Mock<IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
             User = new User("Id", "firstName", "lastName", "email", "billingId", "authId", 0, DateTime.UtcNow);
             GetOrCreateUserService = new GetOrCreateUserService(GetUserMock.Object, CreateUserServiceMock.Object);
         }

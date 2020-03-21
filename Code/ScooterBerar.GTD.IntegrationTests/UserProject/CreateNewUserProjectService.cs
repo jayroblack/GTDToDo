@@ -25,7 +25,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         {
             var userId = Guid.NewGuid().ToString();
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var id = Guid.NewGuid().ToString();
@@ -50,7 +50,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var firstItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
@@ -74,7 +74,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var queryProject = _fixture.Container.Resolve<IQueryHandler<GetProject, GetProjectResult>>();

@@ -11,7 +11,7 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Users
 {
-    public class PersistUpdatedUserService : IServiceOptOutcomes<PersistUpdatedUserServiceArgs,
+    public class PersistUpdatedUserService : IServiceOpt<PersistUpdatedUserServiceArg,
         PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
@@ -28,7 +28,7 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Users
         }
 
         public async Task<Option<PersistUpdatedUserServiceResult, PersistUpdatedUserOutcome>> Run(
-            PersistUpdatedUserServiceArgs arg)
+            PersistUpdatedUserServiceArg arg)
         {
             var table = _mapper.MapFrom(arg.User);
             using (var _dynamoDb = _dynamoDbFactory.Create())

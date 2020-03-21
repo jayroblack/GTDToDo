@@ -26,7 +26,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
 
             var createUserProject = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateNewProjectArg, CreateNewProjectResult,
+                .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
                     CreateUserProjectOutcomes>>();
 
             var projectId = Guid.NewGuid().ToString();
@@ -34,7 +34,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                 createUserProject.Run(new CreateNewProjectArg(projectId, "Project"));
 
             var persistService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult,
+                .Resolve<IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
                     PersistUpdateProjectOutcome>>();
 
             optionResult.Match(async some =>
@@ -44,7 +44,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                     project.CountOverDue, DateTime.UtcNow, 100, project.IsDeleted);
 
                 var persistOptionResult =
-                    await persistService.Run(new PersistUpdateProjectArgs(fudgedVersionProject));
+                    await persistService.Run(new PersistUpdateProjectArg(fudgedVersionProject));
 
                 persistOptionResult.Match(some => Assert.False(true, "Should Fail to persist."),
                     outcome => outcome.Should().Be(PersistUpdateProjectOutcome.Conflict));

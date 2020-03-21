@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Optional;
 using ScooterBear.GTD.Application.Services.Persistence;
 using ScooterBear.GTD.Application.UserProfile;
@@ -16,32 +15,28 @@ namespace ScooterBear.GTD.Application.UserProject
         VersionConflict
     }
 
-    public class DeleteProject : IServiceOptOutcomes<DeleteProjectArgs, DeleteProjectResult, DeleteUserProjectOutcome>
+    public class DeleteProject : IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteUserProjectOutcome>
     {
         private readonly IQueryHandler<GetProject, GetProjectResult> _getProject;
-        private readonly ILogger _logger;
-
         private readonly
-            IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
+            IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
             _persistUpdateProject;
 
         private readonly IProfileFactory _profileFactory;
 
         public DeleteProject(
             IProfileFactory profileFactory,
-            ILogger logger,
             IQueryHandler<GetProject, GetProjectResult> getProject,
-            IServiceOptOutcomes<PersistUpdateProjectArgs, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
+            IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
                 persistUpdateProject)
         {
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _getProject = getProject;
             _persistUpdateProject =
                 persistUpdateProject ?? throw new ArgumentNullException(nameof(persistUpdateProject));
         }
 
-        public async Task<Option<DeleteProjectResult, DeleteUserProjectOutcome>> Run(DeleteProjectArgs arg)
+        public async Task<Option<DeleteProjectResult, DeleteUserProjectOutcome>> Run(DeleteProjectArg arg)
         {
             var userProjectOption = await _getProject.Run(new GetProject(arg.ProjectId));
             if (!userProjectOption.HasValue)
@@ -63,7 +58,7 @@ namespace ScooterBear.GTD.Application.UserProject
 
             project.SetIsDeleted(true);
 
-            var updatedProjectOption = await _persistUpdateProject.Run(new PersistUpdateProjectArgs(project));
+            var updatedProjectOption = await _persistUpdateProject.Run(new PersistUpdateProjectArg(project));
 
             return updatedProjectOption.Match(some =>
                 Option.Some<DeleteProjectResult, DeleteUserProjectOutcome>(

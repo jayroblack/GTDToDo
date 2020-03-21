@@ -14,9 +14,9 @@ namespace ScooterBear.GTD.Application.Services.Persistence
         public IProject Project { get; }
     }
 
-    public class PersistUpdateProjectArgs : IServiceArgs<PersistUpdateProjectResult>
+    public class PersistUpdateProjectArg : IServiceArgs<PersistUpdateProjectResult>
     {
-        public PersistUpdateProjectArgs(Project project)
+        public PersistUpdateProjectArg(Project project)
         {
             Project = project ?? throw new ArgumentNullException(nameof(project));
         }

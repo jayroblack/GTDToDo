@@ -13,14 +13,14 @@ namespace ScooterBear.GTD.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome> _createUser;
+        private readonly IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome> _createUser;
         private readonly IServiceOpt<GetOrCreateUserArg, GetOrCreateUserResult> _getOrCreateUser;
         private readonly IQueryHandler<GetUserArg, GetUserQueryResult> _getUser;
-        private readonly IServiceOptOutcomes<UpdateUserArg, UpdateUserResult, UpdateUserOutcome> _updateUser;
+        private readonly IServiceOpt<UpdateUserArg, UpdateUserResult, UpdateUserOutcome> _updateUser;
 
         public UserController(IQueryHandler<GetUserArg, GetUserQueryResult> getUser,
-            IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome> createUser,
-            IServiceOptOutcomes<UpdateUserArg, UpdateUserResult, UpdateUserOutcome> updateUser,
+            IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome> createUser,
+            IServiceOpt<UpdateUserArg, UpdateUserResult, UpdateUserOutcome> updateUser,
             IServiceOpt<GetOrCreateUserArg, GetOrCreateUserResult> getOrCreateUser)
         {
             _getUser = getUser ?? throw new ArgumentNullException(nameof(getUser));

@@ -12,12 +12,12 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.AWS.DynamoDb.Label
 {
-    public class GetLabelsForUserQuery : IQueryHandler<GetLabels, GetLabelsResult>
+    public class GetLabelsQuery : IQueryHandler<GetLabels, GetLabelsResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
         private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadonlyLabel> _mapTo;
 
-        public GetLabelsForUserQuery(IDynamoDBFactory dynamoDbFactory,
+        public GetLabelsQuery(IDynamoDBFactory dynamoDbFactory,
             IMapTo<UserProjectLabelDynamoDbTable, ReadonlyLabel> mapTo)
         {
             _dynamoDbFactory = dynamoDbFactory ?? throw new ArgumentNullException(nameof(dynamoDbFactory));

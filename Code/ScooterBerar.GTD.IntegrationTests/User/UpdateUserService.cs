@@ -25,12 +25,12 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var user = _fixture.GenerateUser();
             _fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
 
-            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserArg,
+            var createUser = _fixture.Container.Resolve<IServiceOpt<CreateUserArg,
                 CreateUserResult, CreateUserServiceOutcome>>();
 
             await createUser.Run(new CreateUserArg(user.ID, user.FirstName, user.LastName, user.Email));
 
-            var updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserArg,
+            var updateUser = _fixture.Container.Resolve<IServiceOpt<UpdateUserArg,
                 UpdateUserResult, UpdateUserOutcome>>();
 
             var updateOption = await updateUser.Run(new UpdateUserArg(user.ID, null, null,
@@ -46,7 +46,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
         {
             var user = _fixture.GenerateUser();
             _fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
-            var updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserArg,
+            var updateUser = _fixture.Container.Resolve<IServiceOpt<UpdateUserArg,
                 UpdateUserResult, UpdateUserOutcome>>();
 
             var updateOption = await updateUser.Run(new UpdateUserArg(user.ID, user.FirstName, user.LastName,
@@ -62,7 +62,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
         {
             var user = _fixture.GenerateUser();
             _fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
-            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserArg,
+            var createUser = _fixture.Container.Resolve<IServiceOpt<CreateUserArg,
                 CreateUserResult, CreateUserServiceOutcome>>();
 
             var createUserOptional =
@@ -73,7 +73,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
             createUserOptional.MatchSome(x => existingVeresionNumber = x.User.VersionNumber);
 
             _fixture.ProfileFactory.SetUserProfile(new Profile(Guid.NewGuid().ToString()));
-            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserArg,
+            var _updateUser = _fixture.Container.Resolve<IServiceOpt<UpdateUserArg,
                 UpdateUserResult, UpdateUserOutcome>>();
 
             var newFirstName = "Mc";
@@ -96,12 +96,12 @@ namespace ScooterBear.GTD.IntegrationTests.User
         {
             var user = _fixture.GenerateUser();
             _fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
-            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserArg,
+            var createUser = _fixture.Container.Resolve<IServiceOpt<CreateUserArg,
                 CreateUserResult, CreateUserServiceOutcome>>();
 
             await createUser.Run(new CreateUserArg(user.ID, user.FirstName, user.LastName, user.Email));
 
-            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserArg,
+            var _updateUser = _fixture.Container.Resolve<IServiceOpt<UpdateUserArg,
                 UpdateUserResult, UpdateUserOutcome>>();
 
             var newFirstName = "Mc";
@@ -124,7 +124,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
         {
             var user = _fixture.GenerateUser();
             _fixture.ProfileFactory.SetUserProfile(new Profile(user.ID));
-            var createUser = _fixture.Container.Resolve<IServiceOptOutcomes<CreateUserArg,
+            var createUser = _fixture.Container.Resolve<IServiceOpt<CreateUserArg,
                 CreateUserResult, CreateUserServiceOutcome>>();
 
             var createUserOptional =
@@ -134,7 +134,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var existingVeresionNumber = 0;
             createUserOptional.MatchSome(x => existingVeresionNumber = x.User.VersionNumber);
 
-            var _updateUser = _fixture.Container.Resolve<IServiceOptOutcomes<UpdateUserArg,
+            var _updateUser = _fixture.Container.Resolve<IServiceOpt<UpdateUserArg,
                 UpdateUserResult, UpdateUserOutcome>>();
 
             var newFirstName = "Mc";

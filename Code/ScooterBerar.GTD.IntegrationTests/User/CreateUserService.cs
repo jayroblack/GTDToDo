@@ -30,7 +30,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var email = $"jayroblack+{userId}@here.com";
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
+                .Resolve<IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
 
             var optionResult =
                 await createUserService.Run(new CreateUserArg(userId, name, last, email));
@@ -64,7 +64,7 @@ namespace ScooterBear.GTD.IntegrationTests.User
             var email = $"jayroblack+{id}@here.com";
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserService = _fixture.Container
-                .Resolve<IServiceOptOutcomes<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
+                .Resolve<IServiceOpt<CreateUserArg, CreateUserResult, CreateUserServiceOutcome>>();
 
             var optionResult =
                 await createUserService.Run(new CreateUserArg(id, name, last, email));
