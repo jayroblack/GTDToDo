@@ -1,12 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
-import { Dialog, DialogTitle, DialogContent, 
-    DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
-import { CloseNewProjectDialog, SavingNewProjectDialog, SaveNewProjectDialog } from '../actions/newProjectDialog';
-import { withSnackbar } from 'notistack';
-import { FORM_NEW_PROJECT_DIALOG } from '../forms'
+import { CloseProjectDialog, SavingProjectDialog, SaveNewProjectDialog } from '../actions/projectDialog';
+import ProjectFormDialog from './ProjectFormDialog'
 
 const useStyles = theme => ({
 
@@ -14,122 +10,41 @@ const useStyles = theme => ({
 
 class NewProjectDialog extends React.Component {
 
-    constructor(props){
-        super(props);
-        this.timer = null;
-    }
-
-    handleDismiss = (cancelled) => {
-        this.props.dispatch(CloseNewProjectDialog(cancelled));
-    };
-
     onSubmit = (formValues) => {
-        this.props.dispatch(SavingNewProjectDialog());
+        this.props.dispatch(SavingProjectDialog());
         this.timer = setTimeout(() =>{
             const data = { projectName: formValues.projectName };
             this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, data));
         } , 2000)
     };
 
-    componentWillUnmount(){
-        clearTimeout(this.timer);
-    }
-
-    componentDidUpdate(prevProps){
-        if( prevProps.newProjectDialogState.status === 'saving' && 
-        this.props.newProjectDialogState.status === 'saveSucceeded' ){
-            this.props.enqueueSnackbar('New Project Saved.', { key: "NewProjectSaveSucceeded", persist: false, variant: 'success' });
-            this.props.dispatch(CloseNewProjectDialog(true));
+    componentDidUpdateCallback = (prevProps, currentProps) => {
+        if( prevProps.projectDialogState.status === 'saving' && 
+        currentProps.projectDialogState.status === 'saveSucceeded' ){
+            currentProps.enqueueSnackbar('New Project Saved.', { key: "NewProjectSaveSucceeded", persist: false, variant: 'success' });
+            currentProps.dispatch(CloseProjectDialog(true));
         }
-    }
-
-    renderTextField = ({ input, label, meta, ...custom }) => {
-        const opts = {};
-        if( meta.error && meta.touched){
-            opts["error"] = true;
-            opts["helperText"] = meta.error;
-        }
-        
-        if( this.props.newProjectDialogState.status === 'saveFailed' ){
-            opts["error"] = true;
-            opts["helperText"] = this.props.newProjectDialogState.errorMessage;
-        }
-
-        return (
-        <TextField autoFocus
-            required 
-            {... opts}
-            label={label}
-            margin="dense"
-            fullWidth
-            {...input}
-            {...custom}
-        />
-        );
     }
 
     render() {
-        let disabledOptions = {};
-
-        if( this.props.newProjectDialogState.status === 'saving' ){
-            disabledOptions = { disabled:true };
-        }
-        else{
-            disabledOptions = { };
-        }
         
         return (
-            <form name={FORM_NEW_PROJECT_DIALOG} >
-            <Dialog open={this.props.newProjectDialogState.status !== 'closed'} onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add New Project</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Enter the new project name and click save.
-                    </DialogContentText>
-                    <Field name="projectName" label="Project Name" component={this.renderTextField} type="text" {...disabledOptions} />
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary" {...disabledOptions}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" onClick={this.props.handleSubmit(this.onSubmit)} color="primary" {...disabledOptions}>
-                        Save
-                    </Button>
-                </DialogActions>
-                {this.props.newProjectDialogState.status === 'saving' && <LinearProgress />}
-            </Dialog>
-            </form>
+            <ProjectFormDialog 
+                title="Create New Project" 
+                description="Enter the name of your new project." 
+                onSubmit={ this.onSubmit } 
+                componentDidUpdateCallback={ this.componentDidUpdateCallback }
+            />
         );
     }
 }
-
-const validate = (formValues) => {
-    const errors = {};
-
-    if( !formValues.projectName){
-        errors.projectName = "Project name is required."
-        return errors;
-    }
-
-    if( formValues.projectName === 'Inbox'){
-        errors.projectName = "Inbox is a reserved project name."
-        return errors;
-    }
-
-    return errors;
-}
-
-NewProjectDialog = reduxForm({
-    form: FORM_NEW_PROJECT_DIALOG,
-    validate
-})(NewProjectDialog)
 
 NewProjectDialog = connect(
     state => {
       return { 
           projects: state.projects, 
-          newProjectDialogState: state.newProjectDialog,
-          myForm: state.form.newProjectDialog,
+          projectDialogState: state.projectDialog,
+          myForm: state.form.projectDialog,
           userProfile: state.userProfile
         };
     }, 
@@ -138,4 +53,4 @@ NewProjectDialog = connect(
     }
   )(NewProjectDialog)
 
-export default (withStyles(useStyles))( withSnackbar(NewProjectDialog));
+export default (withStyles(useStyles))( NewProjectDialog);

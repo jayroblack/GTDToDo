@@ -6,11 +6,11 @@ export const ADD_PROJECT = "ADD_PROJECT";
 export const EDIT_PROJECT = "EDIT_PROJECT";
 export const DELETED_PROJECT = "DELETED_PROJECT";
 
-export const NEWPROJECTDIALOG_OPEN = "newProjectDialog/OPEN";
-export const NEWPROJECTDIALOG_CLOSE = "newProjectDialog/CLOSE";
-export const NEWPROJECTDIALOG_SAVING = "newProjectDialog/SAVING";
-export const NEWPROJECTDIALOG_SAVE_SUCCEEDED = "newProjectDialog/SAVE_SUCCEEDED";
-export const NEWPROJECTDIALOG_SAVE_FAILED = "newProjectDialog/SAVE_FAILED";
+export const PROJECT_DIALOG_OPEN = "projectDialog/OPEN";
+export const PROJECT_DIALOG_CLOSE = "projectDialog/CLOSE";
+export const PROJECT_DIALOG_SAVING = "projectDialog/SAVING";
+export const PROJECT_DIALOG_SAVE_SUCCEEDED = "projectDialog/SAVE_SUCCEEDED";
+export const PROJECT_DIALOG_SAVE_FAILED = "projectDialog/SAVE_FAILED";
 
 export const EDIT_PROJECTS_DIALOG_OPEN = "EDIT_PROJECTS_DIALOG_OPEN";
 export const EDIT_PROJECTS_DIALOG_CLOSE = "EDIT_PROJECTS_DIALOG_CLOSE";

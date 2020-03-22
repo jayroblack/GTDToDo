@@ -53,10 +53,10 @@ const mapPropsToState = (state) => {
   const user = state.oidc.user;
   
   if (!user) {
-    return { buttonDisabled: true, newProjectDialog: state.NewProjectDialog };
+    return { buttonDisabled: true, projectDialog: state.projectDialog };
   }
   else {
-    return { buttonDisabled: false, newProjectDialog: state.NewProjectDialog };
+    return { buttonDisabled: false, projectDialog: state.projectDialog };
   }
 };
 

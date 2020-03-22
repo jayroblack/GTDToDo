@@ -1,25 +1,25 @@
-import { NEWPROJECTDIALOG_OPEN, 
-    NEWPROJECTDIALOG_CLOSE, 
-    NEWPROJECTDIALOG_SAVING, 
-    NEWPROJECTDIALOG_SAVE_SUCCEEDED, 
-    NEWPROJECTDIALOG_SAVE_FAILED, 
+import { PROJECT_DIALOG_OPEN, 
+    PROJECT_DIALOG_CLOSE, 
+    PROJECT_DIALOG_SAVING, 
+    PROJECT_DIALOG_SAVE_SUCCEEDED, 
+    PROJECT_DIALOG_SAVE_FAILED, 
     ADD_PROJECT } from './types';
 import { CreateProject } from '../api/projects';
-import { FORM_NEW_PROJECT_DIALOG } from '../forms'
+import { FORM_PROJECT_DIALOG } from '../forms'
 
-export const OpenNewProjectDialog = () => {
+export const OpenProjectDialog = () => {
 
     return async (dispatch) => {
         dispatch({
             type: "@@redux-form/INITIALIZE",
-            meta: { form: FORM_NEW_PROJECT_DIALOG },
+            meta: { form: FORM_PROJECT_DIALOG },
             payload: {
                 projectName: ''
             }
         });
 
         dispatch({
-            type: NEWPROJECTDIALOG_OPEN, 
+            type: PROJECT_DIALOG_OPEN, 
             payload: {
                 status: 'open',
                 errorMessage: null,
@@ -30,9 +30,9 @@ export const OpenNewProjectDialog = () => {
     }
 };
 
-export const CloseNewProjectDialog = (cancelled) => {
+export const CloseProjectDialog = (cancelled) => {
     return {
-        type: NEWPROJECTDIALOG_CLOSE, 
+        type: PROJECT_DIALOG_CLOSE, 
         payload: {
             status: 'closed',
             errorMessage: null, 
@@ -42,9 +42,9 @@ export const CloseNewProjectDialog = (cancelled) => {
     }
 };
 
-export const SavingNewProjectDialog = () => {
+export const SavingProjectDialog = () => {
     return {
-        type: NEWPROJECTDIALOG_SAVING, 
+        type: PROJECT_DIALOG_SAVING, 
         payload: {
             status: 'saving',
             errorMessage: null,
@@ -66,7 +66,7 @@ export const SaveNewProjectDialog = (token, data) => {
             });
             dispatch(
             {
-                type: NEWPROJECTDIALOG_SAVE_SUCCEEDED, 
+                type: PROJECT_DIALOG_SAVE_SUCCEEDED, 
                 payload: {
                     status: 'saveSuceeded',
                     errorMessage: null,
@@ -78,7 +78,7 @@ export const SaveNewProjectDialog = (token, data) => {
         else{
             dispatch(
             {
-                type: NEWPROJECTDIALOG_SAVE_FAILED, 
+                type: PROJECT_DIALOG_SAVE_FAILED, 
                 payload: {
                     status: 'saveFailed',
                     errorMessage: response.errorMessage,

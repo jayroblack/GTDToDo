@@ -1,10 +1,14 @@
-import { NEWPROJECTDIALOG_OPEN, NEWPROJECTDIALOG_CLOSE, NEWPROJECTDIALOG_SAVING, 
-    NEWPROJECTDIALOG_SAVE_SUCCEEDED, NEWPROJECTDIALOG_SAVE_FAILED } from '../actions/types';
+import { PROJECT_DIALOG_OPEN, 
+    PROJECT_DIALOG_CLOSE, 
+    PROJECT_DIALOG_SAVING, 
+    PROJECT_DIALOG_SAVE_SUCCEEDED, 
+    PROJECT_DIALOG_SAVE_FAILED, 
+    } from '../actions/types';
 
 
 const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessage: null, cancelled: false, data: null }, action) => {
     switch (action.type) {
-        case NEWPROJECTDIALOG_OPEN: {
+        case PROJECT_DIALOG_OPEN: {
             
             if( newProjectDialogState.status === 'closed' ){
                 return Object.assign({}, { ...newProjectDialogState }, { status: 'open' });
@@ -12,7 +16,7 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
             
             return newProjectDialogState;
         }
-        case NEWPROJECTDIALOG_CLOSE:
+        case PROJECT_DIALOG_CLOSE:
             
             if( newProjectDialogState.status === 'open' || newProjectDialogState.status === 'saveSucceeded' ){
                 return Object.assign({}, { ...newProjectDialogState }, { status: 'closed', errorMessage: null, cancelled: false, data: null });
@@ -28,14 +32,14 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
             }
 
             return newProjectDialogState;
-        case NEWPROJECTDIALOG_SAVING:
+        case PROJECT_DIALOG_SAVING:
             
             if( newProjectDialogState.status === 'open' || newProjectDialogState.status === 'saveFailed'){
                 return Object.assign({}, { ...newProjectDialogState }, { status: 'saving', errorMessage: null, cancelled: false, data: null });
             }
 
             return newProjectDialogState;
-        case NEWPROJECTDIALOG_SAVE_SUCCEEDED:
+        case PROJECT_DIALOG_SAVE_SUCCEEDED:
             
             //STOP AUTOMATICALLY CLOSING ON SAVE SUCCEEDED - we need this status, instead invoke the close action optionally based on outcome from the Action.
             if( newProjectDialogState.status === 'saving'){
@@ -43,7 +47,7 @@ const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessa
             }
 
             return newProjectDialogState;
-        case NEWPROJECTDIALOG_SAVE_FAILED:
+        case PROJECT_DIALOG_SAVE_FAILED:
             
             if( newProjectDialogState.status === 'saving'){
                 return Object.assign({}, { ...newProjectDialogState }, { status: 'saveFailed', errorMessage: action.payload.errorMessage, cancelled: false, data: null });

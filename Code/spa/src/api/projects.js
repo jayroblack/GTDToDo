@@ -30,7 +30,6 @@ export const DeleteProject = async (token, projectId) => {
 
     try{
         const response = await client.delete('/project/' + projectId);
-        console.log(response);
         return { success:true, errorMessage:null, data: response.data }
     }
     catch(err){
