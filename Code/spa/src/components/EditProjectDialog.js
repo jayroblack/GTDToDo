@@ -14,16 +14,20 @@ class EditProjectDialog extends React.Component {
         this.props.dispatch(SavingProjectDialog());
         this.timer = setTimeout(() =>{
             const data = { name: formValues.name };
-            this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, data));
+            this.props.dispatch(UpdateNewProjectDialog(this.props.userProfile.access_token, data));
         } , 2000)
     };
 
     componentDidUpdateCallback = (prevProps, currentProps) => {
         if( prevProps.projectDialogState.status === 'saving' && 
         currentProps.projectDialogState.status === 'saveSucceeded' ){
-            currentProps.enqueueSnackbar('New Project Saved.', { key: "NewProjectSaveSucceeded", persist: false, variant: 'success' });
+            currentProps.enqueueSnackbar('Project Updated.', { key: "ProjectUpdated", persist: false, variant: 'success' });
             currentProps.dispatch(CloseProjectDialog(true));
         }
+    }
+
+    isOpen = () => {
+        return this.props.projectDialogState.status !== 'closed' && !this.props.projectDialogState.isNew;
     }
 
     render() {
@@ -33,7 +37,8 @@ class EditProjectDialog extends React.Component {
                 title="Edit Project" 
                 description="Project names must be unique." 
                 onSubmit={ this.onSubmit } 
-                componentDidUpdateCallback={ this.componentDidUpdateCallback }
+                componentDidUpdateCallback={ this.componentDidUpdateCallback } 
+                isOpen={ this.isOpen() }
             />
         );
     }

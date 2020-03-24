@@ -22,12 +22,13 @@ export const OpenProjectDialog = (id = null, name = null, version = null) => {
             type: PROJECT_DIALOG_OPEN, 
             payload: {
                 status: 'open',
+                isNew: id ? false : true,
                 errorMessage: null,
                 cancelled: false,
                 data: null,
-                id,
-                version
-                }
+                id: id,
+                version: version
+            }
         });
     }
 };
@@ -37,9 +38,12 @@ export const CloseProjectDialog = (cancelled) => {
         type: PROJECT_DIALOG_CLOSE, 
         payload: {
             status: 'closed',
+            isNew: null, 
             errorMessage: null, 
             cancelled: cancelled,
-            data: null
+            data: null,
+            id: null,
+            version: null
         }
     }
 };
@@ -50,7 +54,6 @@ export const SavingProjectDialog = () => {
         payload: {
             status: 'saving',
             errorMessage: null,
-            cancelled: false,
             data: null
         }
     }

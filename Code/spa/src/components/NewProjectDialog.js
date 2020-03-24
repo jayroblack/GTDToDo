@@ -27,6 +27,10 @@ class NewProjectDialog extends React.Component {
         }
     }
 
+    isOpen = () => {
+        return this.props.projectDialogState.status !== 'closed' && this.props.projectDialogState.isNew ;
+    }
+
     render() {
         
         return (
@@ -34,7 +38,8 @@ class NewProjectDialog extends React.Component {
                 title="Create New Project" 
                 description="Enter the name of your new project." 
                 onSubmit={ this.onSubmit } 
-                componentDidUpdateCallback={ this.componentDidUpdateCallback }
+                componentDidUpdateCallback={ this.componentDidUpdateCallback } 
+                isOpen={ this.isOpen() }
             />
         );
     }
