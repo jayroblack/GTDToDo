@@ -71,7 +71,7 @@ class ProjectFormDialog extends React.Component {
         
         return (
             <form name={FORM_PROJECT_DIALOG} >
-            <Dialog open={ this.props.isOpen() } onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
+            <Dialog open={ this.props.isOpen } onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>

@@ -6,7 +6,7 @@ import { PROJECT_DIALOG_OPEN,
     } from '../actions/types';
 
 
-const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessage: null, cancelled: false, data: null, id: null, version:null, isNew: null }, action) => {
+const NewProjectDialog = (newProjectDialogState = { status: 'closed', errorMessage: null, cancelled: false, data: null, id: null, versionNumber:null, isNew: null }, action) => {
     switch (action.type) {
         case PROJECT_DIALOG_OPEN: {
             

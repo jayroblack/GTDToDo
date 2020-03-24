@@ -20,7 +20,8 @@ class NewProjectDialog extends React.Component {
 
     componentDidUpdateCallback = (prevProps, currentProps) => {
         if( prevProps.projectDialogState.status === 'saving' && 
-            currentProps.projectDialogState.status === 'saveSucceeded' ){
+            currentProps.projectDialogState.status === 'saveSucceeded' && 
+            prevProps.projectDialogState.isNew === true){
             
             currentProps.enqueueSnackbar('New Project Saved.', { key: "NewProjectSaveSucceeded", persist: false, variant: 'success' });
             currentProps.dispatch(CloseProjectDialog(true));
@@ -28,7 +29,7 @@ class NewProjectDialog extends React.Component {
     }
 
     isOpen = () => {
-        return this.props.projectDialogState.status !== 'closed' && this.props.projectDialogState.isNew ;
+        return this.props.projectDialogState.status !== 'closed' && this.props.projectDialogState.isNew === true ;
     }
 
     render() {

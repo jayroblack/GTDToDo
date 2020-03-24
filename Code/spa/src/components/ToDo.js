@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { withSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
 import NewProjectDialog from './NewProjectDialog';
+import EditProjectDialog from './EditProjectDialog';
 import EditProjectsDialog from './EditProjectsDialog';
 import { OpenProjectDialog } from '../actions/projectDialog';
 import { OpenEditProjectsDialog } from '../actions/editProjectsDialog'
@@ -152,6 +153,7 @@ class ToDo extends React.Component {
         </Typography>
         </main>
         <NewProjectDialog />
+        <EditProjectDialog />
         <EditProjectsDialog />
       </React.Fragment>
     );

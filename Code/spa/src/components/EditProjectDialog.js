@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { CloseProjectDialog, SavingProjectDialog, SaveNewProjectDialog } from '../actions/projectDialog';
+import { CloseProjectDialog, SavingProjectDialog, UpdateNewProjectDialog } from '../actions/projectDialog';
 import ProjectFormDialog from './ProjectFormDialog'
 
 const useStyles = theme => ({
@@ -13,14 +13,15 @@ class EditProjectDialog extends React.Component {
     onSubmit = (formValues) => {
         this.props.dispatch(SavingProjectDialog());
         this.timer = setTimeout(() =>{
-            const data = { name: formValues.name };
+            const data = { id:this.props.projectDialogState.id, name: formValues.name, versionNumber: this.props.projectDialogState.versionNumber };
             this.props.dispatch(UpdateNewProjectDialog(this.props.userProfile.access_token, data));
         } , 2000)
     };
 
     componentDidUpdateCallback = (prevProps, currentProps) => {
         if( prevProps.projectDialogState.status === 'saving' && 
-        currentProps.projectDialogState.status === 'saveSucceeded' ){
+        currentProps.projectDialogState.status === 'saveSucceeded' && 
+        prevProps.projectDialogState.isNew === false ){
             currentProps.enqueueSnackbar('Project Updated.', { key: "ProjectUpdated", persist: false, variant: 'success' });
             currentProps.dispatch(CloseProjectDialog(true));
         }

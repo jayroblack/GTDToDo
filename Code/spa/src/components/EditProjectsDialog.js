@@ -19,7 +19,7 @@ const useStyles = theme => ({
 });
 
 class EditProjectsDialog extends React.Component {
-    //TODO: Figure out how to refactor for reuse between NewProjectDialog and EditProjectDialog. 
+    
     constructor(props) {
         super(props);
         this.timer = null;
@@ -33,8 +33,8 @@ class EditProjectsDialog extends React.Component {
         this.props.dispatch(OpenSobrietyPrompt("Delete Project", "Are you sure you want to delete this project?", id))
     }
 
-    handleUpdate = (id, name, version) => {
-        this.props.dispatch(OpenProjectDialog(id, name, version));
+    handleUpdate = (id, name, versionNumber) => {
+        this.props.dispatch(OpenProjectDialog(id, name, versionNumber));
     }
 
     componentDidUpdate(prevProps) {
@@ -94,7 +94,7 @@ class EditProjectsDialog extends React.Component {
                                                 {project.name}
                                             </TableCell>
                                             <TableCell align="right">
-                                                <Button variant="contained" color="primary" {...disabledOptions} onClick={()=> this.handleUpdate(project.id, project.name, project.version) }>
+                                                <Button variant="contained" color="primary" {...disabledOptions} onClick={()=> this.handleUpdate(project.id, project.name, project.versionNumber) }>
                                                     Edit
                                                 </Button>
                                                 <span width="200">&nbsp;&nbsp;&nbsp;</span>

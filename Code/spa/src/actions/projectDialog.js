@@ -7,7 +7,7 @@ import { PROJECT_DIALOG_OPEN,
 import { CreateProject, UpdateProject } from '../api/projects';
 import { FORM_PROJECT_DIALOG } from '../forms'
 
-export const OpenProjectDialog = (id = null, name = null, version = null) => {
+export const OpenProjectDialog = (id, name, versionNumber) => {
 
     return async (dispatch) => {
         dispatch({
@@ -27,7 +27,7 @@ export const OpenProjectDialog = (id = null, name = null, version = null) => {
                 cancelled: false,
                 data: null,
                 id: id,
-                version: version
+                versionNumber: versionNumber
             }
         });
     }
@@ -43,7 +43,7 @@ export const CloseProjectDialog = (cancelled) => {
             cancelled: cancelled,
             data: null,
             id: null,
-            version: null
+            versionNumber: null
         }
     }
 };
@@ -72,7 +72,7 @@ export const UpdateNewProjectDialog = (token, data) => {
             {
                 type: PROJECT_DIALOG_SAVE_SUCCEEDED, 
                 payload: {
-                    status: 'saveSuceeded',
+                    status: 'saveSucceeded',
                     errorMessage: null,
                     cancelled: false,
                     data: response.data
@@ -108,7 +108,7 @@ export const SaveNewProjectDialog = (token, data) => {
             {
                 type: PROJECT_DIALOG_SAVE_SUCCEEDED, 
                 payload: {
-                    status: 'saveSuceeded',
+                    status: 'saveSucceeded',
                     errorMessage: null,
                     cancelled: false,
                     data: response.data
