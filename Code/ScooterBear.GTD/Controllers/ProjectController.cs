@@ -20,14 +20,14 @@ namespace ScooterBear.GTD.Controllers
         private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
         private readonly IProfileFactory _profileFactory;
         private readonly IQueryHandler<GetProject, GetProjectResult> _projectQuery;
-        private readonly IServiceOpt<UpdateProjectArg, UpdateProjectResult, UpdateProjectOutcome> _updateProject;
+        private readonly IServiceOpt<UpdateProjectNameArg, UpdateProjectNameResult, UpdateProjectOutcome> _updateProject;
 
         public ProjectController(IProfileFactory profileFactory,
             ICreateIdsStrategy createIdsStrategy,
             IQueryHandler<GetProjects, GetProjectsResult> getProjects,
             IQueryHandler<GetProject, GetProjectResult> projectQuery,
             IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes> createNewProject,
-            IServiceOpt<UpdateProjectArg, UpdateProjectResult, UpdateProjectOutcome> updateProject,
+            IServiceOpt<UpdateProjectNameArg, UpdateProjectNameResult, UpdateProjectOutcome> updateProject,
             IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteUserProjectOutcome> deleteProject)
         {
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
@@ -62,12 +62,12 @@ namespace ScooterBear.GTD.Controllers
 
         [HttpPost]
         [Route("/project")]
-        public async Task<IActionResult> Post([FromBody] NewProjectValues data)
+        public async Task<IActionResult> Post([FromBody] ProjectValues data)
         {
             var id = _createIdsStrategy.NewId();
             var profile = _profileFactory.GetCurrentProfile();
             var optionResult =
-                await _createNewProject.Run(new CreateNewProjectArg(id, data.NewProjectName));
+                await _createNewProject.Run(new CreateNewProjectArg(id, data.Name));
 
             return optionResult.Match<IActionResult>(some => Json(some.Project),
                 outcomes => UnprocessableEntity(outcomes.ToString()));
@@ -75,14 +75,13 @@ namespace ScooterBear.GTD.Controllers
 
         [HttpPut]
         [Route("/project/{projectId}")]
-        public async Task<IActionResult> Put([FromRoute] string projectId, [FromBody] MutableProject projectItem)
+        public async Task<IActionResult> Put([FromRoute] string projectId, [FromBody] ProjectValues projectItem)
         {
             var optionResult = await
-                _updateProject.Run(new UpdateProjectArg(projectId, projectItem.Name, projectItem.Count,
-                    projectItem.IsDeleted, projectItem.CountOverdue, projectItem.VersionNumber));
+                _updateProject.Run(new UpdateProjectNameArg(projectId, projectItem.Name, projectItem.VersionNumber));
 
             return optionResult.Match<IActionResult>(
-                some => Ok(some),
+                some => Ok(some.Project),
                 outcome =>
                 {
                     if (outcome == UpdateProjectOutcome.NotAuthorized)
@@ -122,18 +121,10 @@ namespace ScooterBear.GTD.Controllers
                 });
         }
 
-        public class NewProjectValues
+        public class ProjectValues
         {
-            [JsonProperty("projectName")] public string NewProjectName { get; set; }
+            [JsonProperty("name")] public string Name { get; set; }
+            [JsonProperty("versionNumber")] public int VersionNumber { get; set; }
         }
-    }
-
-    public class MutableProject
-    {
-        [JsonProperty("name")] public string Name { get; set; }
-        [JsonProperty("count")] public int Count { get; set; }
-        [JsonProperty("countOverdue")] public int CountOverdue { get; set; }
-        [JsonProperty("isDeleted")] public bool IsDeleted { get; set; }
-        [JsonProperty("versionNumber")] public int VersionNumber { get; set; }
     }
 }

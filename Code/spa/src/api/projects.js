@@ -21,6 +21,22 @@ export const CreateProject = async (token, data) => {
     }
 }
 
+export const UpdateProject = async (token, data) => {
+    const client = createClient(token);
+
+    if( !client ){
+        return { success:false, errorMessage: "To Token", data:null }
+    }
+
+    try{
+        const response = await client.put('/project/' + data.id, data);
+        return { success:true, errorMessage:null, data: response.data }
+    }
+    catch(err){
+        return { success:false, errorMessage:err.errorMessage, data: null, err: err };
+    }
+}
+
 export const DeleteProject = async (token, projectId) => {
     const client = createClient(token);
     

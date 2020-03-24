@@ -24,11 +24,11 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         {
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var service = _fixture.Container.Resolve<IServiceOpt<UpdateProjectArg,
-                UpdateProjectResult, UpdateProjectOutcome>>();
+            var service = _fixture.Container.Resolve<IServiceOpt<UpdateProjectNameArg,
+                UpdateProjectNameResult, UpdateProjectOutcome>>();
 
             var updateOptionResult = await
-                service.Run(new UpdateProjectArg(Guid.NewGuid().ToString(), "Project No Exist", 1, false, 1, 0));
+                service.Run(new UpdateProjectNameArg(Guid.NewGuid().ToString(), "Project No Exist", 0));
 
             updateOptionResult.Match(some => Assert.False(true, "Should not FIne"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.DoesNotExist));
@@ -39,8 +39,8 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
         {
             var userId = Guid.NewGuid().ToString();
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
-            var service = _fixture.Container.Resolve<IServiceOpt<UpdateProjectArg,
-                UpdateProjectResult, UpdateProjectOutcome>>();
+            var service = _fixture.Container.Resolve<IServiceOpt<UpdateProjectNameArg,
+                UpdateProjectNameResult, UpdateProjectOutcome>>();
 
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
@@ -62,7 +62,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             for (var i = 0; i < listOfProjectsToCreate.Count; i++)
             {
                 var updateOptionResult = await
-                    service.Run(new UpdateProjectArg(listOfProjectsToCreate[i].Id, $"Project {i + 4}", 1, false, 1, 0));
+                    service.Run(new UpdateProjectNameArg(listOfProjectsToCreate[i].Id, $"Project {i + 4}", 0));
 
                 updateOptionResult.Match(some =>
                 {

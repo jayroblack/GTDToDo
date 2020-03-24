@@ -4,17 +4,17 @@ import { PROJECT_DIALOG_OPEN,
     PROJECT_DIALOG_SAVE_SUCCEEDED, 
     PROJECT_DIALOG_SAVE_FAILED, 
     ADD_PROJECT } from './types';
-import { CreateProject } from '../api/projects';
+import { CreateProject, UpdateProject } from '../api/projects';
 import { FORM_PROJECT_DIALOG } from '../forms'
 
-export const OpenProjectDialog = () => {
+export const OpenProjectDialog = (id = null, name = null, version = null) => {
 
     return async (dispatch) => {
         dispatch({
             type: "@@redux-form/INITIALIZE",
             meta: { form: FORM_PROJECT_DIALOG },
             payload: {
-                projectName: ''
+                name: !name ? '' : name
             }
         });
 
@@ -24,7 +24,9 @@ export const OpenProjectDialog = () => {
                 status: 'open',
                 errorMessage: null,
                 cancelled: false,
-                data: null
+                data: null,
+                id,
+                version
                 }
         });
     }
@@ -53,6 +55,41 @@ export const SavingProjectDialog = () => {
         }
     }
 };
+
+export const UpdateNewProjectDialog = (token, data) => {
+    return async (dispatch) => {
+        const response = await UpdateProject(token, data);
+
+        if( response.success ){
+            dispatch({
+                type: ADD_PROJECT,
+                payload: response.data
+            });
+            dispatch(
+            {
+                type: PROJECT_DIALOG_SAVE_SUCCEEDED, 
+                payload: {
+                    status: 'saveSuceeded',
+                    errorMessage: null,
+                    cancelled: false,
+                    data: response.data
+                }
+            });
+        }
+        else{
+            dispatch(
+                {
+                    type: PROJECT_DIALOG_SAVE_FAILED, 
+                    payload: {
+                        status: 'saveFailed',
+                        errorMessage: response.errorMessage,
+                        cancelled: false,
+                        data: null
+                    }
+                });
+        }
+    }
+}
 
 export const SaveNewProjectDialog = (token, data) => {
 

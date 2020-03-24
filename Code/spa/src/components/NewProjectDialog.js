@@ -13,14 +13,15 @@ class NewProjectDialog extends React.Component {
     onSubmit = (formValues) => {
         this.props.dispatch(SavingProjectDialog());
         this.timer = setTimeout(() =>{
-            const data = { projectName: formValues.projectName };
+            const data = { name: formValues.name };
             this.props.dispatch(SaveNewProjectDialog(this.props.userProfile.access_token, data));
         } , 2000)
     };
 
     componentDidUpdateCallback = (prevProps, currentProps) => {
         if( prevProps.projectDialogState.status === 'saving' && 
-        currentProps.projectDialogState.status === 'saveSucceeded' ){
+            currentProps.projectDialogState.status === 'saveSucceeded' ){
+            
             currentProps.enqueueSnackbar('New Project Saved.', { key: "NewProjectSaveSucceeded", persist: false, variant: 'success' });
             currentProps.dispatch(CloseProjectDialog(true));
         }

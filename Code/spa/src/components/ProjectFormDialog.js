@@ -77,7 +77,7 @@ class ProjectFormDialog extends React.Component {
                     <DialogContentText>
                         {this.props.description}
                     </DialogContentText>
-                    <Field name="projectName" label="Project Name" component={this.renderTextField} type="text" {...disabledOptions} />
+                    <Field name="name" label="Project Name" component={this.renderTextField} type="text" {...disabledOptions} />
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary" {...disabledOptions}>
@@ -97,13 +97,13 @@ class ProjectFormDialog extends React.Component {
 const validate = (formValues) => {
     const errors = {};
 
-    if( !formValues.projectName){
-        errors.projectName = "Project name is required."
+    if( !formValues.name){
+        errors.name = "Project name is required."
         return errors;
     }
 
-    if( formValues.projectName === 'Inbox'){
-        errors.projectName = "Inbox is a reserved project name."
+    if( formValues.name === 'Inbox'){
+        errors.name = "Inbox is a reserved project name."
         return errors;
     }
 

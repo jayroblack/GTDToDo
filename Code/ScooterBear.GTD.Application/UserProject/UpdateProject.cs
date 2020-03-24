@@ -18,8 +18,8 @@ namespace ScooterBear.GTD.Application.UserProject
         NameAlreadyExists
     }
 
-    public class UpdateProjectService : IServiceOpt<UpdateProjectArg,
-        UpdateProjectResult, UpdateProjectOutcome>
+    public class UpdateProjectService : IServiceOpt<UpdateProjectNameArg,
+        UpdateProjectNameResult, UpdateProjectOutcome>
     {
         private readonly IQueryHandler<GetProject, GetProjectResult> _getProjectQuery;
         private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjectsQuery;
@@ -47,21 +47,21 @@ namespace ScooterBear.GTD.Application.UserProject
             _getProjectsQuery = getProjectsQuery ?? throw new ArgumentNullException(nameof(getProjectsQuery));
         }
 
-        public async Task<Option<UpdateProjectResult, UpdateProjectOutcome>> Run(UpdateProjectArg arg)
+        public async Task<Option<UpdateProjectNameResult, UpdateProjectOutcome>> Run(UpdateProjectNameArg nameArg)
         {
             var userProjectOption = Option.None<GetProjectResult>();
 
             try
             {
-                userProjectOption = await _getProjectQuery.Run(new GetProject(arg.ProjectId));
+                userProjectOption = await _getProjectQuery.Run(new GetProject(nameArg.ProjectId));
                 if (!userProjectOption.HasValue)
-                    return Option.None<UpdateProjectResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                    return Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                         .DoesNotExist);
             }
             catch (ArgumentException e) //<== Why did we add this again?
             {
                 _logger.Log(LogLevel.Error, e.Message);
-                return Option.None<UpdateProjectResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                return Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                     .UnprocessableEntity);
             }
 
@@ -75,10 +75,10 @@ namespace ScooterBear.GTD.Application.UserProject
 
             var profile = _profileFactory.GetCurrentProfile();
             if (project.UserId != profile.UserId)
-                return Option.None<UpdateProjectResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                return Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                     .NotAuthorized);
 
-            if (project.Name != arg.Name)
+            if (project.Name != nameArg.Name)
             {
                 var projectsOptional = await _getProjectsQuery.Run(new GetProjects(profile.UserId));
 
@@ -86,35 +86,32 @@ namespace ScooterBear.GTD.Application.UserProject
                 projectsOptional.MatchSome(some =>
                 {
                     nameExists =
-                        some.Projects.Any(x => !x.IsDeleted && x.Name == arg.Name);
+                        some.Projects.Any(x => !x.IsDeleted && x.Name == nameArg.Name);
                 });
 
                 if (nameExists)
-                    return Option.None<UpdateProjectResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                    return Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                         .NameAlreadyExists);
             }
 
             try
             {
-                project.SetCount(arg.Count);
-                project.SetCountOverDue(arg.CountOverdue);
-                project.SetIsDeleted(arg.IsDeleted);
-                project.SetName(arg.Name);
-                project.SetVersionNumber(arg.VersionNumber);
+                project.SetName(nameArg.Name);
+                project.SetVersionNumber(nameArg.VersionNumber);
             }
             catch (ArgumentException e)
             {
                 _logger.Log(LogLevel.Error, e.Message);
-                return Option.None<UpdateProjectResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                return Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                     .UnprocessableEntity);
             }
 
             var updatedProjectOption = await _persistUpdateProject.Run(new PersistUpdateProjectArg(project));
 
             return updatedProjectOption.Match(some =>
-                Option.Some<UpdateProjectResult, UpdateProjectOutcome>(
-                    new UpdateProjectResult(some.Project)), outcome =>
-                Option.None<UpdateProjectResult, UpdateProjectOutcome>(UpdateProjectOutcome
+                Option.Some<UpdateProjectNameResult, UpdateProjectOutcome>(
+                    new UpdateProjectNameResult(some.Project)), outcome =>
+                Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                     .VersionConflict));
         }
     }

@@ -12,6 +12,7 @@ import { CloseEditProjectsDialog, PendingEditProjectsDialog, DeleteProjectEditPr
 import { OpenSobrietyPrompt } from '../actions/sobrietyPromptDialog';
 import { withSnackbar } from 'notistack';
 import SobrietyPromptDialog from './SobrietyPromptDialog';
+import { OpenProjectDialog } from '../actions/projectDialog';
 
 const useStyles = theme => ({
 
@@ -28,8 +29,12 @@ class EditProjectsDialog extends React.Component {
         this.props.dispatch(CloseEditProjectsDialog(cancelled));
     };
 
-    handleDelete = (projectId) => {
-        this.props.dispatch(OpenSobrietyPrompt("Delete Project", "Are you sure you want to delete this project?", projectId))
+    handleDelete = (id) => {
+        this.props.dispatch(OpenSobrietyPrompt("Delete Project", "Are you sure you want to delete this project?", id))
+    }
+
+    handleUpdate = (id, name, version) => {
+        this.props.dispatch(OpenProjectDialog(id, name, version));
     }
 
     componentDidUpdate(prevProps) {
@@ -89,16 +94,16 @@ class EditProjectsDialog extends React.Component {
                                                 {project.name}
                                             </TableCell>
                                             <TableCell align="right">
-                                                <Button variant="contained" color="primary" {...disabledOptions}>
+                                                <Button variant="contained" color="primary" {...disabledOptions} onClick={()=> this.handleUpdate(project.id, project.name, project.version) }>
                                                     Edit
-                                    </Button>
+                                                </Button>
                                                 <span width="200">&nbsp;&nbsp;&nbsp;</span>
                                                 <Button variant="contained"
                                                     color="secondary"
                                                     onClick={() => this.handleDelete(project.id)}
                                                     {...disabledOptions}>
                                                     Delete
-                                    </Button>
+                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                     ))}
