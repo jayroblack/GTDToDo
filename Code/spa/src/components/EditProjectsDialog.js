@@ -34,7 +34,7 @@ class EditProjectsDialog extends React.Component {
     }
 
     handleUpdate = (id, name, versionNumber) => {
-        this.props.dispatch(OpenNameFormDialog(id, name, versionNumber));
+        this.props.dispatch(OpenNameFormDialog(id, name, versionNumber, "Project"));
     }
 
     componentDidUpdate(prevProps) {

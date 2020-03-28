@@ -39,7 +39,9 @@ class NewProjectDialog extends React.Component {
     }
 
     isOpen = () => {
-        return this.props.nameFormDialog.status !== 'closed' && this.props.nameFormDialog.isNew === true ;
+        return this.props.nameFormDialog.entity === "Project" && 
+            this.props.nameFormDialog.status !== 'closed' && 
+            this.props.nameFormDialog.isNew === true ;
     }
 
     render() {

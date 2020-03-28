@@ -48,7 +48,7 @@ class ToDo extends React.Component {
   }
 
   handleNewProject = () => {
-    this.props.dispatch(OpenNameFormDialog());
+    this.props.dispatch(OpenNameFormDialog(null, null, null, "Project"));
   }
 
   handleEditProjects = () => {

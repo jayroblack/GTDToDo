@@ -5,7 +5,7 @@ import { NAME_FORM_DIALOG_OPEN,
     NAME_FORM_DIALOG_SAVE_FAILED } from './types';
 import { NAME_FORM_DIALOG } from '../forms'
 
-export const OpenNameFormDialog = (id, name, versionNumber) => {
+export const OpenNameFormDialog = (id, name, versionNumber, entity) => {
 
     return async (dispatch) => {
         dispatch({
@@ -25,7 +25,8 @@ export const OpenNameFormDialog = (id, name, versionNumber) => {
                 cancelled: false,
                 data: null,
                 id: id,
-                versionNumber: versionNumber
+                versionNumber: versionNumber,
+                entity: entity
             }
         });
     }
@@ -41,7 +42,8 @@ export const CloseNameFormDialog = (cancelled) => {
             cancelled: cancelled,
             data: null,
             id: null,
-            versionNumber: null
+            versionNumber: null,
+            entity: null
         }
     }
 };
