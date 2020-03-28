@@ -1,4 +1,4 @@
-import createClient from './todoApiConfig';
+import { createClient, handleError } from './apiCommon';
 
 export const GetIdentity = async (token) => {
     const client = createClient(token);
@@ -12,7 +12,7 @@ export const GetIdentity = async (token) => {
         return { success:true, errorMessage:null, data: response.data }
     }
     catch(err){
-        return { success:false, errorMessage:err.errorMessage, data: null };
+        return handleError(err, "User");
     }
 };
 
@@ -27,7 +27,7 @@ export const GetOrCreateUser = async (token, data) => {
         return { success:true, errorMessage:null, data: response.data }
     }
     catch(err){
-        return { success:false, errorMessage:err.errorMessage, data: null };
+        return handleError(err, "User");
     }
 }
 
@@ -42,6 +42,6 @@ export const GetToDos = async(token) =>{
         return { success:true, errorMessage:null, data: response.data }
     }
     catch(err){
-        return { success:false, errorMessage:err.errorMessage, data: null };
+        return handleError(err, "User");
     }
 }
