@@ -3,7 +3,8 @@ import { PROJECT_DIALOG_OPEN,
     PROJECT_DIALOG_SAVING, 
     PROJECT_DIALOG_SAVE_SUCCEEDED, 
     PROJECT_DIALOG_SAVE_FAILED, 
-    ADD_PROJECT } from './types';
+    ADD_PROJECT,
+    EDIT_PROJECT } from './types';
 import { CreateProject, UpdateProject } from '../api/projects';
 import { FORM_PROJECT_DIALOG } from '../forms'
 
@@ -65,9 +66,10 @@ export const UpdateNewProjectDialog = (token, data) => {
 
         if( response.success ){
             dispatch({
-                type: ADD_PROJECT,
+                type: EDIT_PROJECT,
                 payload: response.data
             });
+
             dispatch(
             {
                 type: PROJECT_DIALOG_SAVE_SUCCEEDED, 
@@ -104,6 +106,7 @@ export const SaveNewProjectDialog = (token, data) => {
                 type: ADD_PROJECT,
                 payload: response.data
             });
+
             dispatch(
             {
                 type: PROJECT_DIALOG_SAVE_SUCCEEDED, 

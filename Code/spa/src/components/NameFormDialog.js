@@ -13,7 +13,8 @@ const useStyles = theme => ({
 
 });
 
-class ProjectFormDialog extends React.Component {
+
+class NameFormDialog extends React.Component {
 
     constructor(props){
         super(props);
@@ -110,12 +111,12 @@ const validate = (formValues) => {
     return errors;
 }
 
-ProjectFormDialog = reduxForm({
+NameFormDialog = reduxForm({
     form: FORM_PROJECT_DIALOG,
     validate
-})(ProjectFormDialog)
+})(NameFormDialog)
 
-ProjectFormDialog = connect(
+NameFormDialog = connect(
     state => {
       return { 
           projects: state.projects, 
@@ -127,9 +128,9 @@ ProjectFormDialog = connect(
     dispatch => {
         return { dispatch }
     }
-  )(ProjectFormDialog)
+  )(NameFormDialog)
 
-  ProjectFormDialog.protoTypes = {
+  NameFormDialog.protoTypes = {
       title: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       isOpen: PropTypes.func.isRequired,
@@ -137,4 +138,4 @@ ProjectFormDialog = connect(
       componentDidUpdateCallback: PropTypes.func //<== componentDidUpdateCallback(prevProps, currentProps)
   }
 
-export default (withStyles(useStyles))( withSnackbar(ProjectFormDialog));
+export default (withStyles(useStyles))( withSnackbar(NameFormDialog));

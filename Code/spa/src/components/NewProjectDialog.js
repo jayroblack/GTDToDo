@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { CloseProjectDialog, SavingProjectDialog, SaveNewProjectDialog } from '../actions/projectDialog';
-import ProjectFormDialog from './ProjectFormDialog'
+import NameFormDialog from './NameFormDialog'
 
 const useStyles = theme => ({
 
@@ -35,7 +35,7 @@ class NewProjectDialog extends React.Component {
     render() {
         
         return (
-            <ProjectFormDialog 
+            <NameFormDialog 
                 title="Create New Project" 
                 description="Enter the name of your new project." 
                 onSubmit={ this.onSubmit } 

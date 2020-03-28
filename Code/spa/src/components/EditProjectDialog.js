@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { CloseProjectDialog, SavingProjectDialog, UpdateNewProjectDialog } from '../actions/projectDialog';
-import ProjectFormDialog from './ProjectFormDialog'
+import NameFormDialog from './NameFormDialog'
 
 const useStyles = theme => ({
 
@@ -34,7 +34,7 @@ class EditProjectDialog extends React.Component {
     render() {
         
         return (
-            <ProjectFormDialog 
+            <NameFormDialog 
                 title="Edit Project" 
                 description="Project names must be unique." 
                 onSubmit={ this.onSubmit } 
