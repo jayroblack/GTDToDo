@@ -12,7 +12,7 @@ import { CloseEditProjectsDialog, PendingEditProjectsDialog, DeleteProjectEditPr
 import { OpenSobrietyPrompt } from '../actions/sobrietyPromptDialog';
 import { withSnackbar } from 'notistack';
 import SobrietyPromptDialog from './SobrietyPromptDialog';
-import { OpenProjectDialog } from '../actions/projectDialog';
+import { OpenNameFormDialog } from '../actions/nameFormDialog';
 
 const useStyles = theme => ({
 
@@ -34,7 +34,7 @@ class EditProjectsDialog extends React.Component {
     }
 
     handleUpdate = (id, name, versionNumber) => {
-        this.props.dispatch(OpenProjectDialog(id, name, versionNumber));
+        this.props.dispatch(OpenNameFormDialog(id, name, versionNumber));
     }
 
     componentDidUpdate(prevProps) {

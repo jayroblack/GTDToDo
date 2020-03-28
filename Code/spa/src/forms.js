@@ -1,1 +1,1 @@
-export const FORM_PROJECT_DIALOG = "projectDialog";
+export const NAME_FORM_DIALOG = "nameFormDialogForm";

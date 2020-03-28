@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import NewProjectDialog from './NewProjectDialog';
 import EditProjectDialog from './EditProjectDialog';
 import EditProjectsDialog from './EditProjectsDialog';
-import { OpenProjectDialog } from '../actions/projectDialog';
+import { OpenNameFormDialog } from '../actions/nameFormDialog';
 import { OpenEditProjectsDialog } from '../actions/editProjectsDialog'
 
 const drawerWidth = 240;
@@ -48,7 +48,7 @@ class ToDo extends React.Component {
   }
 
   handleNewProject = () => {
-    this.props.dispatch(OpenProjectDialog());
+    this.props.dispatch(OpenNameFormDialog());
   }
 
   handleEditProjects = () => {

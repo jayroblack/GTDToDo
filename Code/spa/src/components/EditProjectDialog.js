@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import { CloseProjectDialog, SavingProjectDialog, UpdateNewProjectDialog } from '../actions/projectDialog';
+import { CloseNameFormDialog, SavingNameFormDialog, SaveNameFormDialog } from '../actions/nameFormDialog';
 import NameFormDialog from './NameFormDialog'
-
+import { UpdateProject } from '../api/projects';
+import { EDIT_PROJECT } from '../actions/types';
 const useStyles = theme => ({
 
 });
@@ -11,24 +12,33 @@ const useStyles = theme => ({
 class EditProjectDialog extends React.Component {
 
     onSubmit = (formValues) => {
-        this.props.dispatch(SavingProjectDialog());
-        this.timer = setTimeout(() =>{
-            const data = { id:this.props.projectDialogState.id, name: formValues.name, versionNumber: this.props.projectDialogState.versionNumber };
-            this.props.dispatch(UpdateNewProjectDialog(this.props.userProfile.access_token, data));
+        this.props.dispatch(SavingNameFormDialog());
+        this.timer = setTimeout( async () => {
+            const data = { id:this.props.nameFormDialog.id, name: formValues.name, versionNumber: this.props.nameFormDialog.versionNumber };
+
+            const response = await UpdateProject(this.props.userProfile.access_token, data);
+
+            var objectToDispatch = 
+            {
+                type: EDIT_PROJECT,
+                payload: response.data
+            };
+            
+            this.props.dispatch(SaveNameFormDialog(response, objectToDispatch));
         } , 2000)
     };
 
     componentDidUpdateCallback = (prevProps, currentProps) => {
-        if( prevProps.projectDialogState.status === 'saving' && 
-        currentProps.projectDialogState.status === 'saveSucceeded' && 
-        prevProps.projectDialogState.isNew === false ){
+        if( prevProps.nameFormDialog.status === 'saving' && 
+        currentProps.nameFormDialog.status === 'saveSucceeded' && 
+        prevProps.nameFormDialog.isNew === false ){
             currentProps.enqueueSnackbar('Project Updated.', { key: "ProjectUpdated", persist: false, variant: 'success' });
-            currentProps.dispatch(CloseProjectDialog(true));
+            currentProps.dispatch(CloseNameFormDialog(true));
         }
     }
 
     isOpen = () => {
-        return this.props.projectDialogState.status !== 'closed' && !this.props.projectDialogState.isNew;
+        return this.props.nameFormDialog.status !== 'closed' && !this.props.nameFormDialog.isNew;
     }
 
     render() {
@@ -36,6 +46,7 @@ class EditProjectDialog extends React.Component {
         return (
             <NameFormDialog 
                 title="Edit Project" 
+                entity="Project" 
                 description="Project names must be unique." 
                 onSubmit={ this.onSubmit } 
                 componentDidUpdateCallback={ this.componentDidUpdateCallback } 
@@ -48,9 +59,7 @@ class EditProjectDialog extends React.Component {
 EditProjectDialog = connect(
     state => {
       return { 
-          projects: state.projects, 
-          projectDialogState: state.projectDialog,
-          myForm: state.form.projectDialog,
+          nameFormDialog: state.nameFormDialog,
           userProfile: state.userProfile
         };
     }, 

@@ -5,9 +5,9 @@ import { Field, reduxForm } from 'redux-form';
 import { withStyles } from '@material-ui/core/styles';
 import { Dialog, DialogTitle, DialogContent, 
     DialogContentText, DialogActions, Button, TextField, LinearProgress } from '@material-ui/core'
-import { CloseProjectDialog } from '../actions/projectDialog';
+import { CloseNameFormDialog } from '../actions/nameFormDialog';
 import { withSnackbar } from 'notistack';
-import { FORM_PROJECT_DIALOG } from '../forms'
+import { NAME_FORM_DIALOG } from '../forms'
 
 const useStyles = theme => ({
 
@@ -22,7 +22,7 @@ class NameFormDialog extends React.Component {
     }
 
     handleDismiss = (cancelled) => {
-        this.props.dispatch(CloseProjectDialog(cancelled));
+        this.props.dispatch(CloseNameFormDialog(cancelled));
     };
 
     componentWillUnmount(){
@@ -42,9 +42,9 @@ class NameFormDialog extends React.Component {
             opts["helperText"] = meta.error;
         }
         
-        if( this.props.projectDialogState.status === 'saveFailed' ){
+        if( this.props.nameFormDialog.status === 'saveFailed' ){
             opts["error"] = true;
-            opts["helperText"] = this.props.projectDialogState.errorMessage;
+            opts["helperText"] = this.props.nameFormDialog.errorMessage;
         }
 
         return (
@@ -63,7 +63,7 @@ class NameFormDialog extends React.Component {
     render() {
         let disabledOptions = {};
 
-        if( this.props.projectDialogState.status === 'saving' ){
+        if( this.props.nameFormDialog.status === 'saving' ){
             disabledOptions = { disabled:true };
         }
         else{
@@ -71,14 +71,14 @@ class NameFormDialog extends React.Component {
         }
         
         return (
-            <form name={FORM_PROJECT_DIALOG} >
+            <form name={NAME_FORM_DIALOG} >
             <Dialog open={ this.props.isOpen } onClose={() => this.handleDismiss(false)} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         {this.props.description}
                     </DialogContentText>
-                    <Field name="name" label="Project Name" component={this.renderTextField} type="text" {...disabledOptions} />
+                    <Field name="name" label={ `${this.props.entity} Name` } component={this.renderTextField} type="text" {...disabledOptions} />
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" onClick={ ()=> this.handleDismiss(true)} color="secondary" {...disabledOptions}>
@@ -88,7 +88,7 @@ class NameFormDialog extends React.Component {
                         Save
                     </Button>
                 </DialogActions>
-                {this.props.projectDialogState.status === 'saving' && <LinearProgress />}
+                {this.props.nameFormDialog.status === 'saving' && <LinearProgress />}
             </Dialog>
             </form>
         );
@@ -99,12 +99,12 @@ const validate = (formValues) => {
     const errors = {};
 
     if( !formValues.name){
-        errors.name = "Project name is required."
+        errors.name = "Name is required."
         return errors;
     }
 
     if( formValues.name === 'Inbox'){
-        errors.name = "Inbox is a reserved project name."
+        errors.name = "Inbox is a reserved name."
         return errors;
     }
 
@@ -112,17 +112,14 @@ const validate = (formValues) => {
 }
 
 NameFormDialog = reduxForm({
-    form: FORM_PROJECT_DIALOG,
+    form: NAME_FORM_DIALOG,
     validate
 })(NameFormDialog)
 
 NameFormDialog = connect(
     state => {
       return { 
-          projects: state.projects, 
-          projectDialogState: state.projectDialog,
-          myForm: state.form.projectDialog,
-          userProfile: state.userProfile
+          nameFormDialog: state.nameFormDialog
         };
     }, 
     dispatch => {
@@ -132,6 +129,7 @@ NameFormDialog = connect(
 
   NameFormDialog.protoTypes = {
       title: PropTypes.string.isRequired,
+      entity: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       isOpen: PropTypes.func.isRequired,
       onSubmit: PropTypes.func.isRequired, //<== onSubmit(formValues)
