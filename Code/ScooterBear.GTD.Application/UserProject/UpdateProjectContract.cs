@@ -3,20 +3,6 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.UserProject
 {
-    public class UpdateProjectNameArg : IServiceArgs<UpdateProjectNameResult>
-    {
-        public UpdateProjectNameArg(string projectId, string name, int versionNumber)
-        {
-            ProjectId = projectId;
-            Name = name;
-            VersionNumber = versionNumber;
-        }
-
-        public string ProjectId { get; }
-        public string Name { get; }
-        public int VersionNumber { get; }
-    }
-
     public class UpdateProjectNameResult : IServiceResult
     {
         public UpdateProjectNameResult(IProject project)
@@ -25,5 +11,19 @@ namespace ScooterBear.GTD.Application.UserProject
         }
 
         public IProject Project { get; }
+    }
+
+    public class UpdateProjectNameArg : IServiceArgs<UpdateProjectNameResult>
+    {
+        public UpdateProjectNameArg(string id, string name, int versionNumber)
+        {
+            Id = id;
+            Name = name;
+            VersionNumber = versionNumber;
+        }
+
+        public string Id { get; }
+        public string Name { get; }
+        public int VersionNumber { get; }
     }
 }

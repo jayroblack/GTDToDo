@@ -15,8 +15,8 @@ namespace ScooterBear.GTD.Controllers
     public class ProjectController : Controller
     {
         private readonly ICreateIdsStrategy _createIdsStrategy;
-        private readonly IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes> _createNewProject;
-        private readonly IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteUserProjectOutcome> _deleteProject;
+        private readonly IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateProjectOutcomes> _createNewProject;
+        private readonly IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteProjectOutcome> _deleteProject;
         private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
         private readonly IProfileFactory _profileFactory;
         private readonly IQueryHandler<GetProject, GetProjectResult> _projectQuery;
@@ -26,9 +26,9 @@ namespace ScooterBear.GTD.Controllers
             ICreateIdsStrategy createIdsStrategy,
             IQueryHandler<GetProjects, GetProjectsResult> getProjects,
             IQueryHandler<GetProject, GetProjectResult> projectQuery,
-            IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes> createNewProject,
+            IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateProjectOutcomes> createNewProject,
             IServiceOpt<UpdateProjectNameArg, UpdateProjectNameResult, UpdateProjectOutcome> updateProject,
-            IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteUserProjectOutcome> deleteProject)
+            IServiceOpt<DeleteProjectArg, DeleteProjectResult, DeleteProjectOutcome> deleteProject)
         {
             _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
@@ -46,7 +46,7 @@ namespace ScooterBear.GTD.Controllers
             var profile = _profileFactory.GetCurrentProfile();
             var projectResultOption = await _getProjects.Run(new GetProjects(profile.UserId));
             return projectResultOption.Match(some => Json(some),
-                () => Json(new List<IProject>()));
+                () => Json(new GetProjectsResult(profile.UserId, new List<IProject>())));
         }
 
         [HttpGet]
@@ -56,7 +56,7 @@ namespace ScooterBear.GTD.Controllers
             var resultOption =
                 await _projectQuery.Run(new GetProject(projectId));
 
-            return resultOption.Match<IActionResult>(some => Json(some.UserProject),
+            return resultOption.Match<IActionResult>(some => Json(some.Project),
                 NotFound);
         }
 
@@ -108,13 +108,13 @@ namespace ScooterBear.GTD.Controllers
                 some => Ok(),
                 outcome =>
                 {
-                    if (outcome == DeleteUserProjectOutcome.NotAuthorized)
+                    if (outcome == DeleteProjectOutcome.NotAuthorized)
                         return Unauthorized();
 
-                    if (outcome == DeleteUserProjectOutcome.NotFound)
+                    if (outcome == DeleteProjectOutcome.NotFound)
                         return NotFound();
 
-                    if (outcome == DeleteUserProjectOutcome.HasAssociatedToDos)
+                    if (outcome == DeleteProjectOutcome.HasAssociatedToDos)
                         return UnprocessableEntity("Has associated To Do Items.");
 
                     return Conflict(outcome);

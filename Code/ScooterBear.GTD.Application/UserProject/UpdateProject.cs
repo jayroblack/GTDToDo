@@ -18,11 +18,11 @@ namespace ScooterBear.GTD.Application.UserProject
         NameAlreadyExists
     }
 
-    public class UpdateProjectService : IServiceOpt<UpdateProjectNameArg,
+    public class UpdateProject : IServiceOpt<UpdateProjectNameArg,
         UpdateProjectNameResult, UpdateProjectOutcome>
     {
-        private readonly IQueryHandler<GetProject, GetProjectResult> _getProjectQuery;
-        private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjectsQuery;
+        private readonly IQueryHandler<GetProject, GetProjectResult> _getProject;
+        private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
         private readonly ILogger _logger;
 
         private readonly
@@ -31,30 +31,30 @@ namespace ScooterBear.GTD.Application.UserProject
 
         private readonly IProfileFactory _profileFactory;
 
-        public UpdateProjectService(
+        public UpdateProject(
             IProfileFactory profileFactory,
             ILogger logger,
-            IQueryHandler<GetProject, GetProjectResult> getProjectQuery,
+            IQueryHandler<GetProject, GetProjectResult> getProject,
             IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult, PersistUpdateProjectOutcome>
                 persistUpdateProject,
-            IQueryHandler<GetProjects, GetProjectsResult> getProjectsQuery)
+            IQueryHandler<GetProjects, GetProjectsResult> getProjects)
         {
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _getProjectQuery = getProjectQuery ?? throw new ArgumentNullException(nameof(getProjectQuery));
+            _getProject = getProject ?? throw new ArgumentNullException(nameof(getProject));
             _persistUpdateProject =
                 persistUpdateProject ?? throw new ArgumentNullException(nameof(persistUpdateProject));
-            _getProjectsQuery = getProjectsQuery ?? throw new ArgumentNullException(nameof(getProjectsQuery));
+            _getProjects = getProjects ?? throw new ArgumentNullException(nameof(getProjects));
         }
 
         public async Task<Option<UpdateProjectNameResult, UpdateProjectOutcome>> Run(UpdateProjectNameArg nameArg)
         {
-            var userProjectOption = Option.None<GetProjectResult>();
+            var projectOption = Option.None<GetProjectResult>();
 
             try
             {
-                userProjectOption = await _getProjectQuery.Run(new GetProject(nameArg.ProjectId));
-                if (!userProjectOption.HasValue)
+                projectOption = await _getProject.Run(new GetProject(nameArg.Id));
+                if (!projectOption.HasValue)
                     return Option.None<UpdateProjectNameResult, UpdateProjectOutcome>(UpdateProjectOutcome
                         .DoesNotExist);
             }
@@ -66,9 +66,9 @@ namespace ScooterBear.GTD.Application.UserProject
             }
 
             Project project = null;
-            userProjectOption.MatchSome(some =>
+            projectOption.MatchSome(some =>
             {
-                var proj = some.UserProject;
+                var proj = some.Project;
                 project = new Project(proj.Id, proj.Name, proj.UserId, proj.Count, proj.CountOverDue, proj.DateCreated,
                     proj.VersionNumber, proj.IsDeleted);
             });
@@ -80,7 +80,7 @@ namespace ScooterBear.GTD.Application.UserProject
 
             if (project.Name != nameArg.Name)
             {
-                var projectsOptional = await _getProjectsQuery.Run(new GetProjects(profile.UserId));
+                var projectsOptional = await _getProjects.Run(new GetProjects(profile.UserId));
 
                 var nameExists = false;
                 projectsOptional.MatchSome(some =>

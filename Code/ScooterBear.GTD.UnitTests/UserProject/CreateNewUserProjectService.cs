@@ -33,7 +33,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(Option.None<GetProjectsResult>()));
 
             fixture.PersistService.Setup(x =>
-                    x.Run(It.IsAny<PersistNewProjectArg>()))
+                    x.Run(It.IsAny<PersistProjectArg>()))
                 .Returns(Task.FromResult(new PersistNewProjectResult(fixture.Project)));
 
             var returnOption = await
@@ -73,7 +73,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                     new CreateNewProjectArg("IdTwo", "ProjectName"));
 
             returnOption.HasValue.Should().BeFalse();
-            returnOption.MatchNone(none => none.Should().Be(CreateUserProjectOutcomes.ProjectNameAlreadyExists));
+            returnOption.MatchNone(none => none.Should().Be(CreateProjectOutcomes.ProjectNameAlreadyExists));
         }
 
         [Fact]
@@ -90,14 +90,14 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                     new CreateNewProjectArg("Id", "ProjectTwo"));
 
             returnOption.HasValue.Should().BeFalse();
-            returnOption.MatchNone(none => none.Should().Be(CreateUserProjectOutcomes.ProjectIdAlreadyExists));
+            returnOption.MatchNone(none => none.Should().Be(CreateProjectOutcomes.ProjectIdAlreadyExists));
         }
     }
 
     public class CreateNewUserProjectFixture : IDisposable
     {
         public readonly Mock<IKnowTheDate> IKnowTheDate;
-        public readonly Mock<IService<PersistNewProjectArg, PersistNewProjectResult>> PersistService;
+        public readonly Mock<IService<PersistProjectArg, PersistNewProjectResult>> PersistService;
         public readonly ReadOnlyProject Project;
         public readonly Mock<IQueryHandler<GetProjects, GetProjectsResult>> Query;
         public readonly CreateNewProject Service;
@@ -106,7 +106,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
         public CreateNewUserProjectFixture()
         {
             Query = new Mock<IQueryHandler<GetProjects, GetProjectsResult>>();
-            PersistService = new Mock<IService<PersistNewProjectArg, PersistNewProjectResult>>();
+            PersistService = new Mock<IService<PersistProjectArg, PersistNewProjectResult>>();
             IKnowTheDate = new Mock<IKnowTheDate>();
             IKnowTheDate.Setup(x => x.UtcNow()).Returns(DateTime.UtcNow);
             UserProfileFactory = new Mock<IProfileFactory>();

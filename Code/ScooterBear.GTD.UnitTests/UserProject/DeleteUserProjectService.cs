@@ -29,7 +29,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
             var optionResult = await _fixture.DeleteUserService.Run(new DeleteProjectArg("asdf"));
 
             optionResult.Match(some => Assert.False(true, "Should be Null"),
-                outcome => outcome.Should().Be(DeleteUserProjectOutcome.NotFound));
+                outcome => outcome.Should().Be(DeleteProjectOutcome.NotFound));
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 _fixture.DeleteUserService.Run(new DeleteProjectArg(projectId));
 
             optionResult.Match(some => Assert.False(true, "Should be Null"),
-                outcome => outcome.Should().Be(DeleteUserProjectOutcome.NotAuthorized));
+                outcome => outcome.Should().Be(DeleteProjectOutcome.NotAuthorized));
         }
     }
 

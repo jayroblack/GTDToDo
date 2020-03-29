@@ -12,12 +12,12 @@ namespace ScooterBear.GTD.Application.Users.New
     {
         private readonly ICreateIdsStrategy _createIdsStrategy;
 
-        private readonly IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
+        private readonly IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateProjectOutcomes>
             _createInboxProject;
 
         public WhenNewUserCreatedBootstrapUser(
             ICreateIdsStrategy createIdsStrategy,
-            IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateUserProjectOutcomes>
+            IServiceOpt<CreateNewProjectArg, CreateNewProjectResult, CreateProjectOutcomes>
                 createInboxProject)
         {
             _createIdsStrategy = createIdsStrategy ?? throw new ArgumentNullException(nameof(createIdsStrategy));

@@ -10,7 +10,7 @@ using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Label
+namespace ScooterBear.GTD.AWS.DynamoDb.Labels
 {
     public class GetLabelsQuery : IQueryHandler<GetLabels, GetLabelsResult>
     {

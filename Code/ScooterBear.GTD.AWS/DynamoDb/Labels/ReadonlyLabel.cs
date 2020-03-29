@@ -1,7 +1,7 @@
 ﻿using System;
 using ScooterBear.GTD.Application.UserLabel;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Label
+namespace ScooterBear.GTD.AWS.DynamoDb.Labels
 {
     public class ReadonlyLabel : ILabel
     {

@@ -44,7 +44,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
 
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-                    CreateUserProjectOutcomes>>();
+                    CreateProjectOutcomes>>();
 
             var listOfProjectsToCreate = new List<ProjectItem>();
             listOfProjectsToCreate.Add(new ProjectItem(Guid.NewGuid().ToString(), "Project 1"));

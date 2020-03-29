@@ -8,11 +8,11 @@ namespace ScooterBear.GTD.Application.UserProject
 
     public class DeleteProjectArg : IServiceArgs<DeleteProjectResult>
     {
+        public string ProjectId { get; }
+
         public DeleteProjectArg(string projectId)
         {
             ProjectId = projectId;
         }
-
-        public string ProjectId { get; }
     }
 }

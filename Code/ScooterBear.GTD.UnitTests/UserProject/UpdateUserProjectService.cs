@@ -43,7 +43,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(persistOption));
 
             var testOptionResult = await
-                _fixture.UpdateProjectService.Run(new UpdateProjectNameArg(project.Id, project.Name, 0));
+                _fixture.UpdateProject.Run(new UpdateProjectNameArg(project.Id, project.Name, 0));
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.VersionConflict));
@@ -60,7 +60,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(Option.None<GetProjectsResult>()));
 
             var testOptionResult = await
-                _fixture.UpdateProjectService.Run(_fixture.UpdateProjectNameArg);
+                _fixture.UpdateProject.Run(_fixture.UpdateProjectNameArg);
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.DoesNotExist));
@@ -84,7 +84,7 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                 .Returns(Task.FromResult(Option.None<GetProjectsResult>()));
 
             var testOptionResult = await
-                _fixture.UpdateProjectService.Run(new UpdateProjectNameArg(project.Id, project.Name, 0));
+                _fixture.UpdateProject.Run(new UpdateProjectNameArg(project.Id, project.Name, 0));
 
             testOptionResult.Match(some => Assert.False(true, "Should Return None"),
                 outcome => outcome.Should().Be(UpdateProjectOutcome.NotAuthorized));
@@ -103,14 +103,14 @@ namespace ScooterBear.GTD.UnitTests.UserProject
                     PersistUpdateProjectOutcome>>();
             UpdateProjectNameArg = new UpdateProjectNameArg("ProjectId", "Name", 0);
             MockedGetUserProjects = new Mock<IQueryHandler<GetProjects, GetProjectsResult>>();
-            UpdateProjectService = new UpdateProjectService(ProfileFactory, MockedLogger.Object,
+            UpdateProject = new UpdateProject(ProfileFactory, MockedLogger.Object,
                 MockedGetProject.Object, MockedPersistProject.Object, MockedGetUserProjects.Object);
         }
 
         public Mock<IServiceOpt<PersistUpdateProjectArg, PersistUpdateProjectResult,
             PersistUpdateProjectOutcome>> MockedPersistProject { get; }
 
-        public UpdateProjectService UpdateProjectService { get; }
+        public UpdateProject UpdateProject { get; }
         public Mock<IQueryHandler<GetProject, GetProjectResult>> MockedGetProject { get; }
         public FakedProfileFactory ProfileFactory { get; }
         public Mock<ILogger> MockedLogger { get; }

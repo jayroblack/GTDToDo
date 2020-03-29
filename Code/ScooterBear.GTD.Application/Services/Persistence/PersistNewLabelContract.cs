@@ -1,28 +1,28 @@
 ﻿using System;
-using ScooterBear.GTD.Application.UserProject;
+using ScooterBear.GTD.Application.UserLabel;
 using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.Services.Persistence
 {
-    public class PersistNewProjectResult : IServiceResult
+    public class PersistNewLabelResult : IServiceResult
     {
-        public IProject Project { get; }
+        public ILabel Label { get; }
 
-        public PersistNewProjectResult(IProject project)
+        public PersistNewLabelResult(ILabel label)
         {
-            Project = project ?? throw new ArgumentNullException(nameof(project));
+            Label = label ?? throw new ArgumentNullException(nameof(label));
         }
     }
 
-    public class PersistProjectArg : IServiceArgs<PersistNewProjectResult>, IServiceArgs<PersistUpdateProjectResult>
+    public class PersistLabelArg : IServiceArgs<PersistNewLabelResult>
     {
         public string Id { get; }
         public string UserId { get; }
-        public string ProjectName { get; }
+        public string Name { get; }
         public DateTime DateTimeCreated { get; }
         public bool ConsistentRead { get; }
 
-        public PersistProjectArg(string id, string userId, string projectName, DateTime dateTimeCreated,
+        public PersistLabelArg(string id, string userId, string name, DateTime dateTimeCreated,
             bool consistentRead = false)
         {
             if (string.IsNullOrEmpty(id))
@@ -31,15 +31,15 @@ namespace ScooterBear.GTD.Application.Services.Persistence
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException($"{nameof(userId)} is required.");
 
-            if (string.IsNullOrEmpty(projectName))
-                throw new ArgumentException($"{nameof(projectName)} is required.");
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException($"{nameof(name)} is required.");
 
             if (dateTimeCreated == default)
                 throw new ArgumentException($"{nameof(dateTimeCreated)} is required.");
 
             Id = id;
             UserId = userId;
-            ProjectName = projectName;
+            Name = name;
             DateTimeCreated = dateTimeCreated;
             ConsistentRead = consistentRead;
         }

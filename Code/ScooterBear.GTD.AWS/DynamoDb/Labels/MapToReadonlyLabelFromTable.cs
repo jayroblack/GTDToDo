@@ -1,7 +1,7 @@
 ﻿using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Label
+namespace ScooterBear.GTD.AWS.DynamoDb.Labels
 {
     public class MapToReadonlyLabelFromTable :
         IMapTo<UserProjectLabelDynamoDbTable, ReadonlyLabel>

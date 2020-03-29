@@ -25,7 +25,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-                    CreateUserProjectOutcomes>>();
+                    CreateProjectOutcomes>>();
 
             var queryProject = _fixture.Container.Resolve<IQueryHandler<GetProject, GetProjectResult>>();
 
@@ -44,7 +44,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
 
             var deleteProjectService = _fixture.Container
                 .Resolve<IServiceOpt<DeleteProjectArg, DeleteProjectResult,
-                    DeleteUserProjectOutcome>>();
+                    DeleteProjectOutcome>>();
 
             var deleteOption = await deleteProjectService.Run(new DeleteProjectArg(projectId));
 
@@ -54,8 +54,8 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
 
             queryProjAfterDelete.Match(some =>
                 {
-                    some.UserProject.Should().NotBeNull();
-                    some.UserProject.IsDeleted.Should().BeTrue();
+                    some.Project.Should().NotBeNull();
+                    some.Project.IsDeleted.Should().BeTrue();
                 },
                 () => Assert.False(true, "Should Return a value that is deleted"));
 

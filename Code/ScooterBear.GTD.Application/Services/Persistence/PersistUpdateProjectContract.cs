@@ -6,22 +6,22 @@ namespace ScooterBear.GTD.Application.Services.Persistence
 {
     public class PersistUpdateProjectResult : IServiceResult
     {
+        public IProject Project { get; }
+
         public PersistUpdateProjectResult(IProject project)
         {
             Project = project ?? throw new ArgumentNullException(nameof(project));
         }
-
-        public IProject Project { get; }
     }
 
     public class PersistUpdateProjectArg : IServiceArgs<PersistUpdateProjectResult>
     {
+        public Project Project { get; }
+
         public PersistUpdateProjectArg(Project project)
         {
             Project = project ?? throw new ArgumentNullException(nameof(project));
         }
-
-        public Project Project { get; }
     }
 
     public enum PersistUpdateProjectOutcome

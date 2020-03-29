@@ -10,23 +10,23 @@ using ScooterBear.GTD.Patterns.CQRS;
 
 namespace ScooterBear.GTD.Application.UserProject
 {
-    public enum CreateUserProjectOutcomes
+    public enum CreateProjectOutcomes
     {
         ProjectNameAlreadyExists,
         ProjectIdAlreadyExists
     }
 
     public class CreateNewProject : IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-        CreateUserProjectOutcomes>
+        CreateProjectOutcomes>
     {
-        private readonly IKnowTheDate _iKnowTheDate;
-        private readonly IService<PersistNewProjectArg, PersistNewProjectResult> _persistProject;
-        private readonly IProfileFactory _profileFactory;
         private readonly IQueryHandler<GetProjects, GetProjectsResult> _getProjects;
+        private readonly IKnowTheDate _iKnowTheDate;
+        private readonly IService<PersistProjectArg, PersistNewProjectResult> _persistProject;
+        private readonly IProfileFactory _profileFactory;
 
         public CreateNewProject(
             IQueryHandler<GetProjects, GetProjectsResult> getProjects,
-            IService<PersistNewProjectArg, PersistNewProjectResult> persistProject,
+            IService<PersistProjectArg, PersistNewProjectResult> persistProject,
             IKnowTheDate iKnowTheDate,
             IProfileFactory profileFactory)
         {
@@ -36,41 +36,39 @@ namespace ScooterBear.GTD.Application.UserProject
             _profileFactory = profileFactory ?? throw new ArgumentNullException(nameof(profileFactory));
         }
 
-        public async Task<Option<CreateNewProjectResult, CreateUserProjectOutcomes>> Run(CreateNewProjectArg arg)
+        public async Task<Option<CreateNewProjectResult, CreateProjectOutcomes>> Run(CreateNewProjectArg arg)
         {
             var userId = _profileFactory.GetCurrentProfile().UserId;
 
-            var userProjects = await _getProjects.Run(new GetProjects(userId));
+            var projects = await _getProjects.Run(new GetProjects(userId));
 
             var dateTimeCreated = _iKnowTheDate.UtcNow();
 
             return await
-                userProjects.MatchAsync(async some =>
+                projects.MatchAsync(async some =>
                     {
-                        //Project Names Must be Unique
                         if (some.Projects.Any(x => x.Name == arg.NewProjectName && !x.IsDeleted))
-                            return Option.None<CreateNewProjectResult, CreateUserProjectOutcomes>(
-                                CreateUserProjectOutcomes.ProjectNameAlreadyExists);
+                            return Option.None<CreateNewProjectResult, CreateProjectOutcomes>(
+                                CreateProjectOutcomes.ProjectNameAlreadyExists);
 
-                        //Project Ids Must be Unique
                         if (some.Projects.Any(x => x.Id == arg.Id))
-                            return Option.None<CreateNewProjectResult, CreateUserProjectOutcomes>(
-                                CreateUserProjectOutcomes.ProjectIdAlreadyExists);
+                            return Option.None<CreateNewProjectResult, CreateProjectOutcomes>(
+                                CreateProjectOutcomes.ProjectIdAlreadyExists);
 
                         var persistResult = await
-                            _persistProject.Run(new PersistNewProjectArg(arg.Id, userId, arg.NewProjectName,
+                            _persistProject.Run(new PersistProjectArg(arg.Id, userId, arg.NewProjectName,
                                 dateTimeCreated));
 
-                        return Option.Some<CreateNewProjectResult, CreateUserProjectOutcomes>(
+                        return Option.Some<CreateNewProjectResult, CreateProjectOutcomes>(
                             new CreateNewProjectResult(persistResult.Project));
                     },
                     async () =>
                     {
                         var persistResult = await
-                            _persistProject.Run(new PersistNewProjectArg(arg.Id, userId, arg.NewProjectName,
+                            _persistProject.Run(new PersistProjectArg(arg.Id, userId, arg.NewProjectName,
                                 dateTimeCreated, arg.ConsistentRead));
 
-                        return Option.Some<CreateNewProjectResult, CreateUserProjectOutcomes>(
+                        return Option.Some<CreateNewProjectResult, CreateProjectOutcomes>(
                             new CreateNewProjectResult(persistResult.Project));
                     });
         }

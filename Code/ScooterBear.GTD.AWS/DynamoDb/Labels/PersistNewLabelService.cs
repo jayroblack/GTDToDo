@@ -6,29 +6,29 @@ using ScooterBear.GTD.AWS.DynamoDb.Core;
 using ScooterBear.GTD.Patterns;
 using ScooterBear.GTD.Patterns.CQRS;
 
-namespace ScooterBear.GTD.AWS.DynamoDb.Projects
+namespace ScooterBear.GTD.AWS.DynamoDb.Labels
 {
-    public class PersistNewProjectService : IService<PersistProjectArg, PersistNewProjectResult>
+    public class PersistNewLabelService : IService<PersistLabelArg, PersistNewLabelResult>
     {
         private readonly IDynamoDBFactory _dynamoDbFactory;
-        private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> _mapTo;
+        private readonly IMapTo<UserProjectLabelDynamoDbTable, ReadonlyLabel> _mapTo;
 
-        public PersistNewProjectService(IDynamoDBFactory dynamoDbFactory,
-            IMapTo<UserProjectLabelDynamoDbTable, ReadOnlyProject> mapTo)
+        public PersistNewLabelService(IDynamoDBFactory dynamoDbFactory,
+            IMapTo<UserProjectLabelDynamoDbTable, ReadonlyLabel> mapTo)
         {
             _dynamoDbFactory = dynamoDbFactory ?? throw new ArgumentNullException(nameof(dynamoDbFactory));
             _mapTo = mapTo ?? throw new ArgumentNullException(nameof(mapTo));
         }
 
-        public async Task<PersistNewProjectResult> Run(PersistProjectArg arg)
+        public async Task<PersistNewLabelResult> Run(PersistLabelArg arg)
         {
             var table = new UserProjectLabelDynamoDbTable
             {
                 ID = arg.Id,
-                Data = UserProjectLabelTableData.Project,
+                Data = UserProjectLabelTableData.Label,
                 Count = 0,
                 CountOverDue = 0,
-                Name = arg.ProjectName,
+                Name = arg.Name,
                 UserId = arg.UserId,
                 DateCreated = arg.DateTimeCreated,
                 IsDeleted = false
@@ -38,13 +38,13 @@ namespace ScooterBear.GTD.AWS.DynamoDb.Projects
             {
                 await dynamoDb.SaveAsync(table, arg.ConsistentRead);
 
-                var projectRetrieved =
-                    await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.Project,
+                var labelRetrieved =
+                    await dynamoDb.LoadAsync<UserProjectLabelDynamoDbTable>(table.ID, UserProjectLabelTableData.Label,
                         CancellationToken.None);
 
-                var readonlyProject = _mapTo.MapTo(projectRetrieved);
+                var readonlyLabel = _mapTo.MapTo(labelRetrieved);
 
-                return new PersistNewProjectResult(readonlyProject);
+                return new PersistNewLabelResult(readonlyLabel);
             }
         }
     }

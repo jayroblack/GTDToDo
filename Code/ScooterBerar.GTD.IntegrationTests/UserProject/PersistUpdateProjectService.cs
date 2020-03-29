@@ -27,7 +27,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
 
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-                    CreateUserProjectOutcomes>>();
+                    CreateProjectOutcomes>>();
 
             var projectId = Guid.NewGuid().ToString();
             var optionResult = await

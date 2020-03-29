@@ -26,7 +26,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             var userId = Guid.NewGuid().ToString();
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-                    CreateUserProjectOutcomes>>();
+                    CreateProjectOutcomes>>();
 
             var id = Guid.NewGuid().ToString();
             var firstItem = new ProjectItem(id, "Project 1");
@@ -41,7 +41,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                 await createUserProject.Run(new CreateNewProjectArg(secondItem.Id, secondItem.Name));
 
             secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
-                outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectIdAlreadyExists));
+                outcomes => outcomes.Should().Be(CreateProjectOutcomes.ProjectIdAlreadyExists));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-                    CreateUserProjectOutcomes>>();
+                    CreateProjectOutcomes>>();
 
             var firstItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
             var secondItem = new ProjectItem(Guid.NewGuid().ToString(), "Project 1");
@@ -65,7 +65,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
                 await createUserProject.Run(new CreateNewProjectArg(secondItem.Id, secondItem.Name));
 
             secondCreateOption.Match(some => Assert.False(true, "Should Fail."),
-                outcomes => outcomes.Should().Be(CreateUserProjectOutcomes.ProjectNameAlreadyExists));
+                outcomes => outcomes.Should().Be(CreateProjectOutcomes.ProjectNameAlreadyExists));
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace ScooterBear.GTD.IntegrationTests.UserProject
             _fixture.ProfileFactory.SetUserProfile(new Profile(userId));
             var createUserProject = _fixture.Container
                 .Resolve<IServiceOpt<CreateNewProjectArg, CreateNewProjectResult,
-                    CreateUserProjectOutcomes>>();
+                    CreateProjectOutcomes>>();
 
             var queryProject = _fixture.Container.Resolve<IQueryHandler<GetProject, GetProjectResult>>();
 

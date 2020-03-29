@@ -30,7 +30,7 @@ class NameFormDialog extends React.Component {
     }
 
     componentDidUpdate(prevProps){
-        if( this.props.componentDidUpdateCallback && prevProps && this.props ){
+        if( this.props.componentDidUpdateCallback ){
             this.props.componentDidUpdateCallback(prevProps, this.props);
         }
     }

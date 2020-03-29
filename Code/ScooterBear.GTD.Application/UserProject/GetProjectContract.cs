@@ -5,12 +5,12 @@ namespace ScooterBear.GTD.Application.UserProject
 {
     public class GetProjectResult : IQueryResult
     {
-        public GetProjectResult(IProject userProject)
-        {
-            UserProject = userProject ?? throw new ArgumentNullException(nameof(userProject));
-        }
+        public IProject Project { get; }
 
-        public IProject UserProject { get; }
+        public GetProjectResult(IProject project)
+        {
+            Project = project;
+        }
     }
 
     public class GetProject : IQuery<GetProjectResult>
