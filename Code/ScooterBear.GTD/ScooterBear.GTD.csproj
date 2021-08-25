@@ -11,7 +11,7 @@
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="4.0.0" />
     <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.0.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.1" />
